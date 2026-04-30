@@ -1,0 +1,1281 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Platizio – Accredited Investor Application</title>
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+      background-color: #ffffff;
+      padding: 30px 20px 60px;
+      color: #333;
+    }
+
+    .logo-wrap {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .form-card {
+      max-width: 800px;
+      margin: 0 auto;
+      background: #ffffff;
+      padding: 40px 44px;
+      border-radius: 14px;
+      box-shadow: 0 6px 32px rgba(176, 64, 16, 0.12);
+      border-top: 6px solid transparent;
+      border-image: linear-gradient(90deg, #7A2000, #C85A1E, #E8854A) 1;
+    }
+
+    .form-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #C85A1E;
+      text-align: center;
+      margin-bottom: 32px;
+      letter-spacing: 0.4px;
+    }
+
+    /* ── Section headers ── */
+    .section-header {
+      background: linear-gradient(90deg, #7A2000, #C85A1E);
+      color: #fff;
+      padding: 9px 16px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin: 32px 0 20px;
+    }
+
+    .sub-label {
+      font-weight: 700;
+      font-size: 13px;
+      color: #C85A1E;
+      margin: 22px 0 10px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .form-row-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 16px;
+    }
+
+    label.field-label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+      color: #555;
+      font-size: 13px;
+    }
+
+    label.field-label .req {
+      color: #C85A1E;
+      margin-left: 2px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 14px;
+      color: #333;
+      background: #fff;
+      transition: border-color 0.18s, box-shadow 0.18s;
+      font-family: inherit;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      outline: none;
+      border-color: #C85A1E;
+      box-shadow: 0 0 0 3px rgba(200, 90, 30, 0.12);
+    }
+
+    .hint {
+      font-size: 11px;
+      color: #999;
+      margin-top: 4px;
+      display: block;
+    }
+
+    /* ── Option cards ── */
+    .card-grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .card-grid-2 {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .card-grid-3 {
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+
+    .option-card {
+      border: 2px solid #e8e0d8;
+      border-radius: 10px;
+      padding: 18px 40px 18px 18px;
+      cursor: pointer;
+      transition: border-color 0.18s, box-shadow 0.18s, background 0.18s;
+      position: relative;
+      display: block;
+    }
+
+    .option-card:hover {
+      border-color: #C85A1E;
+      box-shadow: 0 2px 12px rgba(200, 90, 30, 0.1);
+    }
+
+    .option-card.selected {
+      border-color: #C85A1E;
+      background: #fff8f5;
+      box-shadow: 0 2px 16px rgba(200, 90, 30, 0.15);
+    }
+
+    .option-card input[type="radio"] {
+      display: none;
+    }
+
+    .option-card .card-title {
+      font-weight: 700;
+      font-size: 14px;
+      color: #333;
+      margin-bottom: 5px;
+    }
+
+    .option-card.selected .card-title {
+      color: #C85A1E;
+    }
+
+    .option-card .card-desc {
+      font-size: 12px;
+      color: #777;
+      line-height: 1.5;
+    }
+
+    .option-card .card-check {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 2px solid #ddd;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.18s;
+    }
+
+    .option-card.selected .card-check {
+      background: #C85A1E;
+      border-color: #C85A1E;
+    }
+
+    .option-card.selected .card-check::after {
+      content: '✓';
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    /* Certificate validity card extras */
+    .cert-fee-row {
+      display: flex;
+      gap: 18px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+
+    .cert-fee-item {
+      font-size: 11px;
+      color: #666;
+      line-height: 1.6;
+    }
+
+    .cert-fee-item .fee-label {
+      color: #999;
+      margin-right: 4px;
+    }
+
+    .cert-fee-item .fee-amount {
+      font-weight: 700;
+      color: #333;
+    }
+
+    .cert-fee-item .fee-when {
+      color: #C85A1E;
+      font-size: 10px;
+      margin-left: 4px;
+    }
+
+    /* Eligibility bullets */
+    .eligibility-bullets {
+      list-style: none;
+      margin-top: 6px;
+    }
+
+    .eligibility-bullets li {
+      font-size: 12px;
+      color: #666;
+      padding: 2px 0 2px 10px;
+      position: relative;
+    }
+
+    .eligibility-bullets li::before {
+      content: '•';
+      color: #C85A1E;
+      position: absolute;
+      left: 0;
+    }
+
+    /* ── Address ── */
+    .address-section {
+      background: #fdf8f5;
+      border: 1px solid #edddd0;
+      border-radius: 8px;
+      padding: 18px 20px 8px;
+      margin-bottom: 8px;
+    }
+
+    .same-address-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      background: #fff;
+      border: 1.5px solid #C85A1E;
+      border-radius: 6px;
+      color: #C85A1E;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 14px;
+      transition: background 0.15s, color 0.15s;
+      font-family: inherit;
+    }
+
+    .same-address-btn:hover {
+      background: #C85A1E;
+      color: #fff;
+    }
+
+    /* ── Document sections ── */
+    .doc-section {
+      display: none;
+    }
+
+    .doc-section.active {
+      display: block;
+    }
+
+    .doc-category {
+      margin-bottom: 22px;
+    }
+
+    .doc-category-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #7A2000;
+      margin-bottom: 4px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid #f0e0d0;
+    }
+
+    .doc-category-desc {
+      font-size: 11px;
+      color: #888;
+      margin-bottom: 10px;
+      margin-top: 3px;
+    }
+
+    .file-grid {
+      display: grid;
+      gap: 10px;
+    }
+
+    .file-item {
+      background: #fff8f5;
+      border: 1px dashed #C85A1E;
+      border-radius: 7px;
+      padding: 12px 16px;
+    }
+
+    .file-item .field-label {
+      color: #B94513;
+    }
+
+    input[type="file"] {
+      width: 100%;
+      font-size: 13px;
+      color: #666;
+      border: none;
+      padding: 0;
+      background: transparent;
+      margin-top: 4px;
+    }
+
+    .info-box {
+      background: #f0f7ff;
+      border: 1px solid #b8d4f0;
+      border-radius: 6px;
+      padding: 10px 14px;
+      font-size: 12px;
+      color: #445;
+      margin-bottom: 18px;
+      line-height: 1.6;
+    }
+
+    /* ── Submit ── */
+    .btn-submit {
+      display: block;
+      width: 100%;
+      padding: 14px;
+      margin-top: 34px;
+      background: linear-gradient(90deg, #7A2000, #C85A1E, #E8854A);
+      color: #fff;
+      font-size: 16px;
+      font-weight: 700;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      letter-spacing: 0.5px;
+      transition: opacity 0.18s, transform 0.1s;
+    }
+
+    .btn-submit:hover:not(:disabled) {
+      opacity: 0.9;
+    }
+
+    .btn-submit:active:not(:disabled) {
+      transform: scale(0.99);
+    }
+
+    .btn-submit:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+
+    #statusMessage {
+      margin-top: 16px;
+      text-align: center;
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .field-error {
+      border-color: #dc2626 !important;
+      box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1) !important;
+    }
+
+    .error-msg {
+      color: #dc2626;
+      font-size: 11px;
+      margin-top: 4px;
+      display: block;
+    }
+
+    .card-error {
+      color: #dc2626;
+      font-size: 11px;
+      margin-top: 8px;
+      display: none;
+    }
+
+    .divider {
+      height: 1px;
+      background: #f0e8e0;
+      margin: 4px 0 14px;
+    }
+
+    /* ── Sample button ── */
+    .btn-sample {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 16px;
+      background: #fff;
+      border: 1.5px dashed #C85A1E;
+      border-radius: 6px;
+      color: #C85A1E;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.15s, color 0.15s;
+      margin-bottom: 24px;
+    }
+
+    .btn-sample:hover {
+      background: #fff3ed;
+    }
+
+    @media (max-width: 620px) {
+      .form-card {
+        padding: 24px 18px;
+      }
+
+      .form-row,
+      .form-row-3,
+      .card-grid-2,
+      .card-grid-3 {
+        grid-template-columns: 1fr;
+      }
+
+      .cert-fee-row {
+        flex-direction: column;
+        gap: 4px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ── Platizio Logo ── -->
+  <div class="logo-wrap">
+    <svg viewBox="0 0 330 88" xmlns="http://www.w3.org/2000/svg" style="height:78px;width:auto;" aria-label="Platizio">
+      <defs>
+        <linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#E8884E" />
+          <stop offset="100%" stop-color="#C04010" />
+        </linearGradient>
+        <linearGradient id="g2" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#C04010" />
+          <stop offset="100%" stop-color="#6E1A00" />
+        </linearGradient>
+      </defs>
+      <polygon points="264,38 296,6 296,70" fill="#f5ede6" stroke="#8B3000" stroke-width="1.6"
+        stroke-linejoin="round" />
+      <polygon points="296,6 264,38 328,38" fill="url(#g1)" stroke="#8B3000" stroke-width="1.6"
+        stroke-linejoin="round" />
+      <polygon points="328,38 296,6 296,70" fill="url(#g1)" stroke="#8B3000" stroke-width="1.6"
+        stroke-linejoin="round" />
+      <polygon points="296,70 264,38 328,38" fill="url(#g2)" stroke="#8B3000" stroke-width="1.6"
+        stroke-linejoin="round" />
+      <path d="M296,70 Q308,80 302,88" fill="none" stroke="#6E1A00" stroke-width="2" stroke-linecap="round" />
+      <text x="4" y="60" font-family="Georgia,'Times New Roman',serif" font-size="56" fill="#C04010">Platizio</text>
+    </svg>
+  </div>
+
+  <!-- ── Form Card ── -->
+  <div class="form-card">
+    <div class="form-title">Accredited Investor Application</div>
+
+    <div style="text-align:right;">
+      <button type="button" class="btn-sample" onclick="fillSample()">⚡ Fill Sample Data</button>
+    </div>
+
+    <form id="accreditationForm" novalidate>
+
+      <!-- ═══ 1. APPLICATION TYPE ═══ -->
+      <div class="section-header">1 · Application Type</div>
+
+      <div class="card-grid card-grid-2">
+        <label class="option-card" id="card-resident" onclick="selectAppType('resident', this)">
+          <input type="radio" name="applicationType" value="Individual (Indian Resident)">
+          <div class="card-check"></div>
+          <div class="card-title">Individual (Indian Resident)</div>
+          <div class="card-desc">Indian citizen residing in India</div>
+        </label>
+        <label class="option-card" id="card-nri" onclick="selectAppType('nri', this)">
+          <input type="radio" name="applicationType" value="Individual (NRI)">
+          <div class="card-check"></div>
+          <div class="card-title">Individual (NRI)</div>
+          <div class="card-desc">Non-Resident Indian based outside India</div>
+        </label>
+      </div>
+      <span class="card-error" id="appTypeError">Please select an application type.</span>
+
+      <!-- ═══ 2. BASIC DETAILS ═══ -->
+      <div class="section-header">2 · Basic Details</div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="field-label">Full Name <span class="req">*</span></label>
+          <input type="text" id="fullName" placeholder="As per PAN card" required>
+        </div>
+        <div class="form-group">
+          <label class="field-label">Organization</label>
+          <input type="text" id="organization" placeholder="Company / Firm (optional)">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="field-label">Email Address <span class="req">*</span></label>
+          <input type="email" id="emailAddress" placeholder="you@example.com" required>
+        </div>
+        <div class="form-group">
+          <label class="field-label">Phone Number <span class="req">*</span></label>
+          <input type="tel" id="phoneNumber" placeholder="+91 XXXXX XXXXX" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="field-label">PAN Card Number <span class="req">*</span></label>
+        <input type="text" id="panCard" placeholder="ABCDE1234F" maxlength="10"
+          style="text-transform:uppercase; max-width:240px;" required>
+        <span class="hint">Format: 5 letters · 4 digits · 1 letter</span>
+      </div>
+
+      <!-- Current Address -->
+      <div class="sub-label">Current Address</div>
+      <div class="divider"></div>
+
+      <div class="address-section">
+        <div class="form-group">
+          <label class="field-label">Address Line 1 <span class="req">*</span></label>
+          <input type="text" id="currAddr1" placeholder="House / Flat No., Street Name" required>
+        </div>
+        <div class="form-group">
+          <label class="field-label">Address Line 2</label>
+          <input type="text" id="currAddr2" placeholder="Area / Locality / Landmark (optional)">
+        </div>
+        <div class="form-row-3">
+          <div class="form-group">
+            <label class="field-label">City</label>
+            <input type="text" id="currCity" placeholder="City">
+          </div>
+          <div class="form-group">
+            <label class="field-label">Country</label>
+            <select id="currCountry">
+              <option value="India">India</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="field-label">Pincode</label>
+            <input type="text" id="currPincode" placeholder="e.g. 110001" maxlength="10" inputmode="numeric">
+          </div>
+        </div>
+      </div>
+
+      <!-- Permanent Address -->
+      <div class="sub-label">Permanent Address</div>
+      <div class="divider"></div>
+
+      <button type="button" class="same-address-btn" onclick="copyCurrentAddress()">
+        ↓ &nbsp;Same as Current Address
+      </button>
+
+      <div class="address-section">
+        <div class="form-group">
+          <label class="field-label">Address Line 1 <span class="req">*</span></label>
+          <input type="text" id="permAddr1" placeholder="House / Flat No., Street Name" required>
+        </div>
+        <div class="form-group">
+          <label class="field-label">Address Line 2</label>
+          <input type="text" id="permAddr2" placeholder="Area / Locality / Landmark (optional)">
+        </div>
+        <div class="form-row-3">
+          <div class="form-group">
+            <label class="field-label">City</label>
+            <input type="text" id="permCity" placeholder="City">
+          </div>
+          <div class="form-group">
+            <label class="field-label">Country</label>
+            <select id="permCountry">
+              <option value="India">India</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="field-label">Pincode</label>
+            <input type="text" id="permPincode" placeholder="e.g. 110001" maxlength="10" inputmode="numeric">
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ 3. ELIGIBILITY PATH ═══ -->
+      <div class="section-header">3 · Eligibility Path</div>
+      <p style="font-size:12px;color:#888;margin-bottom:16px;">Select how you meet SEBI's Accredited Investor criteria.
+      </p>
+
+      <div class="card-grid card-grid-3">
+        <label class="option-card" onclick="selectEligibility('networth', this)">
+          <input type="radio" name="eligibilityPath" value="Net Worth">
+          <div class="card-check"></div>
+          <div class="card-title">Net Worth</div>
+          <ul class="eligibility-bullets">
+            <li>Net worth ≥ ₹7.5 Crore</li>
+            <li>Financial assets ≥ ₹3.75 Crore</li>
+          </ul>
+        </label>
+        <label class="option-card" onclick="selectEligibility('hybrid', this)">
+          <input type="radio" name="eligibilityPath" value="Hybrid">
+          <div class="card-check"></div>
+          <div class="card-title">Hybrid</div>
+          <ul class="eligibility-bullets">
+            <li>Annual income ≥ ₹1 Crore</li>
+            <li>Net worth ≥ ₹5 Crore</li>
+            <li>Financial assets ≥ ₹2.5 Crore</li>
+          </ul>
+        </label>
+        <label class="option-card" onclick="selectEligibility('income', this)">
+          <input type="radio" name="eligibilityPath" value="Income">
+          <div class="card-check"></div>
+          <div class="card-title">Income</div>
+          <ul class="eligibility-bullets">
+            <li>Annual income ≥ ₹2 Crore</li>
+          </ul>
+        </label>
+      </div>
+      <span class="card-error" id="eligibilityError">Please select an eligibility path.</span>
+
+      <!-- ═══ 4. CERTIFICATE VALIDITY ═══ -->
+      <div class="section-header">4 · Certificate Validity</div>
+      <p style="font-size:12px;color:#888;margin-bottom:16px;">Select the CDSL Accredited Investor Certificate validity
+        period.</p>
+
+      <div class="card-grid card-grid-2">
+        <label class="option-card" onclick="selectValidity('twoyear', this)">
+          <input type="radio" name="certValidity" value="2-Year">
+          <div class="card-check"></div>
+          <div class="card-title">2-Year Certificate</div>
+          <div class="cert-fee-row">
+            <div class="cert-fee-item">
+              <span class="fee-label">CA fees:</span>
+              <span class="fee-amount">₹7,000 + GST</span>
+              <span class="fee-when">payable now</span>
+            </div>
+            <div class="cert-fee-item">
+              <span class="fee-label">CDSL fees:</span>
+              <span class="fee-amount">₹10,000 + GST</span>
+              <span class="fee-when">payable later</span>
+            </div>
+          </div>
+        </label>
+        <label class="option-card" onclick="selectValidity('threeyear', this)">
+          <input type="radio" name="certValidity" value="3-Year">
+          <div class="card-check"></div>
+          <div class="card-title">3-Year Certificate</div>
+          <div class="cert-fee-row">
+            <div class="cert-fee-item">
+              <span class="fee-label">CA fees:</span>
+              <span class="fee-amount">₹12,000 + GST</span>
+              <span class="fee-when">payable now</span>
+            </div>
+            <div class="cert-fee-item">
+              <span class="fee-label">CDSL fees:</span>
+              <span class="fee-amount">₹14,500 + GST</span>
+              <span class="fee-when">payable later</span>
+            </div>
+          </div>
+        </label>
+      </div>
+      <span class="card-error" id="validityError">Please select a certificate validity period.</span>
+
+      <!-- ═══ 5. DOCUMENTS ═══ -->
+      <div class="section-header">5 · Documents Upload</div>
+      <p style="font-size:12px;color:#888;margin-bottom:6px;">Accepted formats: PDF, JPG, PNG &nbsp;·&nbsp; Max 5 MB per
+        file &nbsp;·&nbsp; Please self-attest physical documents before uploading.</p>
+      <p style="font-size:12px;color:#C85A1E;margin-bottom:18px;font-weight:600;" id="docPrompt">← Select an eligibility
+        path and certificate validity above to see the required documents.</p>
+
+      <!-- ── Net Worth Documents ── -->
+      <div class="doc-section" id="docs-networth">
+        <div class="info-box" id="nw_info"></div>
+
+        <div class="doc-category">
+          <div class="doc-category-title">Income Tax Returns <span style="color:#dc2626">*</span></div>
+          <div class="doc-category-desc" id="nw_itr_desc"></div>
+          <div class="file-grid">
+            <div class="file-item">
+              <label class="field-label">Latest Year ITR <span class="req">*</span></label>
+              <input type="file" id="nw_itr" accept=".pdf">
+            </div>
+            <div class="file-item" id="nw_itr_prev_row" style="display:none;">
+              <label class="field-label" id="nw_itr_prev_label">Previous Year ITR <span class="req">*</span></label>
+              <input type="file" id="nw_itr_prev" accept=".pdf">
+            </div>
+          </div>
+        </div>
+
+        <div class="doc-category">
+          <div class="doc-category-title">Financial Assets <span style="color:#dc2626">*</span></div>
+          <div class="doc-category-desc">Count toward both net worth and financial assets threshold. Upload at least one
+            document.</div>
+          <div class="file-grid">
+            <div class="file-item">
+              <label class="field-label">CAS Statement — NSDL / CDSL <span
+                  style="font-weight:400;color:#999">(recommended)</span></label>
+              <span class="hint">Covers all DEMAT holdings, mutual funds &amp; NPS · no older than 1 month</span>
+              <input type="file" id="nw_cas" accept=".pdf">
+            </div>
+            <div class="file-item">
+              <label class="field-label">PMS / AIF / SIF / Unlisted Shares Statements</label>
+              <span class="hint">No older than 3 months · multiple files accepted</span>
+              <input type="file" id="nw_pms" accept=".pdf" multiple>
+            </div>
+            <div class="file-item">
+              <label class="field-label">Bank Statements</label>
+              <span class="hint">Savings accounts, Fixed Deposits · no older than 1 month · multiple files
+                accepted</span>
+              <input type="file" id="nw_bank" accept=".pdf" multiple>
+            </div>
+            <div class="file-item">
+              <label class="field-label">Provident Fund Statements (EPF / PPF)</label>
+              <input type="file" id="nw_pf" accept=".pdf" multiple>
+            </div>
+            <div class="file-item">
+              <label class="field-label">International Equities</label>
+              <span class="hint">Equities held abroad</span>
+              <input type="file" id="nw_intl" accept=".pdf" multiple>
+            </div>
+          </div>
+        </div>
+
+        <div class="doc-category">
+          <div class="doc-category-title">Non-Financial Assets</div>
+          <div class="doc-category-desc">Count toward net worth only (not financial assets threshold). Upload if
+            applicable.</div>
+          <div class="file-grid">
+            <div class="file-item">
+              <label class="field-label">Real Estate — Ownership Proof</label>
+              <span class="hint">Excluding primary residence (as per SEBI regulations) · multiple files accepted</span>
+              <input type="file" id="nw_realestate_proof" accept=".pdf,image/jpeg,image/png" multiple>
+            </div>
+            <div class="file-item">
+              <label class="field-label">Real Estate — Latest Ready Reckoner Value</label>
+              <span class="hint">For each property listed above · multiple files accepted</span>
+              <input type="file" id="nw_realestate_value" accept=".pdf" multiple>
+            </div>
+            <div class="file-item">
+              <label class="field-label">Gold Valuation Certificate</label>
+              <span class="hint">No older than 3 months</span>
+              <input type="file" id="nw_gold" accept=".pdf">
+            </div>
+            <div class="file-item">
+              <label class="field-label">Jewellery Valuation Certificate</label>
+              <span class="hint">No older than 3 months</span>
+              <input type="file" id="nw_jewellery" accept=".pdf">
+            </div>
+          </div>
+        </div>
+
+        <div class="doc-category">
+          <div class="doc-category-title">Liabilities</div>
+          <div class="doc-category-desc">Deducted from net worth. Upload if applicable.</div>
+          <div class="file-grid">
+            <div class="file-item">
+              <label class="field-label">Loan Statements / Balance Sheet <span style="font-weight:400;color:#999">(if
+                  any)</span></label>
+              <span class="hint">Home loans, personal loans, or other outstanding dues · multiple files accepted</span>
+              <input type="file" id="nw_loans" accept=".pdf" multiple>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Hybrid Documents ── -->
+      <div class="doc-section" id="docs-hybrid">
+        <div class="info-box" id="hy_info"></div>
+
+        <div class="doc-category">
+          <div class="doc-category-title">Income Tax Returns <span style="color:#dc2626">*</span></div>
+          <div class="doc-category-desc" id="hy_itr_desc"></div>
+          <div class="file-grid">
+            <div class="file-item">
+              <label class="field-label">Latest Year ITR <span class="req">*</span></label>
+              <input type="file" id="hy_itr" accept=".pdf">
+            </div>
+            <div class="file-item" id="hy_itr_prev_row" style="display:none;">
+              <label class="field-label" id="hy_itr_prev_label">Previous Year ITR <span class="req">*</span></label>
+              <input type="file" id="hy_itr_prev" accept=".pdf">
+            </div>
+          </div>
+        </div>
+
+        <div class="doc-category">
+          <div class="doc-category-title">Financial Assets <span style="color:#dc2626">*</span></div>
+          <div class="doc-category-desc">Count toward both net worth and financial assets threshold. Upload at least one
+            document.</div>
+          <div class="file-grid">
+            <div class="file-item">
+              <label class="field-label">CAS Statement — NSDL / CDSL <span
+                  style="font-weight:400;color:#999">(recommended)</span></label>
+              <span class="hint">Covers all DEMAT holdings, mutual funds &amp; NPS · no older than 1 month</span>
+              <input type="file" id="hy_cas" accept=".pdf">
+            </div>
+            <div class="file-item">
+              <label class="field-label">PMS / AIF / SIF / Unlisted Shares Statements</label>
+              <span class="hint">No older than 3 months · multiple files accepted</span>
+              <input type="file" id="hy_pms" accept=".pdf" multiple>
+            </div>
+            <div class="file-item">
+              <label class="field-label">Bank Statements</label>
+              <span class="hint">Savings accounts, Fixed Deposits · no older than 1 month · multiple files
+                accepted</span>
+              <input type="file" id="hy_bank" accept=".pdf" multiple>
+            </div>
+            <div class="file-item">
+              <label class="field-label">Provident Fund Statements (EPF / PPF)</label>
+              <input type="file" id="hy_pf" accept=".pdf" multiple>
+            </div>
+          </div>
+        </div>
+
+        <div class="doc-category">
+          <div class="doc-category-title">Non-Financial Assets</div>
+          <div class="doc-category-desc">Count toward net worth only. Upload if applicable.</div>
+          <div class="file-grid">
+            <div class="file-item">
+              <label class="field-label">Real Estate — Ownership Proof &amp; Ready Reckoner Value</label>
+              <span class="hint">Excluding primary residence · provide both documents per property · multiple files
+                accepted</span>
+              <input type="file" id="hy_realestate" accept=".pdf,image/jpeg,image/png" multiple>
+            </div>
+            <div class="file-item">
+              <label class="field-label">Gold / Jewellery Valuation Certificates</label>
+              <span class="hint">No older than 3 months · multiple files accepted</span>
+              <input type="file" id="hy_gold" accept=".pdf" multiple>
+            </div>
+          </div>
+        </div>
+
+        <div class="doc-category">
+          <div class="doc-category-title">Liabilities</div>
+          <div class="doc-category-desc">Deducted from net worth. Upload if applicable.</div>
+          <div class="file-grid">
+            <div class="file-item">
+              <label class="field-label">Loan Statements / Balance Sheet <span style="font-weight:400;color:#999">(if
+                  any)</span></label>
+              <span class="hint">Home loans, personal loans, or other outstanding dues · multiple files accepted</span>
+              <input type="file" id="hy_loans" accept=".pdf" multiple>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Income Documents ── -->
+      <div class="doc-section" id="docs-income">
+        <div class="info-box" id="in_info"></div>
+
+        <div class="doc-category">
+          <div class="doc-category-title">Income Tax Returns <span style="color:#dc2626">*</span></div>
+          <div class="doc-category-desc" id="in_itr_desc"></div>
+          <div class="file-grid">
+            <div class="file-item">
+              <label class="field-label">Latest Year ITR <span class="req">*</span></label>
+              <input type="file" id="in_itr" accept=".pdf">
+            </div>
+            <div class="file-item" id="in_itr_prev_row" style="display:none;">
+              <label class="field-label" id="in_itr_prev_label">Previous Year ITR <span class="req">*</span></label>
+              <input type="file" id="in_itr_prev" accept=".pdf">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ SUBMIT ═══ -->
+      <button type="submit" class="btn-submit" id="submitBtn">Submit Application</button>
+      <div id="statusMessage"></div>
+
+    </form>
+  </div>
+
+  <script>
+    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbz4GDAAur1ItGhYTn1QI15qNtRcUfzLXqHxqKsO0mu5Sop-3yWZkpnb057uoNIEruwc/exec';
+
+    // ── Fill sample data ──
+    function fillSample() {
+      // 1. Application type → Indian Resident
+      const residentCard = document.getElementById('card-resident');
+      selectAppType('resident', residentCard);
+
+      // 2. Basic details
+      document.getElementById('fullName').value       = 'Arjun Mehta';
+      document.getElementById('organization').value   = 'Mehta Capital Advisors LLP';
+      document.getElementById('emailAddress').value   = 'arjun.mehta@mehtacapital.in';
+      document.getElementById('phoneNumber').value    = '+91 98765 43210';
+      document.getElementById('panCard').value        = 'ABCPM1234A';
+
+      // Current address
+      document.getElementById('currAddr1').value   = '14B, Palm Grove Residency';
+      document.getElementById('currAddr2').value   = 'Sector 62, NOIDA';
+      document.getElementById('currCity').value    = 'Noida';
+      document.getElementById('currCountry').value = 'India';
+      document.getElementById('currPincode').value = '201309';
+
+      // Permanent address (auto-fill from current)
+      copyCurrentAddress();
+
+      // 3. Eligibility path → Net Worth
+      const nwCard = document.querySelector('[name="eligibilityPath"][value="networth"]').closest('.option-card');
+      selectEligibility('networth', nwCard);
+
+      // 4. Certificate validity → 2-Year
+      const twoYrCard = document.querySelector('[name="certValidity"][value="twoyear"]').closest('.option-card');
+      selectValidity('twoyear', twoYrCard);
+
+      // Scroll to first section smoothly
+      document.getElementById('accreditationForm').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    const COUNTRIES = [
+      'Afghanistan', 'Albania', 'Algeria', 'Angola', 'Argentina', 'Australia', 'Austria',
+      'Bahrain', 'Bangladesh', 'Belgium', 'Brazil', 'Canada', 'China', 'Denmark', 'Egypt',
+      'Ethiopia', 'Finland', 'France', 'Germany', 'Ghana', 'Greece', 'Hong Kong', 'Hungary',
+      'India', 'Indonesia', 'Iran', 'Iraq', 'Ireland', 'Israel', 'Italy', 'Japan', 'Jordan',
+      'Kenya', 'Kuwait', 'Lebanon', 'Libya', 'Malaysia', 'Mexico', 'Morocco', 'Nepal',
+      'Netherlands', 'New Zealand', 'Nigeria', 'Norway', 'Oman', 'Pakistan', 'Philippines',
+      'Poland', 'Portugal', 'Qatar', 'Romania', 'Russia', 'Saudi Arabia', 'Singapore',
+      'South Africa', 'South Korea', 'Spain', 'Sri Lanka', 'Sudan', 'Sweden', 'Switzerland',
+      'Syria', 'Taiwan', 'Tanzania', 'Thailand', 'Turkey', 'UAE', 'Uganda', 'UK', 'Ukraine',
+      'USA', 'Vietnam', 'Yemen', 'Zimbabwe'
+    ];
+
+    let selectedAppType = '';
+    let selectedEligibility = '';
+    let selectedValidity = '';
+
+    // ── Application Type ──
+    function selectAppType(type, el) {
+      selectedAppType = type;
+      document.querySelectorAll('#card-resident, #card-nri').forEach(c => c.classList.remove('selected'));
+      el.classList.add('selected');
+      el.querySelector('input[type="radio"]').checked = true;
+      document.getElementById('appTypeError').style.display = 'none';
+
+      const currCountry = document.getElementById('currCountry');
+      const permCountry = document.getElementById('permCountry');
+
+      if (type === 'nri') {
+        const options = COUNTRIES.map(c => `<option value="${c}">${c}</option>`).join('');
+        currCountry.innerHTML = options;
+        permCountry.innerHTML = options;
+        currCountry.value = '';
+        permCountry.value = '';
+        document.getElementById('phoneNumber').placeholder = '+1 / +44 / +971 …';
+      } else {
+        currCountry.innerHTML = '<option value="India">India</option>';
+        permCountry.innerHTML = '<option value="India">India</option>';
+        currCountry.value = 'India';
+        permCountry.value = 'India';
+        document.getElementById('phoneNumber').placeholder = '+91 XXXXX XXXXX';
+      }
+    }
+
+    // ── Eligibility Path ──
+    function selectEligibility(path, el) {
+      selectedEligibility = path;
+      document.querySelectorAll('[name="eligibilityPath"]').forEach(r => {
+        r.closest('.option-card').classList.remove('selected');
+      });
+      el.classList.add('selected');
+      el.querySelector('input[type="radio"]').checked = true;
+      document.getElementById('eligibilityError').style.display = 'none';
+      updateDocSection();
+    }
+
+    // ── Certificate Validity ──
+    function selectValidity(validity, el) {
+      selectedValidity = validity;
+      document.querySelectorAll('[name="certValidity"]').forEach(r => {
+        r.closest('.option-card').classList.remove('selected');
+      });
+      el.classList.add('selected');
+      el.querySelector('input[type="radio"]').checked = true;
+      document.getElementById('validityError').style.display = 'none';
+      updateDocSection();
+    }
+
+    // ── Update document section based on both eligibility + validity ──
+    function updateDocSection() {
+      if (!selectedEligibility || !selectedValidity) return;
+
+      document.querySelectorAll('.doc-section').forEach(s => s.classList.remove('active'));
+      document.getElementById('docs-' + selectedEligibility).classList.add('active');
+      document.getElementById('docPrompt').style.display = 'none';
+
+      const isThreeYear = selectedValidity === 'threeyear';
+      const validityLabel = isThreeYear ? '3-Year' : '2-Year';
+
+      // Update info boxes and ITR descriptions per eligibility path
+      const configs = {
+        networth: {
+          info: `Documents for the <strong>Net Worth</strong> path · <strong>${validityLabel} Certificate</strong> — prove net worth ≥ ₹7.5 Crore (financial assets ≥ ₹3.75 Crore). ${isThreeYear ? 'Two years of ITR are required for a 3-year certificate.' : 'Latest year ITR is required.'} Upload at least one financial asset statement.`,
+          itrDesc: isThreeYear
+            ? 'Upload the latest and previous year ITR or acknowledgements (both required for a 3-year certificate). PDF format only.'
+            : 'Upload the latest year ITR or ITR acknowledgement. PDF format only.',
+        },
+        hybrid: {
+          info: `Documents for the <strong>Hybrid</strong> path · <strong>${validityLabel} Certificate</strong> — prove annual income ≥ ₹1 Crore AND net worth ≥ ₹5 Crore (financial assets ≥ ₹2.5 Crore). ITR serves as both income proof and net worth documentation. ${isThreeYear ? 'Two years of ITR are required for a 3-year certificate.' : ''}`,
+          itrDesc: isThreeYear
+            ? 'Upload the latest and previous year ITR (both required for a 3-year certificate). Counts as proof of income AND net worth. PDF format only.'
+            : 'Upload the latest year ITR or ITR acknowledgement. Counts as proof of income AND net worth. PDF format only.',
+        },
+        income: {
+          info: `Documents for the <strong>Income</strong> path · <strong>${validityLabel} Certificate</strong> — prove annual income ≥ ₹2 Crore. ${isThreeYear ? 'Two years of ITR are required for a 3-year certificate.' : 'Latest year ITR is required.'}`,
+          itrDesc: isThreeYear
+            ? 'Upload the latest and previous year ITR or acknowledgements (both required for a 3-year certificate). PDF format only.'
+            : 'Upload the latest year ITR or ITR acknowledgement. PDF format only.',
+        },
+      };
+
+      const cfg = configs[selectedEligibility];
+      document.getElementById(selectedEligibility[0] + selectedEligibility.slice(1).replace('networth', 'w').replace('hybrid', 'y').replace('income', 'n') + '_info');
+      // Target ids: nw_info, hy_info, in_info
+      const prefixMap = { networth: 'nw', hybrid: 'hy', income: 'in' };
+      const prefix = prefixMap[selectedEligibility];
+
+      document.getElementById(prefix + '_info').innerHTML = cfg.info;
+      document.getElementById(prefix + '_itr_desc').textContent = cfg.itrDesc;
+
+      // Show/hide previous year ITR row for all three paths
+      ['nw', 'hy', 'in'].forEach(p => {
+        const row = document.getElementById(p + '_itr_prev_row');
+        if (row) row.style.display = (isThreeYear && p === prefix) ? 'block' : 'none';
+      });
+    }
+
+    // ── Copy current → permanent address ──
+    function copyCurrentAddress() {
+      document.getElementById('permAddr1').value = document.getElementById('currAddr1').value;
+      document.getElementById('permAddr2').value = document.getElementById('currAddr2').value;
+      document.getElementById('permCity').value = document.getElementById('currCity').value;
+      document.getElementById('permCountry').value = document.getElementById('currCountry').value;
+      document.getElementById('permPincode').value = document.getElementById('currPincode').value;
+    }
+
+    // ── Validation ──
+    function clearErrors() {
+      document.querySelectorAll('.field-error').forEach(el => el.classList.remove('field-error'));
+      document.querySelectorAll('.error-msg:not(.card-error)').forEach(el => el.remove());
+    }
+
+    function markError(id, msg) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.classList.add('field-error');
+      const span = document.createElement('span');
+      span.className = 'error-msg';
+      span.textContent = msg;
+      el.parentNode.appendChild(span);
+    }
+
+    function validateForm() {
+      clearErrors();
+      let valid = true;
+
+      if (!selectedAppType) {
+        document.getElementById('appTypeError').style.display = 'block';
+        valid = false;
+      }
+
+      [
+        { id: 'fullName', msg: 'Full name is required.' },
+        { id: 'emailAddress', msg: 'Email address is required.' },
+        { id: 'phoneNumber', msg: 'Phone number is required.' },
+        { id: 'panCard', msg: 'PAN card number is required.' },
+        { id: 'currAddr1', msg: 'Current address line 1 is required.' },
+        { id: 'permAddr1', msg: 'Permanent address line 1 is required.' },
+      ].forEach(({ id, msg }) => {
+        const el = document.getElementById(id);
+        if (!el.value.trim()) { markError(id, msg); valid = false; }
+      });
+
+      const pan = document.getElementById('panCard').value.trim().toUpperCase();
+      if (pan && !/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(pan)) {
+        markError('panCard', 'Invalid PAN format — expected ABCDE1234F.');
+        valid = false;
+      }
+
+      const email = document.getElementById('emailAddress').value.trim();
+      if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        markError('emailAddress', 'Please enter a valid email address.');
+        valid = false;
+      }
+
+      if (!selectedEligibility) {
+        document.getElementById('eligibilityError').style.display = 'block';
+        valid = false;
+      }
+
+      if (!selectedValidity) {
+        document.getElementById('validityError').style.display = 'block';
+        valid = false;
+      }
+
+      // ITR validation
+      const prefixMap = { networth: 'nw', hybrid: 'hy', income: 'in' };
+      if (selectedEligibility && selectedValidity) {
+        const p = prefixMap[selectedEligibility];
+        const itrEl = document.getElementById(p + '_itr');
+        if (!itrEl.files[0]) { markError(p + '_itr', 'Latest year ITR is required.'); valid = false; }
+
+        if (selectedValidity === 'threeyear') {
+          const itrPrevEl = document.getElementById(p + '_itr_prev');
+          if (!itrPrevEl.files[0]) { markError(p + '_itr_prev', 'Previous year ITR is required for a 3-year certificate.'); valid = false; }
+        }
+      }
+
+      if (!valid) {
+        const firstErr = document.querySelector('.field-error') ||
+          document.querySelector('.card-error[style*="block"]');
+        if (firstErr) firstErr.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        document.getElementById('statusMessage').innerText = 'Please fix the errors above before submitting.';
+        document.getElementById('statusMessage').style.color = '#dc2626';
+      }
+      return valid;
+    }
+
+    // ── File encoding ──
+    const toBase64 = file => new Promise((res, rej) => {
+      const r = new FileReader();
+      r.readAsDataURL(file);
+      r.onload = () => res(r.result);
+      r.onerror = err => rej(err);
+    });
+
+    const encodeFile = async id => {
+      const el = document.getElementById(id);
+      if (!el || !el.files[0]) return { data: '', name: '', type: '' };
+      const f = el.files[0];
+      return { data: await toBase64(f), name: f.name, type: f.type };
+    };
+
+    const encodeMultiFile = async id => {
+      const el = document.getElementById(id);
+      if (!el || !el.files.length) return [];
+      return Promise.all(Array.from(el.files).map(async f => ({
+        data: await toBase64(f), name: f.name, type: f.type
+      })));
+    };
+
+    // ── Submit ──
+    document.getElementById('accreditationForm').addEventListener('submit', async e => {
+      e.preventDefault();
+      if (!validateForm()) return;
+
+      const submitBtn = document.getElementById('submitBtn');
+      const statusMsg = document.getElementById('statusMessage');
+      submitBtn.disabled = true;
+      submitBtn.innerText = 'Uploading & Submitting…';
+      statusMsg.innerText = '';
+
+      try {
+        let docs = {};
+        const isThreeYear = selectedValidity === 'threeyear';
+
+        if (selectedEligibility === 'networth') {
+          docs = {
+            itr: await encodeFile('nw_itr'),
+            itrPrev: isThreeYear ? await encodeFile('nw_itr_prev') : null,
+            cas: await encodeFile('nw_cas'),
+            pms: await encodeMultiFile('nw_pms'),
+            bank: await encodeMultiFile('nw_bank'),
+            pf: await encodeMultiFile('nw_pf'),
+            intl: await encodeMultiFile('nw_intl'),
+            realEstateProof: await encodeMultiFile('nw_realestate_proof'),
+            realEstateValue: await encodeMultiFile('nw_realestate_value'),
+            gold: await encodeFile('nw_gold'),
+            jewellery: await encodeFile('nw_jewellery'),
+            loans: await encodeMultiFile('nw_loans'),
+          };
+        } else if (selectedEligibility === 'hybrid') {
+          docs = {
+            itr: await encodeFile('hy_itr'),
+            itrPrev: isThreeYear ? await encodeFile('hy_itr_prev') : null,
+            cas: await encodeFile('hy_cas'),
+            pms: await encodeMultiFile('hy_pms'),
+            bank: await encodeMultiFile('hy_bank'),
+            pf: await encodeMultiFile('hy_pf'),
+            realEstate: await encodeMultiFile('hy_realestate'),
+            gold: await encodeMultiFile('hy_gold'),
+            loans: await encodeMultiFile('hy_loans'),
+          };
+        } else if (selectedEligibility === 'income') {
+          docs = {
+            itr: await encodeFile('in_itr'),
+            itrPrev: isThreeYear ? await encodeFile('in_itr_prev') : null,
+          };
+        }
+
+        const payload = {
+          applicationType: document.querySelector('[name="applicationType"]:checked')?.value,
+          certValidity: document.querySelector('[name="certValidity"]:checked')?.value,
+          fullName: document.getElementById('fullName').value,
+          organization: document.getElementById('organization').value,
+          emailAddress: document.getElementById('emailAddress').value,
+          phoneNumber: document.getElementById('phoneNumber').value,
+          panCard: document.getElementById('panCard').value.toUpperCase(),
+          currentAddress: {
+            line1: document.getElementById('currAddr1').value,
+            line2: document.getElementById('currAddr2').value,
+            city: document.getElementById('currCity').value,
+            country: document.getElementById('currCountry').value,
+            pincode: document.getElementById('currPincode').value,
+          },
+          permanentAddress: {
+            line1: document.getElementById('permAddr1').value,
+            line2: document.getElementById('permAddr2').value,
+            city: document.getElementById('permCity').value,
+            country: document.getElementById('permCountry').value,
+            pincode: document.getElementById('permPincode').value,
+          },
+          eligibilityPath: document.querySelector('[name="eligibilityPath"]:checked')?.value,
+          documents: docs,
+        };
+
+        await fetch(WEB_APP_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify(payload)
+        });
+
+        statusMsg.innerText = '✓ Application submitted successfully! We will reach out to you shortly.';
+        statusMsg.style.color = '#166534';
+        document.getElementById('accreditationForm').reset();
+        document.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
+        document.querySelectorAll('.doc-section').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('[id$="_itr_prev_row"]').forEach(r => r.style.display = 'none');
+        document.getElementById('docPrompt').style.display = 'block';
+        document.getElementById('currCountry').innerHTML = '<option value="India">India</option>';
+        document.getElementById('permCountry').innerHTML = '<option value="India">India</option>';
+        selectedAppType = '';
+        selectedEligibility = '';
+        selectedValidity = '';
+
+      } catch (err) {
+        console.error(err);
+        statusMsg.innerText = '✗ Submission failed. Please check your connection and try again.';
+        statusMsg.style.color = '#991B1B';
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerText = 'Submit Application';
+      }
+    });
+  </script>
+
+</body>
+
+</html>

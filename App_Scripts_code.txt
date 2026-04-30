@@ -1,0 +1,241 @@
+// ══════════════════════════════════════════════════════════════════════
+//  Platizio – Accredited Investor Application · Google Apps Script
+// ══════════════════════════════════════════════════════════════════════
+//
+//  SETUP (do this once before deploying):
+//  1. Create a Google Sheet and copy its ID into SHEET_ID below.
+//     (The ID is the long string in the Sheet URL between /d/ and /edit)
+//  2. Create a Google Drive folder for uploaded documents and copy
+//     its ID into FOLDER_ID below.
+//     (The ID is the long string at the end of the folder URL)
+//  3. Run setupSheetHeaders() once manually to add column headers.
+//  4. Deploy as a Web App:
+//       Extensions → Apps Script → Deploy → New deployment
+//       Type: Web App · Execute as: Me · Who has access: Anyone
+//  5. Copy the Web App URL into index.html → WEB_APP_URL constant.
+// ══════════════════════════════════════════════════════════════════════
+
+function doPost(e) {
+  try {
+    const SHEET_ID  = 'YOUR_SHEET_ID_HERE';   // ← replace with your Google Sheet ID
+    const FOLDER_ID = 'YOUR_FOLDER_ID_HERE';  // ← replace with your Drive folder ID
+
+    const data   = JSON.parse(e.postData.contents);
+    const folder = DriveApp.getFolderById(FOLDER_ID);
+
+    const name = (data.fullName || 'Applicant').trim();
+    const pan  = (data.panCard  || 'NOPAN').trim();
+    const ts   = Utilities.formatDate(new Date(), Session.getScriptTimeZone(), 'yyyyMMdd_HHmm');
+
+    // Create one subfolder per applicant to keep documents organised
+    const subFolder = folder.createFolder(name + '_' + pan + '_' + ts);
+
+    // ── Upload a single base64-encoded file → shareable Drive link ──
+    function uploadFile(fileObj, label) {
+      if (!fileObj || !fileObj.data) return '';
+      const base64Part = fileObj.data.indexOf(',') !== -1
+        ? fileObj.data.split(',')[1]
+        : fileObj.data;
+      const decoded = Utilities.base64Decode(base64Part);
+      const blob    = Utilities.newBlob(decoded, fileObj.type || 'application/octet-stream', label + '_' + fileObj.name);
+      const file    = subFolder.createFile(blob);
+      try {
+        file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
+      } catch (sharingErr) {
+        Logger.log('Sharing restricted for ' + label + ': ' + sharingErr.toString());
+      }
+      return file.getUrl();
+    }
+
+    // ── Upload an array of base64-encoded files → comma-separated Drive links ──
+    function uploadFiles(fileArr, label) {
+      if (!fileArr || !fileArr.length) return '';
+      const links = fileArr
+        .filter(f => f && f.data)
+        .map((f, i) => uploadFile(f, label + '_' + (i + 1)));
+      return links.join(', ');
+    }
+
+    // ─────────────────────────────────────────────────────────────────
+    //  Document uploads — common fields first, then path-specific
+    // ─────────────────────────────────────────────────────────────────
+
+    const docs = data.documents || {};
+    const path = (data.eligibilityPath || '').toLowerCase();
+
+    // ITR — present for all three paths
+    const itrUrl     = uploadFile(docs.itr,     name + '_ITR_Latest');
+    const itrPrevUrl = docs.itrPrev ? uploadFile(docs.itrPrev, name + '_ITR_Previous') : '';
+
+    // Path-specific document URLs (declared upfront, populated per path)
+    let casUrl              = '';
+    let pmsUrls             = '';
+    let bankUrls            = '';
+    let pfUrls              = '';
+    let intlUrls            = '';           // Net Worth only
+    let realEstateProofUrls = '';           // Net Worth only
+    let realEstateValueUrls = '';           // Net Worth only
+    let goldUrl             = '';           // Net Worth only (single file)
+    let jewelleryUrl        = '';           // Net Worth only (single file)
+    let loansUrls           = '';           // Net Worth & Hybrid
+    let realEstateUrls_hy   = '';           // Hybrid only
+    let goldUrls_hy         = '';           // Hybrid only (multiple files)
+
+    if (path === 'networth') {
+      casUrl              = uploadFile(docs.cas,              name + '_CAS');
+      pmsUrls             = uploadFiles(docs.pms,             name + '_PMS');
+      bankUrls            = uploadFiles(docs.bank,            name + '_Bank');
+      pfUrls              = uploadFiles(docs.pf,              name + '_PF');
+      intlUrls            = uploadFiles(docs.intl,            name + '_Intl');
+      realEstateProofUrls = uploadFiles(docs.realEstateProof, name + '_RE_OwnershipProof');
+      realEstateValueUrls = uploadFiles(docs.realEstateValue, name + '_RE_ReadyReckoner');
+      goldUrl             = uploadFile(docs.gold,             name + '_Gold');
+      jewelleryUrl        = uploadFile(docs.jewellery,        name + '_Jewellery');
+      loansUrls           = uploadFiles(docs.loans,           name + '_Loans');
+
+    } else if (path === 'hybrid') {
+      casUrl            = uploadFile(docs.cas,         name + '_CAS');
+      pmsUrls           = uploadFiles(docs.pms,        name + '_PMS');
+      bankUrls          = uploadFiles(docs.bank,       name + '_Bank');
+      pfUrls            = uploadFiles(docs.pf,         name + '_PF');
+      realEstateUrls_hy = uploadFiles(docs.realEstate, name + '_RealEstate');
+      goldUrls_hy       = uploadFiles(docs.gold,       name + '_Gold_Jewellery');
+      loansUrls         = uploadFiles(docs.loans,      name + '_Loans');
+
+    }
+    // Income path: only ITR (latest + optional previous) — already handled above
+
+    // ─────────────────────────────────────────────────────────────────
+    //  Address formatting helpers
+    // ─────────────────────────────────────────────────────────────────
+
+    const curr = data.currentAddress   || {};
+    const perm = data.permanentAddress || {};
+
+    // Human-readable labels for sheet
+    const appTypeLabel =
+      data.applicationType === 'nri' ? 'Individual (NRI)' : 'Individual (Indian Resident)';
+
+    const validityLabel =
+      data.certValidity === 'threeyear' ? '3-Year' : '2-Year';
+
+    const pathLabel =
+      path === 'networth' ? 'Net Worth' :
+      path === 'hybrid'   ? 'Hybrid'    : 'Income';
+
+    // ─────────────────────────────────────────────────────────────────
+    //  Append one row to the Google Sheet
+    // ─────────────────────────────────────────────────────────────────
+
+    const sheet = SpreadsheetApp.openById(SHEET_ID).getActiveSheet();
+
+    sheet.appendRow([
+      new Date(),             // A  – Timestamp
+      appTypeLabel,           // B  – Application Type
+      validityLabel,          // C  – Certificate Validity
+      data.fullName      || '',  // D  – Full Name
+      data.organization  || '',  // E  – Organization
+      data.emailAddress  || '',  // F  – Email Address
+      data.phoneNumber   || '',  // G  – Phone Number
+      data.panCard       || '',  // H  – PAN Number
+      curr.line1   || '',     // I  – Current Address Line 1
+      curr.line2   || '',     // J  – Current Address Line 2
+      curr.city    || '',     // K  – Current City
+      curr.country || '',     // L  – Current Country
+      curr.pincode || '',     // M  – Current Pincode
+      perm.line1   || '',     // N  – Permanent Address Line 1
+      perm.line2   || '',     // O  – Permanent Address Line 2
+      perm.city    || '',     // P  – Permanent City
+      perm.country || '',     // Q  – Permanent Country
+      perm.pincode || '',     // R  – Permanent Pincode
+      pathLabel,              // S  – Eligibility Path
+      itrUrl,                 // T  – ITR Latest Year (Drive Link)
+      itrPrevUrl,             // U  – ITR Previous Year (Drive Link) [3-Year certificate only]
+      casUrl,                 // V  – CAS Statement (Drive Link)
+      pmsUrls,                // W  – PMS / AIF / SIF Statements (Drive Links)
+      bankUrls,               // X  – Bank Statements (Drive Links)
+      pfUrls,                 // Y  – PF / EPF Statements (Drive Links)
+      intlUrls,               // Z  – International Assets (Drive Links) [Net Worth]
+      realEstateProofUrls,    // AA – Real Estate Ownership Proof (Drive Links) [Net Worth]
+      realEstateValueUrls,    // AB – Real Estate Ready Reckoner Value (Drive Links) [Net Worth]
+      goldUrl,                // AC – Gold Valuation Certificate (Drive Link) [Net Worth]
+      jewelleryUrl,           // AD – Jewellery Valuation Certificate (Drive Link) [Net Worth]
+      loansUrls,              // AE – Loan Statements (Drive Links) [Net Worth & Hybrid]
+      realEstateUrls_hy,      // AF – Real Estate Documents (Drive Links) [Hybrid]
+      goldUrls_hy,            // AG – Gold / Jewellery Documents (Drive Links) [Hybrid]
+    ]);
+
+    return ContentService
+      .createTextOutput(JSON.stringify({ status: 'success' }))
+      .setMimeType(ContentService.MimeType.JSON);
+
+  } catch (error) {
+    return ContentService
+      .createTextOutput(JSON.stringify({ status: 'error', message: error.toString() }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+}
+
+
+// ══════════════════════════════════════════════════════════════════════
+//  setupSheetHeaders()
+//  Run this function ONCE manually (not as a Web App) to add the
+//  column header row, bold it, and freeze it.
+//
+//  How to run: Apps Script editor → select setupSheetHeaders from
+//  the function dropdown → click Run.
+// ══════════════════════════════════════════════════════════════════════
+
+function setupSheetHeaders() {
+  const SHEET_ID = 'YOUR_SHEET_ID_HERE';  // ← same Sheet ID as above
+
+  const sheet = SpreadsheetApp.openById(SHEET_ID).getActiveSheet();
+
+  const headers = [
+    'Timestamp',                                                    // A
+    'Application Type',                                            // B
+    'Certificate Validity',                                        // C
+    'Full Name',                                                   // D
+    'Organization',                                                // E
+    'Email Address',                                               // F
+    'Phone Number',                                                // G
+    'PAN Number',                                                  // H
+    'Current Address – Line 1',                                    // I
+    'Current Address – Line 2',                                    // J
+    'Current City',                                                // K
+    'Current Country',                                             // L
+    'Current Pincode',                                             // M
+    'Permanent Address – Line 1',                                  // N
+    'Permanent Address – Line 2',                                  // O
+    'Permanent City',                                              // P
+    'Permanent Country',                                           // Q
+    'Permanent Pincode',                                           // R
+    'Eligibility Path',                                            // S
+    'ITR – Latest Year (Drive Link)',                              // T
+    'ITR – Previous Year (Drive Link) [3-Year only]',             // U
+    'CAS Statement (Drive Link)',                                  // V
+    'PMS / AIF / SIF Statements (Drive Links)',                    // W
+    'Bank Statements (Drive Links)',                               // X
+    'PF / EPF Statements (Drive Links)',                           // Y
+    'International Assets (Drive Links) [Net Worth]',             // Z
+    'Real Estate – Ownership Proof (Drive Links) [Net Worth]',    // AA
+    'Real Estate – Ready Reckoner Value (Drive Links) [Net Worth]',// AB
+    'Gold Valuation Certificate (Drive Link) [Net Worth]',        // AC
+    'Jewellery Valuation Certificate (Drive Link) [Net Worth]',   // AD
+    'Loan Statements (Drive Links) [Net Worth & Hybrid]',         // AE
+    'Real Estate Documents (Drive Links) [Hybrid]',               // AF
+    'Gold / Jewellery Documents (Drive Links) [Hybrid]',          // AG
+  ];
+
+  const headerRange = sheet.getRange(1, 1, 1, headers.length);
+  headerRange.setValues([headers]);
+  headerRange.setFontWeight('bold');
+  headerRange.setBackground('#7A2000');
+  headerRange.setFontColor('#ffffff');
+  sheet.setFrozenRows(1);
+
+  // Auto-resize columns for readability
+  sheet.autoResizeColumns(1, headers.length);
+
+  Logger.log('Headers set up successfully! ' + headers.length + ' columns created.');
+}
