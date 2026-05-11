@@ -463,28 +463,7 @@
 
   <!-- ── Platizio Logo ── -->
   <div class="logo-wrap">
-    <svg viewBox="0 0 330 88" xmlns="http://www.w3.org/2000/svg" style="height:78px;width:auto;" aria-label="Platizio">
-      <defs>
-        <linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="#E8884E" />
-          <stop offset="100%" stop-color="#C04010" />
-        </linearGradient>
-        <linearGradient id="g2" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="#C04010" />
-          <stop offset="100%" stop-color="#6E1A00" />
-        </linearGradient>
-      </defs>
-      <polygon points="264,38 296,6 296,70" fill="#f5ede6" stroke="#8B3000" stroke-width="1.6"
-        stroke-linejoin="round" />
-      <polygon points="296,6 264,38 328,38" fill="url(#g1)" stroke="#8B3000" stroke-width="1.6"
-        stroke-linejoin="round" />
-      <polygon points="328,38 296,6 296,70" fill="url(#g1)" stroke="#8B3000" stroke-width="1.6"
-        stroke-linejoin="round" />
-      <polygon points="296,70 264,38 328,38" fill="url(#g2)" stroke="#8B3000" stroke-width="1.6"
-        stroke-linejoin="round" />
-      <path d="M296,70 Q308,80 302,88" fill="none" stroke="#6E1A00" stroke-width="2" stroke-linecap="round" />
-      <text x="4" y="60" font-family="Georgia,'Times New Roman',serif" font-size="56" fill="#C04010">Platizio</text>
-    </svg>
+    <img src="Platizio Logo.png" alt="Platizio" style="height:180px;width:auto;">
   </div>
 
   <!-- ── Form Card ── -->
@@ -569,8 +548,8 @@
       <div class="form-row">
         <div class="form-group">
           <label class="field-label">PAN Card Number <span class="req">*</span></label>
-          <input type="text" id="panCard" placeholder="ABCDE1234F" maxlength="10"
-            style="text-transform:uppercase;" required>
+          <input type="text" id="panCard" placeholder="ABCDE1234F" maxlength="10" style="text-transform:uppercase;"
+            required>
           <span class="hint">Format: 5 letters · 4 digits · 1 letter</span>
         </div>
         <div class="form-group">
@@ -648,9 +627,11 @@
 
       <!-- ── Spouse Details (shown only for Joint–Spouse) ── -->
       <div id="spouseSection" style="display:none;">
-        <div class="sub-label" style="margin-top:28px; font-size:14px; color:#7A2000;">— Spouse / Co-Applicant Details —</div>
+        <div class="sub-label" style="margin-top:28px; font-size:14px; color:#7A2000;">— Spouse / Co-Applicant Details —
+        </div>
         <div class="divider"></div>
-        <p style="font-size:12px;color:#888;margin-bottom:14px;">Please provide your spouse's details exactly as they appear on official documents.</p>
+        <p style="font-size:12px;color:#888;margin-bottom:14px;">Please provide your spouse's details exactly as they
+          appear on official documents.</p>
 
         <div class="form-row">
           <div class="form-group">
@@ -707,7 +688,9 @@
             </div>
             <div class="form-group">
               <label class="field-label">Country</label>
-              <select id="sp_currCountry"><option value="India">India</option></select>
+              <select id="sp_currCountry">
+                <option value="India">India</option>
+              </select>
             </div>
             <div class="form-group">
               <label class="field-label">Pincode</label>
@@ -738,7 +721,9 @@
             </div>
             <div class="form-group">
               <label class="field-label">Country</label>
-              <select id="sp_permCountry"><option value="India">India</option></select>
+              <select id="sp_permCountry">
+                <option value="India">India</option>
+              </select>
             </div>
             <div class="form-group">
               <label class="field-label">Pincode</label>
@@ -757,7 +742,7 @@
         <label class="option-card" onclick="selectEligibility('networth', this)">
           <input type="radio" name="eligibilityPath" value="Net Worth">
           <div class="card-check"></div>
-          <div class="card-title">Net Worth</div>
+          <div class="card-title">A. Net Worth</div>
           <ul class="eligibility-bullets">
             <li>Net worth ≥ ₹7.5 Crore</li>
             <li>Financial assets ≥ ₹3.75 Crore</li>
@@ -766,7 +751,7 @@
         <label class="option-card" onclick="selectEligibility('hybrid', this)">
           <input type="radio" name="eligibilityPath" value="Hybrid">
           <div class="card-check"></div>
-          <div class="card-title">Hybrid</div>
+          <div class="card-title">B. Hybrid</div>
           <ul class="eligibility-bullets">
             <li>Annual income ≥ ₹1 Crore</li>
             <li>Net worth ≥ ₹5 Crore</li>
@@ -776,13 +761,35 @@
         <label class="option-card" onclick="selectEligibility('income', this)">
           <input type="radio" name="eligibilityPath" value="Income">
           <div class="card-check"></div>
-          <div class="card-title">Income</div>
+          <div class="card-title">C. Income</div>
           <ul class="eligibility-bullets">
             <li>Annual income ≥ ₹2 Crore</li>
           </ul>
         </label>
       </div>
       <span class="card-error" id="eligibilityError">Please select an eligibility path.</span>
+
+      <!-- 3.2 · Net Worth Certificate Method (Net Worth & Hybrid only) -->
+      <div id="certMethodSection" style="display:none; margin-top:22px;">
+        <div class="sub-label">3.2 · Net Worth Certificate</div>
+        <div class="divider"></div>
+        <p style="font-size:12px;color:#888;margin-bottom:12px;">How will your Net Worth be certified?</p>
+        <div class="card-grid card-grid-2">
+          <label class="option-card" id="card-ca" onclick="selectCertMethod('ca', this)">
+            <input type="radio" name="certMethod" value="CA">
+            <div class="card-check"></div>
+            <div class="card-title">Net Worth by Your CA</div>
+            <div class="card-desc">Your Chartered Accountant provides the Net Worth Certificate directly</div>
+          </label>
+          <label class="option-card" id="card-platizio" onclick="selectCertMethod('platizio', this)">
+            <input type="radio" name="certMethod" value="Platizio">
+            <div class="card-check"></div>
+            <div class="card-title">Facilitated by Platizio</div>
+            <div class="card-desc">Platizio arranges your Net Worth Certificate through empanelled CAs</div>
+          </label>
+        </div>
+        <span class="card-error" id="certMethodError">Please select a certification method.</span>
+      </div>
 
       <!-- ═══ 4. CERTIFICATE VALIDITY ═══ -->
       <div class="section-header">4 · Certificate Validity</div>
@@ -797,7 +804,7 @@
           <div class="cert-fee-row">
             <div class="cert-fee-item">
               <span class="fee-label">CA fees:</span>
-              <span class="fee-amount">₹7,000 + GST</span>
+              <span class="fee-amount">₹9,000 + GST</span>
               <span class="fee-when">payable now</span>
             </div>
             <div class="cert-fee-item">
@@ -814,7 +821,7 @@
           <div class="cert-fee-row">
             <div class="cert-fee-item">
               <span class="fee-label">CA fees:</span>
-              <span class="fee-amount">₹12,000 + GST</span>
+              <span class="fee-amount">₹13,500 + GST</span>
               <span class="fee-when">payable now</span>
             </div>
             <div class="cert-fee-item">
@@ -1029,6 +1036,37 @@
         </div>
       </div>
 
+      <!-- ── CA Method Documents (Net Worth or Hybrid via own CA) ── -->
+      <div class="doc-section" id="docs-ca">
+        <div class="info-box" id="ca_info"></div>
+
+        <div class="doc-category">
+          <div class="doc-category-title">Income Tax Returns <span style="color:#dc2626">*</span></div>
+          <div class="doc-category-desc" id="ca_itr_desc"></div>
+          <div class="file-grid">
+            <div class="file-item">
+              <label class="field-label">Latest Year ITR <span class="req">*</span></label>
+              <input type="file" id="ca_itr" accept=".pdf">
+            </div>
+            <div class="file-item" id="ca_itr_prev_row" style="display:none;">
+              <label class="field-label">Previous Year ITR <span class="req">*</span></label>
+              <input type="file" id="ca_itr_prev" accept=".pdf">
+            </div>
+          </div>
+        </div>
+
+        <div class="doc-category">
+          <div class="doc-category-title">Net Worth Certificate <span style="color:#dc2626">*</span></div>
+          <div class="doc-category-desc">Certificate issued by your CA attesting to your net worth as per SEBI guidelines. PDF format only.</div>
+          <div class="file-grid">
+            <div class="file-item">
+              <label class="field-label">Net Worth Certificate <span class="req">*</span></label>
+              <input type="file" id="ca_nw_cert" accept=".pdf">
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- ═══ SUBMIT ═══ -->
       <button type="submit" class="btn-submit" id="submitBtn">Submit Application</button>
       <div id="statusMessage"></div>
@@ -1050,16 +1088,16 @@
       selectAccountType('individual', individualCard);
 
       // 2. Basic details
-      document.getElementById('fullName').value       = 'Arjun Mehta';
-      document.getElementById('organization').value   = 'Mehta Capital Advisors LLP';
-      document.getElementById('emailAddress').value   = 'arjun.mehta@mehtacapital.in';
-      document.getElementById('phoneNumber').value    = '+91 98765 43210';
-      document.getElementById('panCard').value        = 'ABCPM1234A';
+      document.getElementById('fullName').value = 'Arjun Mehta';
+      document.getElementById('organization').value = 'Mehta Capital Advisors LLP';
+      document.getElementById('emailAddress').value = 'arjun.mehta@mehtacapital.in';
+      document.getElementById('phoneNumber').value = '+91 98765 43210';
+      document.getElementById('panCard').value = 'ABCPM1234A';
 
       // Current address
-      document.getElementById('currAddr1').value   = '14B, Palm Grove Residency';
-      document.getElementById('currAddr2').value   = 'Sector 62, NOIDA';
-      document.getElementById('currCity').value    = 'Noida';
+      document.getElementById('currAddr1').value = '14B, Palm Grove Residency';
+      document.getElementById('currAddr2').value = 'Sector 62, NOIDA';
+      document.getElementById('currCity').value = 'Noida';
       document.getElementById('currCountry').value = 'India';
       document.getElementById('currPincode').value = '201309';
 
@@ -1094,6 +1132,7 @@
     let selectedAccountType = '';
     let selectedAppType     = '';
     let selectedEligibility = '';
+    let selectedCertMethod  = '';   // 'ca' | 'platizio' — for Net Worth & Hybrid paths
     let selectedValidity    = '';
 
     // ── Residency (Indian Resident / NRI) — Step 1 ──
@@ -1143,12 +1182,31 @@
     // ── Eligibility Path ──
     function selectEligibility(path, el) {
       selectedEligibility = path;
-      document.querySelectorAll('[name="eligibilityPath"]').forEach(r => {
-        r.closest('.option-card').classList.remove('selected');
-      });
+
+      // Reset cert method when path changes
+      selectedCertMethod = '';
+      document.querySelectorAll('[name="certMethod"]').forEach(r => r.closest('.option-card').classList.remove('selected'));
+      document.getElementById('certMethodError').style.display = 'none';
+
+      document.querySelectorAll('[name="eligibilityPath"]').forEach(r => r.closest('.option-card').classList.remove('selected'));
       el.classList.add('selected');
       el.querySelector('input[type="radio"]').checked = true;
       document.getElementById('eligibilityError').style.display = 'none';
+
+      // Show cert method sub-section only for Net Worth and Hybrid
+      const needsCert = path === 'networth' || path === 'hybrid';
+      document.getElementById('certMethodSection').style.display = needsCert ? 'block' : 'none';
+
+      updateDocSection();
+    }
+
+    // ── Certificate Method (CA / Platizio) ──
+    function selectCertMethod(method, el) {
+      selectedCertMethod = method;
+      document.querySelectorAll('[name="certMethod"]').forEach(r => r.closest('.option-card').classList.remove('selected'));
+      el.classList.add('selected');
+      el.querySelector('input[type="radio"]').checked = true;
+      document.getElementById('certMethodError').style.display = 'none';
       updateDocSection();
     }
 
@@ -1164,32 +1222,55 @@
       updateDocSection();
     }
 
-    // ── Update document section based on both eligibility + validity ──
+    // ── Update document section based on eligibility + cert method + validity ──
     function updateDocSection() {
       if (!selectedEligibility || !selectedValidity) return;
 
+      // Net Worth & Hybrid also need a cert method choice
+      const needsCertMethod = selectedEligibility === 'networth' || selectedEligibility === 'hybrid';
+      if (needsCertMethod && !selectedCertMethod) return;
+
+      const isThreeYear   = selectedValidity === 'threeyear';
+      const validityLabel = isThreeYear ? '3-Year' : '2-Year';
+      const pathLabel     = selectedEligibility === 'networth' ? 'Net Worth'
+                          : selectedEligibility === 'hybrid'   ? 'Hybrid' : 'Income';
+
+      // Resolve which section + prefix to activate
+      let sectionId, prefix;
+      if (selectedEligibility === 'income') {
+        sectionId = 'docs-income';  prefix = 'in';
+      } else if (selectedCertMethod === 'ca') {
+        sectionId = 'docs-ca';      prefix = 'ca';
+      } else {
+        sectionId = 'docs-' + selectedEligibility;
+        prefix    = selectedEligibility === 'networth' ? 'nw' : 'hy';
+      }
+
       document.querySelectorAll('.doc-section').forEach(s => s.classList.remove('active'));
-      document.getElementById('docs-' + selectedEligibility).classList.add('active');
+      document.getElementById(sectionId).classList.add('active');
       document.getElementById('docPrompt').style.display = 'none';
 
-      const isThreeYear = selectedValidity === 'threeyear';
-      const validityLabel = isThreeYear ? '3-Year' : '2-Year';
-
-      // Update info boxes and ITR descriptions per eligibility path
+      // Info-box and ITR description text per prefix
       const configs = {
-        networth: {
+        ca: {
+          info: `Documents for the <strong>${pathLabel}</strong> path · <strong>${validityLabel} Certificate</strong> — Net Worth verified by your CA. ${isThreeYear ? 'Two years of ITR are required for a 3-year certificate.' : 'Latest year ITR is required.'}`,
+          itrDesc: isThreeYear
+            ? 'Upload the latest and previous year ITR (both required for a 3-year certificate). PDF format only.'
+            : 'Upload the latest year ITR or acknowledgement. PDF format only.',
+        },
+        nw: {
           info: `Documents for the <strong>Net Worth</strong> path · <strong>${validityLabel} Certificate</strong> — prove net worth ≥ ₹7.5 Crore (financial assets ≥ ₹3.75 Crore). ${isThreeYear ? 'Two years of ITR are required for a 3-year certificate.' : 'Latest year ITR is required.'} Upload at least one financial asset statement.`,
           itrDesc: isThreeYear
             ? 'Upload the latest and previous year ITR or acknowledgements (both required for a 3-year certificate). PDF format only.'
             : 'Upload the latest year ITR or ITR acknowledgement. PDF format only.',
         },
-        hybrid: {
+        hy: {
           info: `Documents for the <strong>Hybrid</strong> path · <strong>${validityLabel} Certificate</strong> — prove annual income ≥ ₹1 Crore AND net worth ≥ ₹5 Crore (financial assets ≥ ₹2.5 Crore). ITR serves as both income proof and net worth documentation. ${isThreeYear ? 'Two years of ITR are required for a 3-year certificate.' : ''}`,
           itrDesc: isThreeYear
             ? 'Upload the latest and previous year ITR (both required for a 3-year certificate). Counts as proof of income AND net worth. PDF format only.'
             : 'Upload the latest year ITR or ITR acknowledgement. Counts as proof of income AND net worth. PDF format only.',
         },
-        income: {
+        in: {
           info: `Documents for the <strong>Income</strong> path · <strong>${validityLabel} Certificate</strong> — prove annual income ≥ ₹2 Crore. ${isThreeYear ? 'Two years of ITR are required for a 3-year certificate.' : 'Latest year ITR is required.'}`,
           itrDesc: isThreeYear
             ? 'Upload the latest and previous year ITR or acknowledgements (both required for a 3-year certificate). PDF format only.'
@@ -1197,17 +1278,11 @@
         },
       };
 
-      const cfg = configs[selectedEligibility];
-      document.getElementById(selectedEligibility[0] + selectedEligibility.slice(1).replace('networth', 'w').replace('hybrid', 'y').replace('income', 'n') + '_info');
-      // Target ids: nw_info, hy_info, in_info
-      const prefixMap = { networth: 'nw', hybrid: 'hy', income: 'in' };
-      const prefix = prefixMap[selectedEligibility];
+      document.getElementById(prefix + '_info').innerHTML        = configs[prefix].info;
+      document.getElementById(prefix + '_itr_desc').textContent  = configs[prefix].itrDesc;
 
-      document.getElementById(prefix + '_info').innerHTML = cfg.info;
-      document.getElementById(prefix + '_itr_desc').textContent = cfg.itrDesc;
-
-      // Show/hide previous year ITR row for all three paths
-      ['nw', 'hy', 'in'].forEach(p => {
+      // Show/hide previous-year ITR rows across all sections
+      ['nw', 'hy', 'in', 'ca'].forEach(p => {
         const row = document.getElementById(p + '_itr_prev_row');
         if (row) row.style.display = (isThreeYear && p === prefix) ? 'block' : 'none';
       });
@@ -1215,18 +1290,18 @@
 
     // ── Copy current → permanent address (main applicant) ──
     function copyCurrentAddress() {
-      document.getElementById('permAddr1').value   = document.getElementById('currAddr1').value;
-      document.getElementById('permAddr2').value   = document.getElementById('currAddr2').value;
-      document.getElementById('permCity').value    = document.getElementById('currCity').value;
+      document.getElementById('permAddr1').value = document.getElementById('currAddr1').value;
+      document.getElementById('permAddr2').value = document.getElementById('currAddr2').value;
+      document.getElementById('permCity').value = document.getElementById('currCity').value;
       document.getElementById('permCountry').value = document.getElementById('currCountry').value;
       document.getElementById('permPincode').value = document.getElementById('currPincode').value;
     }
 
     // ── Copy spouse current → spouse permanent address ──
     function copySpouseAddress() {
-      document.getElementById('sp_permAddr1').value   = document.getElementById('sp_currAddr1').value;
-      document.getElementById('sp_permAddr2').value   = document.getElementById('sp_currAddr2').value;
-      document.getElementById('sp_permCity').value    = document.getElementById('sp_currCity').value;
+      document.getElementById('sp_permAddr1').value = document.getElementById('sp_currAddr1').value;
+      document.getElementById('sp_permAddr2').value = document.getElementById('sp_currAddr2').value;
+      document.getElementById('sp_permCity').value = document.getElementById('sp_currCity').value;
       document.getElementById('sp_permCountry').value = document.getElementById('sp_currCountry').value;
       document.getElementById('sp_permPincode').value = document.getElementById('sp_currPincode').value;
     }
@@ -1263,12 +1338,12 @@
 
       // Main applicant required fields
       [
-        { id: 'fullName',     msg: 'Full name is required.' },
+        { id: 'fullName', msg: 'Full name is required.' },
         { id: 'emailAddress', msg: 'Email address is required.' },
-        { id: 'phoneNumber',  msg: 'Phone number is required.' },
-        { id: 'panCard',      msg: 'PAN card number is required.' },
-        { id: 'currAddr1',    msg: 'Current address line 1 is required.' },
-        { id: 'permAddr1',    msg: 'Permanent address line 1 is required.' },
+        { id: 'phoneNumber', msg: 'Phone number is required.' },
+        { id: 'panCard', msg: 'PAN card number is required.' },
+        { id: 'currAddr1', msg: 'Current address line 1 is required.' },
+        { id: 'permAddr1', msg: 'Permanent address line 1 is required.' },
       ].forEach(({ id, msg }) => {
         const el = document.getElementById(id);
         if (!el.value.trim()) { markError(id, msg); valid = false; }
@@ -1296,12 +1371,12 @@
       // Spouse / co-applicant fields — required when Joint–Spouse selected
       if (selectedAccountType === 'joint') {
         [
-          { id: 'sp_fullName',     msg: 'Spouse full name is required.' },
+          { id: 'sp_fullName', msg: 'Spouse full name is required.' },
           { id: 'sp_emailAddress', msg: 'Spouse email address is required.' },
-          { id: 'sp_phoneNumber',  msg: 'Spouse phone number is required.' },
-          { id: 'sp_panCard',      msg: 'Spouse PAN card number is required.' },
-          { id: 'sp_currAddr1',    msg: 'Spouse current address line 1 is required.' },
-          { id: 'sp_permAddr1',    msg: 'Spouse permanent address line 1 is required.' },
+          { id: 'sp_phoneNumber', msg: 'Spouse phone number is required.' },
+          { id: 'sp_panCard', msg: 'Spouse PAN card number is required.' },
+          { id: 'sp_currAddr1', msg: 'Spouse current address line 1 is required.' },
+          { id: 'sp_permAddr1', msg: 'Spouse permanent address line 1 is required.' },
         ].forEach(({ id, msg }) => {
           const el = document.getElementById(id);
           if (el && !el.value.trim()) { markError(id, msg); valid = false; }
@@ -1332,21 +1407,34 @@
         valid = false;
       }
 
+      // Cert method required for Net Worth & Hybrid
+      const needsCertMethod = selectedEligibility === 'networth' || selectedEligibility === 'hybrid';
+      if (needsCertMethod && !selectedCertMethod) {
+        document.getElementById('certMethodError').style.display = 'block';
+        valid = false;
+      }
+
+      // Net Worth Certificate required when CA method chosen
+      if (needsCertMethod && selectedCertMethod === 'ca') {
+        const nwCertEl = document.getElementById('ca_nw_cert');
+        if (nwCertEl && !nwCertEl.files[0]) { markError('ca_nw_cert', 'Net Worth Certificate is required.'); valid = false; }
+      }
+
       if (!selectedValidity) {
         document.getElementById('validityError').style.display = 'block';
         valid = false;
       }
 
-      // ITR validation
-      const prefixMap = { networth: 'nw', hybrid: 'hy', income: 'in' };
-      if (selectedEligibility && selectedValidity) {
-        const p = prefixMap[selectedEligibility];
+      // ITR validation — resolve prefix accounting for CA method
+      if (selectedEligibility && selectedValidity && (!needsCertMethod || selectedCertMethod)) {
+        const prefixMap = { networth: 'nw', hybrid: 'hy', income: 'in' };
+        const p = (needsCertMethod && selectedCertMethod === 'ca') ? 'ca' : prefixMap[selectedEligibility];
         const itrEl = document.getElementById(p + '_itr');
-        if (!itrEl.files[0]) { markError(p + '_itr', 'Latest year ITR is required.'); valid = false; }
+        if (itrEl && !itrEl.files[0]) { markError(p + '_itr', 'Latest year ITR is required.'); valid = false; }
 
         if (selectedValidity === 'threeyear') {
           const itrPrevEl = document.getElementById(p + '_itr_prev');
-          if (!itrPrevEl.files[0]) { markError(p + '_itr_prev', 'Previous year ITR is required for a 3-year certificate.'); valid = false; }
+          if (itrPrevEl && !itrPrevEl.files[0]) { markError(p + '_itr_prev', 'Previous year ITR is required for a 3-year certificate.'); valid = false; }
         }
       }
 
@@ -1396,38 +1484,47 @@
 
       try {
         let docs = {};
-        const isThreeYear = selectedValidity === 'threeyear';
+        const isThreeYear    = selectedValidity === 'threeyear';
+        const useCA          = (selectedEligibility === 'networth' || selectedEligibility === 'hybrid')
+                               && selectedCertMethod === 'ca';
 
-        if (selectedEligibility === 'networth') {
+        if (useCA) {
+          // CA-certified Net Worth (Net Worth or Hybrid path, own CA)
           docs = {
-            itr: await encodeFile('nw_itr'),
-            itrPrev: isThreeYear ? await encodeFile('nw_itr_prev') : null,
-            cas: await encodeFile('nw_cas'),
-            pms: await encodeMultiFile('nw_pms'),
-            bank: await encodeMultiFile('nw_bank'),
-            pf: await encodeMultiFile('nw_pf'),
-            intl: await encodeMultiFile('nw_intl'),
-            realEstateProof: await encodeMultiFile('nw_realestate_proof'),
-            realEstateValue: await encodeMultiFile('nw_realestate_value'),
-            gold: await encodeFile('nw_gold'),
-            jewellery: await encodeFile('nw_jewellery'),
-            loans: await encodeMultiFile('nw_loans'),
+            itr:          await encodeFile('ca_itr'),
+            itrPrev:      isThreeYear ? await encodeFile('ca_itr_prev') : null,
+            nwCertificate: await encodeFile('ca_nw_cert'),
+          };
+        } else if (selectedEligibility === 'networth') {
+          docs = {
+            itr:              await encodeFile('nw_itr'),
+            itrPrev:          isThreeYear ? await encodeFile('nw_itr_prev') : null,
+            cas:              await encodeFile('nw_cas'),
+            pms:              await encodeMultiFile('nw_pms'),
+            bank:             await encodeMultiFile('nw_bank'),
+            pf:               await encodeMultiFile('nw_pf'),
+            intl:             await encodeMultiFile('nw_intl'),
+            realEstateProof:  await encodeMultiFile('nw_realestate_proof'),
+            realEstateValue:  await encodeMultiFile('nw_realestate_value'),
+            gold:             await encodeFile('nw_gold'),
+            jewellery:        await encodeFile('nw_jewellery'),
+            loans:            await encodeMultiFile('nw_loans'),
           };
         } else if (selectedEligibility === 'hybrid') {
           docs = {
-            itr: await encodeFile('hy_itr'),
-            itrPrev: isThreeYear ? await encodeFile('hy_itr_prev') : null,
-            cas: await encodeFile('hy_cas'),
-            pms: await encodeMultiFile('hy_pms'),
-            bank: await encodeMultiFile('hy_bank'),
-            pf: await encodeMultiFile('hy_pf'),
-            realEstate: await encodeMultiFile('hy_realestate'),
-            gold: await encodeMultiFile('hy_gold'),
-            loans: await encodeMultiFile('hy_loans'),
+            itr:         await encodeFile('hy_itr'),
+            itrPrev:     isThreeYear ? await encodeFile('hy_itr_prev') : null,
+            cas:         await encodeFile('hy_cas'),
+            pms:         await encodeMultiFile('hy_pms'),
+            bank:        await encodeMultiFile('hy_bank'),
+            pf:          await encodeMultiFile('hy_pf'),
+            realEstate:  await encodeMultiFile('hy_realestate'),
+            gold:        await encodeMultiFile('hy_gold'),
+            loans:       await encodeMultiFile('hy_loans'),
           };
         } else if (selectedEligibility === 'income') {
           docs = {
-            itr: await encodeFile('in_itr'),
+            itr:     await encodeFile('in_itr'),
             itrPrev: isThreeYear ? await encodeFile('in_itr_prev') : null,
           };
         }
@@ -1435,52 +1532,53 @@
         const isJoint = selectedAccountType === 'joint';
 
         const payload = {
-          accountType:     isJoint ? 'Joint – Spouse' : 'Individual',
+          accountType: isJoint ? 'Joint – Spouse' : 'Individual',
           applicationType: selectedAppType === 'nri' ? 'NRI' : 'Indian Resident',
-          certValidity:    document.querySelector('[name="certValidity"]:checked')?.value,
-          fullName:        document.getElementById('fullName').value,
-          organization:    document.getElementById('organization').value,
-          emailAddress:    document.getElementById('emailAddress').value,
-          phoneNumber:     document.getElementById('phoneNumber').value,
-          panCard:         document.getElementById('panCard').value.toUpperCase(),
-          aadhaarNumber:   document.getElementById('aadhaarNumber').value.replace(/\s/g, ''),
+          certValidity: document.querySelector('[name="certValidity"]:checked')?.value,
+          fullName: document.getElementById('fullName').value,
+          organization: document.getElementById('organization').value,
+          emailAddress: document.getElementById('emailAddress').value,
+          phoneNumber: document.getElementById('phoneNumber').value,
+          panCard: document.getElementById('panCard').value.toUpperCase(),
+          aadhaarNumber: document.getElementById('aadhaarNumber').value.replace(/\s/g, ''),
           currentAddress: {
-            line1:   document.getElementById('currAddr1').value,
-            line2:   document.getElementById('currAddr2').value,
-            city:    document.getElementById('currCity').value,
+            line1: document.getElementById('currAddr1').value,
+            line2: document.getElementById('currAddr2').value,
+            city: document.getElementById('currCity').value,
             country: document.getElementById('currCountry').value,
             pincode: document.getElementById('currPincode').value,
           },
           permanentAddress: {
-            line1:   document.getElementById('permAddr1').value,
-            line2:   document.getElementById('permAddr2').value,
-            city:    document.getElementById('permCity').value,
+            line1: document.getElementById('permAddr1').value,
+            line2: document.getElementById('permAddr2').value,
+            city: document.getElementById('permCity').value,
             country: document.getElementById('permCountry').value,
             pincode: document.getElementById('permPincode').value,
           },
           spouse: isJoint ? {
-            fullName:      document.getElementById('sp_fullName').value,
-            organization:  document.getElementById('sp_organization').value,
-            emailAddress:  document.getElementById('sp_emailAddress').value,
-            phoneNumber:   document.getElementById('sp_phoneNumber').value,
-            panCard:       document.getElementById('sp_panCard').value.toUpperCase(),
+            fullName: document.getElementById('sp_fullName').value,
+            organization: document.getElementById('sp_organization').value,
+            emailAddress: document.getElementById('sp_emailAddress').value,
+            phoneNumber: document.getElementById('sp_phoneNumber').value,
+            panCard: document.getElementById('sp_panCard').value.toUpperCase(),
             aadhaarNumber: document.getElementById('sp_aadhaarNumber').value.replace(/\s/g, ''),
             currentAddress: {
-              line1:   document.getElementById('sp_currAddr1').value,
-              line2:   document.getElementById('sp_currAddr2').value,
-              city:    document.getElementById('sp_currCity').value,
+              line1: document.getElementById('sp_currAddr1').value,
+              line2: document.getElementById('sp_currAddr2').value,
+              city: document.getElementById('sp_currCity').value,
               country: document.getElementById('sp_currCountry').value,
               pincode: document.getElementById('sp_currPincode').value,
             },
             permanentAddress: {
-              line1:   document.getElementById('sp_permAddr1').value,
-              line2:   document.getElementById('sp_permAddr2').value,
-              city:    document.getElementById('sp_permCity').value,
+              line1: document.getElementById('sp_permAddr1').value,
+              line2: document.getElementById('sp_permAddr2').value,
+              city: document.getElementById('sp_permCity').value,
               country: document.getElementById('sp_permCountry').value,
               pincode: document.getElementById('sp_permPincode').value,
             },
           } : null,
           eligibilityPath: document.querySelector('[name="eligibilityPath"]:checked')?.value,
+          certMethod:      selectedCertMethod === 'ca' ? 'Net Worth by CA' : selectedCertMethod === 'platizio' ? 'Facilitated by Platizio' : '',
           documents: docs,
         };
 
@@ -1504,11 +1602,13 @@
         });
         // Hide conditional sections
         document.getElementById('accountTypeSection').style.display = 'none';
+        document.getElementById('certMethodSection').style.display = 'none';
         document.getElementById('spouseSection').style.display = 'none';
         selectedAccountType = '';
-        selectedAppType = '';
+        selectedAppType     = '';
         selectedEligibility = '';
-        selectedValidity = '';
+        selectedCertMethod  = '';
+        selectedValidity    = '';
 
       } catch (err) {
         console.error(err);
