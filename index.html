@@ -500,45 +500,45 @@
       <!-- ═══ 1. APPLICATION TYPE ═══ -->
       <div class="section-header">1 · Application Type</div>
 
-      <!-- 1a · Account Type -->
-      <div class="sub-label">Account Type</div>
+      <!-- 1a · Residency Status -->
+      <div class="sub-label">Residency Status</div>
       <div class="divider"></div>
 
       <div class="card-grid card-grid-2">
-        <label class="option-card" id="card-individual" onclick="selectAccountType('individual', this)">
-          <input type="radio" name="accountType" value="Individual">
+        <label class="option-card" id="card-resident" onclick="selectAppType('resident', this)">
+          <input type="radio" name="applicationType" value="Indian Resident">
           <div class="card-check"></div>
-          <div class="card-title">Individual</div>
-          <div class="card-desc">Single applicant applying independently</div>
+          <div class="card-title">Indian Resident</div>
+          <div class="card-desc">Indian citizen currently residing in India</div>
         </label>
-        <label class="option-card" id="card-joint" onclick="selectAccountType('joint', this)">
-          <input type="radio" name="accountType" value="Joint – Spouse">
+        <label class="option-card" id="card-nri" onclick="selectAppType('nri', this)">
+          <input type="radio" name="applicationType" value="NRI">
           <div class="card-check"></div>
-          <div class="card-title">Joint – Spouse</div>
-          <div class="card-desc">Joint application with your spouse as co-applicant</div>
+          <div class="card-title">NRI</div>
+          <div class="card-desc">Non-Resident Indian based outside India</div>
         </label>
       </div>
-      <span class="card-error" id="accountTypeError">Please select an account type.</span>
+      <span class="card-error" id="appTypeError">Please select a residency status.</span>
 
-      <!-- 1b · Residency Status (revealed after account type is chosen) -->
-      <div id="residencySection" style="display:none; margin-top:22px;">
-        <div class="sub-label">Residency Status</div>
+      <!-- 1b · Account Type (revealed after residency is chosen) -->
+      <div id="accountTypeSection" style="display:none; margin-top:22px;">
+        <div class="sub-label">Account Type</div>
         <div class="divider"></div>
         <div class="card-grid card-grid-2">
-          <label class="option-card" id="card-resident" onclick="selectAppType('resident', this)">
-            <input type="radio" name="applicationType" value="Indian Resident">
+          <label class="option-card" id="card-individual" onclick="selectAccountType('individual', this)">
+            <input type="radio" name="accountType" value="Individual">
             <div class="card-check"></div>
-            <div class="card-title">Indian Resident</div>
-            <div class="card-desc">Indian citizen currently residing in India</div>
+            <div class="card-title">Individual</div>
+            <div class="card-desc">Single applicant applying independently</div>
           </label>
-          <label class="option-card" id="card-nri" onclick="selectAppType('nri', this)">
-            <input type="radio" name="applicationType" value="NRI">
+          <label class="option-card" id="card-joint" onclick="selectAccountType('joint', this)">
+            <input type="radio" name="accountType" value="Joint – Spouse">
             <div class="card-check"></div>
-            <div class="card-title">NRI</div>
-            <div class="card-desc">Non-Resident Indian based outside India</div>
+            <div class="card-title">Joint – Spouse</div>
+            <div class="card-desc">Joint application with your spouse as co-applicant</div>
           </label>
         </div>
-        <span class="card-error" id="appTypeError">Please select a residency status.</span>
+        <span class="card-error" id="accountTypeError">Please select an account type.</span>
       </div>
 
       <!-- ═══ 2. BASIC DETAILS ═══ -->
@@ -573,10 +573,10 @@
             style="text-transform:uppercase;" required>
           <span class="hint">Format: 5 letters · 4 digits · 1 letter</span>
         </div>
-        <div class="form-group" id="aadhaarGroup" style="display:none;">
-          <label class="field-label">Aadhaar Number <span class="req">*</span></label>
+        <div class="form-group">
+          <label class="field-label">Aadhaar Number</label>
           <input type="text" id="aadhaarNumber" placeholder="XXXX XXXX XXXX" maxlength="14" inputmode="numeric">
-          <span class="hint">12-digit Aadhaar number</span>
+          <span class="hint">12-digit Aadhaar number (optional)</span>
         </div>
       </div>
 
@@ -681,10 +681,10 @@
               style="text-transform:uppercase;">
             <span class="hint">Format: 5 letters · 4 digits · 1 letter</span>
           </div>
-          <div class="form-group" id="sp_aadhaarGroup" style="display:none;">
-            <label class="field-label">Aadhaar Number <span class="req">*</span></label>
+          <div class="form-group">
+            <label class="field-label">Aadhaar Number</label>
             <input type="text" id="sp_aadhaarNumber" placeholder="XXXX XXXX XXXX" maxlength="14" inputmode="numeric">
-            <span class="hint">12-digit Aadhaar number</span>
+            <span class="hint">12-digit Aadhaar number (optional)</span>
           </div>
         </div>
 
@@ -1041,13 +1041,13 @@
 
     // ── Fill sample data ──
     function fillSample() {
-      // 1. Account type → Individual
-      const individualCard = document.getElementById('card-individual');
-      selectAccountType('individual', individualCard);
-
-      // 2. Residency → Indian Resident
+      // 1. Residency → Indian Resident
       const residentCard = document.getElementById('card-resident');
       selectAppType('resident', residentCard);
+
+      // 2. Account type → Individual
+      const individualCard = document.getElementById('card-individual');
+      selectAccountType('individual', individualCard);
 
       // 2. Basic details
       document.getElementById('fullName').value       = 'Arjun Mehta';
@@ -1096,31 +1096,16 @@
     let selectedEligibility = '';
     let selectedValidity    = '';
 
-    // ── Account Type (Individual / Joint-Spouse) ──
-    function selectAccountType(type, el) {
-      selectedAccountType = type;
-      document.querySelectorAll('[name="accountType"]').forEach(r => r.closest('.option-card').classList.remove('selected'));
-      el.classList.add('selected');
-      el.querySelector('input[type="radio"]').checked = true;
-      document.getElementById('accountTypeError').style.display = 'none';
-
-      // Reveal residency row
-      document.getElementById('residencySection').style.display = 'block';
-
-      // Show / hide spouse section
-      document.getElementById('spouseSection').style.display = type === 'joint' ? 'block' : 'none';
-
-      // Re-apply Aadhaar visibility if residency already chosen
-      if (selectedAppType) toggleAadhaarFields();
-    }
-
-    // ── Residency (Indian Resident / NRI) ──
+    // ── Residency (Indian Resident / NRI) — Step 1 ──
     function selectAppType(type, el) {
       selectedAppType = type;
       document.querySelectorAll('[name="applicationType"]').forEach(r => r.closest('.option-card').classList.remove('selected'));
       el.classList.add('selected');
       el.querySelector('input[type="radio"]').checked = true;
       document.getElementById('appTypeError').style.display = 'none';
+
+      // Reveal account type row
+      document.getElementById('accountTypeSection').style.display = 'block';
 
       const countryIds = ['currCountry', 'permCountry', 'sp_currCountry', 'sp_permCountry'];
       if (type === 'nri') {
@@ -1141,17 +1126,18 @@
         const sp = document.getElementById('sp_phoneNumber');
         if (sp) sp.placeholder = '+91 XXXXX XXXXX';
       }
-
-      toggleAadhaarFields();
     }
 
-    // ── Show / hide Aadhaar fields based on residency + account type ──
-    function toggleAadhaarFields() {
-      const isResident = selectedAppType === 'resident';
-      const isJoint    = selectedAccountType === 'joint';
-      document.getElementById('aadhaarGroup').style.display = isResident ? 'block' : 'none';
-      const spG = document.getElementById('sp_aadhaarGroup');
-      if (spG) spG.style.display = (isResident && isJoint) ? 'block' : 'none';
+    // ── Account Type (Individual / Joint-Spouse) — Step 2 ──
+    function selectAccountType(type, el) {
+      selectedAccountType = type;
+      document.querySelectorAll('[name="accountType"]').forEach(r => r.closest('.option-card').classList.remove('selected'));
+      el.classList.add('selected');
+      el.querySelector('input[type="radio"]').checked = true;
+      document.getElementById('accountTypeError').style.display = 'none';
+
+      // Show / hide spouse section
+      document.getElementById('spouseSection').style.display = type === 'joint' ? 'block' : 'none';
     }
 
     // ── Eligibility Path ──
@@ -1300,16 +1286,11 @@
         valid = false;
       }
 
-      // Aadhaar — required for Indian Resident
-      if (selectedAppType === 'resident') {
-        const aadhaar = document.getElementById('aadhaarNumber').value.replace(/\s/g, '');
-        if (!aadhaar) {
-          markError('aadhaarNumber', 'Aadhaar number is required for Indian Residents.');
-          valid = false;
-        } else if (!/^\d{12}$/.test(aadhaar)) {
-          markError('aadhaarNumber', 'Aadhaar must be exactly 12 digits.');
-          valid = false;
-        }
+      // Aadhaar — optional, but validate format if a value is entered
+      const aadhaar = document.getElementById('aadhaarNumber').value.replace(/\s/g, '');
+      if (aadhaar && !/^\d{12}$/.test(aadhaar)) {
+        markError('aadhaarNumber', 'Aadhaar must be exactly 12 digits.');
+        valid = false;
       }
 
       // Spouse / co-applicant fields — required when Joint–Spouse selected
@@ -1338,16 +1319,11 @@
           valid = false;
         }
 
-        // Spouse Aadhaar — required if Indian Resident
-        if (selectedAppType === 'resident') {
-          const spAadhaar = document.getElementById('sp_aadhaarNumber').value.replace(/\s/g, '');
-          if (!spAadhaar) {
-            markError('sp_aadhaarNumber', 'Spouse Aadhaar number is required for Indian Residents.');
-            valid = false;
-          } else if (!/^\d{12}$/.test(spAadhaar)) {
-            markError('sp_aadhaarNumber', 'Spouse Aadhaar must be exactly 12 digits.');
-            valid = false;
-          }
+        // Spouse Aadhaar — optional, but validate format if a value is entered
+        const spAadhaar = document.getElementById('sp_aadhaarNumber').value.replace(/\s/g, '');
+        if (spAadhaar && !/^\d{12}$/.test(spAadhaar)) {
+          markError('sp_aadhaarNumber', 'Spouse Aadhaar must be exactly 12 digits.');
+          valid = false;
         }
       }
 
@@ -1467,8 +1443,7 @@
           emailAddress:    document.getElementById('emailAddress').value,
           phoneNumber:     document.getElementById('phoneNumber').value,
           panCard:         document.getElementById('panCard').value.toUpperCase(),
-          aadhaarNumber:   selectedAppType === 'resident'
-                             ? document.getElementById('aadhaarNumber').value.replace(/\s/g, '') : '',
+          aadhaarNumber:   document.getElementById('aadhaarNumber').value.replace(/\s/g, ''),
           currentAddress: {
             line1:   document.getElementById('currAddr1').value,
             line2:   document.getElementById('currAddr2').value,
@@ -1489,8 +1464,7 @@
             emailAddress:  document.getElementById('sp_emailAddress').value,
             phoneNumber:   document.getElementById('sp_phoneNumber').value,
             panCard:       document.getElementById('sp_panCard').value.toUpperCase(),
-            aadhaarNumber: selectedAppType === 'resident'
-                             ? document.getElementById('sp_aadhaarNumber').value.replace(/\s/g, '') : '',
+            aadhaarNumber: document.getElementById('sp_aadhaarNumber').value.replace(/\s/g, ''),
             currentAddress: {
               line1:   document.getElementById('sp_currAddr1').value,
               line2:   document.getElementById('sp_currAddr2').value,
@@ -1529,10 +1503,8 @@
           if (sel) { sel.innerHTML = '<option value="India">India</option>'; }
         });
         // Hide conditional sections
-        document.getElementById('residencySection').style.display = 'none';
+        document.getElementById('accountTypeSection').style.display = 'none';
         document.getElementById('spouseSection').style.display = 'none';
-        document.getElementById('aadhaarGroup').style.display = 'none';
-        document.getElementById('sp_aadhaarGroup').style.display = 'none';
         selectedAccountType = '';
         selectedAppType = '';
         selectedEligibility = '';
