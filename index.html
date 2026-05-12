@@ -463,7 +463,7 @@
 
   <!-- ── Platizio Logo ── -->
   <div class="logo-wrap">
-    <img src="Platizio Logo.png" alt="Platizio" style="height:180px;width:auto;">
+    <img src="Platizio Logo.png" alt="Platizio" style="height:140px;width:auto;">
   </div>
 
   <!-- ── Form Card ── -->
@@ -1057,7 +1057,8 @@
 
         <div class="doc-category">
           <div class="doc-category-title">Net Worth Certificate <span style="color:#dc2626">*</span></div>
-          <div class="doc-category-desc">Certificate issued by your CA attesting to your net worth as per SEBI guidelines. PDF format only.</div>
+          <div class="doc-category-desc">Certificate issued by your CA attesting to your net worth as per SEBI
+            guidelines. PDF format only.</div>
           <div class="file-grid">
             <div class="file-item">
               <label class="field-label">Net Worth Certificate <span class="req">*</span></label>
@@ -1130,10 +1131,10 @@
     ];
 
     let selectedAccountType = '';
-    let selectedAppType     = '';
+    let selectedAppType = '';
     let selectedEligibility = '';
-    let selectedCertMethod  = '';   // 'ca' | 'platizio' — for Net Worth & Hybrid paths
-    let selectedValidity    = '';
+    let selectedCertMethod = '';   // 'ca' | 'platizio' — for Net Worth & Hybrid paths
+    let selectedValidity = '';
 
     // ── Residency (Indian Resident / NRI) — Step 1 ──
     function selectAppType(type, el) {
@@ -1230,20 +1231,20 @@
       const needsCertMethod = selectedEligibility === 'networth' || selectedEligibility === 'hybrid';
       if (needsCertMethod && !selectedCertMethod) return;
 
-      const isThreeYear   = selectedValidity === 'threeyear';
+      const isThreeYear = selectedValidity === 'threeyear';
       const validityLabel = isThreeYear ? '3-Year' : '2-Year';
-      const pathLabel     = selectedEligibility === 'networth' ? 'Net Worth'
-                          : selectedEligibility === 'hybrid'   ? 'Hybrid' : 'Income';
+      const pathLabel = selectedEligibility === 'networth' ? 'Net Worth'
+        : selectedEligibility === 'hybrid' ? 'Hybrid' : 'Income';
 
       // Resolve which section + prefix to activate
       let sectionId, prefix;
       if (selectedEligibility === 'income') {
-        sectionId = 'docs-income';  prefix = 'in';
+        sectionId = 'docs-income'; prefix = 'in';
       } else if (selectedCertMethod === 'ca') {
-        sectionId = 'docs-ca';      prefix = 'ca';
+        sectionId = 'docs-ca'; prefix = 'ca';
       } else {
         sectionId = 'docs-' + selectedEligibility;
-        prefix    = selectedEligibility === 'networth' ? 'nw' : 'hy';
+        prefix = selectedEligibility === 'networth' ? 'nw' : 'hy';
       }
 
       document.querySelectorAll('.doc-section').forEach(s => s.classList.remove('active'));
@@ -1278,8 +1279,8 @@
         },
       };
 
-      document.getElementById(prefix + '_info').innerHTML        = configs[prefix].info;
-      document.getElementById(prefix + '_itr_desc').textContent  = configs[prefix].itrDesc;
+      document.getElementById(prefix + '_info').innerHTML = configs[prefix].info;
+      document.getElementById(prefix + '_itr_desc').textContent = configs[prefix].itrDesc;
 
       // Show/hide previous-year ITR rows across all sections
       ['nw', 'hy', 'in', 'ca'].forEach(p => {
@@ -1484,47 +1485,47 @@
 
       try {
         let docs = {};
-        const isThreeYear    = selectedValidity === 'threeyear';
-        const useCA          = (selectedEligibility === 'networth' || selectedEligibility === 'hybrid')
-                               && selectedCertMethod === 'ca';
+        const isThreeYear = selectedValidity === 'threeyear';
+        const useCA = (selectedEligibility === 'networth' || selectedEligibility === 'hybrid')
+          && selectedCertMethod === 'ca';
 
         if (useCA) {
           // CA-certified Net Worth (Net Worth or Hybrid path, own CA)
           docs = {
-            itr:          await encodeFile('ca_itr'),
-            itrPrev:      isThreeYear ? await encodeFile('ca_itr_prev') : null,
+            itr: await encodeFile('ca_itr'),
+            itrPrev: isThreeYear ? await encodeFile('ca_itr_prev') : null,
             nwCertificate: await encodeFile('ca_nw_cert'),
           };
         } else if (selectedEligibility === 'networth') {
           docs = {
-            itr:              await encodeFile('nw_itr'),
-            itrPrev:          isThreeYear ? await encodeFile('nw_itr_prev') : null,
-            cas:              await encodeFile('nw_cas'),
-            pms:              await encodeMultiFile('nw_pms'),
-            bank:             await encodeMultiFile('nw_bank'),
-            pf:               await encodeMultiFile('nw_pf'),
-            intl:             await encodeMultiFile('nw_intl'),
-            realEstateProof:  await encodeMultiFile('nw_realestate_proof'),
-            realEstateValue:  await encodeMultiFile('nw_realestate_value'),
-            gold:             await encodeFile('nw_gold'),
-            jewellery:        await encodeFile('nw_jewellery'),
-            loans:            await encodeMultiFile('nw_loans'),
+            itr: await encodeFile('nw_itr'),
+            itrPrev: isThreeYear ? await encodeFile('nw_itr_prev') : null,
+            cas: await encodeFile('nw_cas'),
+            pms: await encodeMultiFile('nw_pms'),
+            bank: await encodeMultiFile('nw_bank'),
+            pf: await encodeMultiFile('nw_pf'),
+            intl: await encodeMultiFile('nw_intl'),
+            realEstateProof: await encodeMultiFile('nw_realestate_proof'),
+            realEstateValue: await encodeMultiFile('nw_realestate_value'),
+            gold: await encodeFile('nw_gold'),
+            jewellery: await encodeFile('nw_jewellery'),
+            loans: await encodeMultiFile('nw_loans'),
           };
         } else if (selectedEligibility === 'hybrid') {
           docs = {
-            itr:         await encodeFile('hy_itr'),
-            itrPrev:     isThreeYear ? await encodeFile('hy_itr_prev') : null,
-            cas:         await encodeFile('hy_cas'),
-            pms:         await encodeMultiFile('hy_pms'),
-            bank:        await encodeMultiFile('hy_bank'),
-            pf:          await encodeMultiFile('hy_pf'),
-            realEstate:  await encodeMultiFile('hy_realestate'),
-            gold:        await encodeMultiFile('hy_gold'),
-            loans:       await encodeMultiFile('hy_loans'),
+            itr: await encodeFile('hy_itr'),
+            itrPrev: isThreeYear ? await encodeFile('hy_itr_prev') : null,
+            cas: await encodeFile('hy_cas'),
+            pms: await encodeMultiFile('hy_pms'),
+            bank: await encodeMultiFile('hy_bank'),
+            pf: await encodeMultiFile('hy_pf'),
+            realEstate: await encodeMultiFile('hy_realestate'),
+            gold: await encodeMultiFile('hy_gold'),
+            loans: await encodeMultiFile('hy_loans'),
           };
         } else if (selectedEligibility === 'income') {
           docs = {
-            itr:     await encodeFile('in_itr'),
+            itr: await encodeFile('in_itr'),
             itrPrev: isThreeYear ? await encodeFile('in_itr_prev') : null,
           };
         }
@@ -1578,7 +1579,7 @@
             },
           } : null,
           eligibilityPath: document.querySelector('[name="eligibilityPath"]:checked')?.value,
-          certMethod:      selectedCertMethod === 'ca' ? 'Net Worth by CA' : selectedCertMethod === 'platizio' ? 'Facilitated by Platizio' : '',
+          certMethod: selectedCertMethod === 'ca' ? 'Net Worth by CA' : selectedCertMethod === 'platizio' ? 'Facilitated by Platizio' : '',
           documents: docs,
         };
 
@@ -1605,10 +1606,10 @@
         document.getElementById('certMethodSection').style.display = 'none';
         document.getElementById('spouseSection').style.display = 'none';
         selectedAccountType = '';
-        selectedAppType     = '';
+        selectedAppType = '';
         selectedEligibility = '';
-        selectedCertMethod  = '';
-        selectedValidity    = '';
+        selectedCertMethod = '';
+        selectedValidity = '';
 
       } catch (err) {
         console.error(err);
