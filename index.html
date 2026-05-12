@@ -355,6 +355,175 @@
       line-height: 1.6;
     }
 
+    /* ── Step progress indicator ── */
+    .step-indicator {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      margin-bottom: 32px;
+    }
+
+    .step-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      position: relative;
+    }
+
+    .step-item:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      top: 14px;
+      left: calc(50% + 14px);
+      width: calc(100% - 4px);
+      height: 2px;
+      background: #e8e0d8;
+      z-index: 0;
+    }
+
+    .step-item.done:not(:last-child)::after,
+    .step-item.active:not(:last-child)::after {
+      background: #C85A1E;
+    }
+
+    .step-connector {
+      width: 60px;
+      height: 2px;
+      background: #e8e0d8;
+      margin-bottom: 20px;
+      transition: background 0.3s;
+    }
+
+    .step-connector.done { background: #C85A1E; }
+
+    .step-dot {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 2px solid #e8e0d8;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      color: #bbb;
+      transition: all 0.3s;
+      z-index: 1;
+    }
+
+    .step-item.active .step-dot {
+      border-color: #C85A1E;
+      background: #C85A1E;
+      color: #fff;
+    }
+
+    .step-item.done .step-dot {
+      border-color: #7A2000;
+      background: #7A2000;
+      color: #fff;
+    }
+
+    .step-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: #bbb;
+      white-space: nowrap;
+    }
+
+    .step-item.active .step-label { color: #C85A1E; }
+    .step-item.done  .step-label  { color: #7A2000; }
+
+    /* ── Terms & Conditions ── */
+    .tnc-box {
+      background: #fafafa;
+      border: 1px solid #e8e0d8;
+      border-radius: 8px;
+      padding: 16px 18px;
+      max-height: 200px;
+      overflow-y: auto;
+      font-size: 12px;
+      color: #555;
+      line-height: 1.7;
+      margin-bottom: 16px;
+    }
+
+    .tnc-box h4 {
+      font-size: 13px;
+      color: #7A2000;
+      margin-bottom: 8px;
+    }
+
+    .tnc-box p { margin-bottom: 10px; }
+    .tnc-box ol { padding-left: 18px; }
+    .tnc-box ol li { margin-bottom: 6px; }
+
+    .tnc-agree {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 24px;
+      cursor: pointer;
+    }
+
+    .tnc-agree input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      min-width: 16px;
+      margin-top: 2px;
+      accent-color: #C85A1E;
+      cursor: pointer;
+    }
+
+    .tnc-agree span {
+      font-size: 13px;
+      color: #444;
+      font-weight: 500;
+    }
+
+    .tnc-agree span strong { color: #C85A1E; }
+
+    /* ── Page navigation buttons ── */
+    .btn-next {
+      display: block;
+      width: 100%;
+      padding: 14px;
+      margin-top: 8px;
+      background: linear-gradient(90deg, #7A2000, #C85A1E, #E8854A);
+      color: #fff;
+      font-size: 16px;
+      font-weight: 700;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      letter-spacing: 0.5px;
+      transition: opacity 0.2s;
+      font-family: inherit;
+    }
+
+    .btn-next:hover { opacity: 0.92; }
+
+    .btn-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 9px 18px;
+      margin-bottom: 24px;
+      background: #fff;
+      border: 1.5px solid #C85A1E;
+      border-radius: 6px;
+      color: #C85A1E;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .btn-back:hover { background: #fff3ed; }
+
     /* ── Submit ── */
     .btn-submit {
       display: block;
@@ -470,11 +639,27 @@
   <div class="form-card">
     <div class="form-title">Accredited Investor Application</div>
 
+    <!-- Step progress indicator -->
+    <div class="step-indicator" id="stepIndicator">
+      <div class="step-item active" id="step1Item">
+        <div class="step-dot">1</div>
+        <div class="step-label">Application Details</div>
+      </div>
+      <div class="step-connector" id="stepConnector"></div>
+      <div class="step-item" id="step2Item">
+        <div class="step-dot">2</div>
+        <div class="step-label">Eligibility &amp; Documents</div>
+      </div>
+    </div>
+
     <div style="text-align:right;">
       <button type="button" class="btn-sample" onclick="fillSample()">⚡ Fill Sample Data</button>
     </div>
 
     <form id="accreditationForm" novalidate>
+
+      <!-- ══════════════════════════════════════ PAGE 1 ══════════════════════════════════════ -->
+      <div id="formPage1">
 
       <!-- ═══ 1. APPLICATION TYPE ═══ -->
       <div class="section-header">1 · Application Type</div>
@@ -732,6 +917,40 @@
           </div>
         </div>
       </div>
+
+      <!-- ── Terms & Conditions ── -->
+      <div class="section-header" style="margin-top:36px;">Terms &amp; Conditions</div>
+
+      <div class="tnc-box">
+        <h4>Platizio – Accredited Investor Application Declaration</h4>
+        <p>Please read the following terms carefully before proceeding. By agreeing, you confirm that you have read, understood, and accepted all conditions stated below.</p>
+        <ol>
+          <li><strong>Accuracy of Information:</strong> I hereby declare that all information and documents provided in this application are true, accurate, and complete to the best of my knowledge. I understand that any false or misleading information may result in rejection of my application and potential legal liability.</li>
+          <li><strong>SEBI Compliance:</strong> I confirm that I meet the eligibility criteria for an Accredited Investor as defined under the SEBI (Alternative Investment Funds) Regulations and related circulars. I understand that the Accredited Investor status is granted based on SEBI's regulatory framework.</li>
+          <li><strong>Document Consent:</strong> I authorise Platizio and its empanelled Chartered Accountants (CAs) to use the documents and information submitted for the sole purpose of verifying and processing my Accredited Investor Certificate through CDSL.</li>
+          <li><strong>Data Privacy:</strong> I consent to Platizio storing and processing my personal data, including PAN, Aadhaar (if provided), and financial information, in accordance with applicable data protection laws and Platizio's Privacy Policy, strictly for the purpose of this application.</li>
+          <li><strong>Fee Acknowledgement:</strong> I acknowledge the applicable CA certification fees (payable to Platizio) and CDSL certificate fees (payable at the time of CDSL registration), as displayed during the application process.</li>
+          <li><strong>Certificate Validity:</strong> I understand that the Accredited Investor Certificate is valid for the period selected (2-Year or 3-Year) from the date of issuance and must be renewed thereafter to maintain Accredited Investor status.</li>
+          <li><strong>No Investment Advice:</strong> I acknowledge that obtaining Accredited Investor status does not constitute investment advice from Platizio. Investment decisions remain solely my responsibility.</li>
+          <li><strong>Right to Reject:</strong> Platizio and the empanelled CA reserve the right to reject this application if the submitted documents are found to be insufficient, inauthentic, or do not meet SEBI's prescribed criteria.</li>
+        </ol>
+      </div>
+
+      <label class="tnc-agree">
+        <input type="checkbox" id="tncCheckbox">
+        <span>I have read and agree to the <strong>Terms &amp; Conditions</strong> above and declare that all information provided is true and accurate.</span>
+      </label>
+      <span class="error-msg" id="tncError" style="display:none; margin-top:-16px; margin-bottom:12px;">You must agree to the Terms &amp; Conditions to proceed.</span>
+
+      <button type="button" class="btn-next" onclick="goToPage2()">Next → Eligibility &amp; Documents</button>
+
+      </div>
+      <!-- ══════════════════════════════════════ END PAGE 1 ══════════════════════════════════════ -->
+
+      <!-- ══════════════════════════════════════ PAGE 2 ══════════════════════════════════════ -->
+      <div id="formPage2" style="display:none;">
+
+      <button type="button" class="btn-back" onclick="goToPage1()">← Back to Application Details</button>
 
       <!-- ═══ 3. ELIGIBILITY PATH ═══ -->
       <div class="section-header">3 · Eligibility Path</div>
@@ -1072,11 +1291,123 @@
       <button type="submit" class="btn-submit" id="submitBtn">Submit Application</button>
       <div id="statusMessage"></div>
 
+      </div>
+      <!-- ══════════════════════════════════════ END PAGE 2 ══════════════════════════════════════ -->
+
     </form>
   </div>
 
   <script>
     const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbz4GDAAur1ItGhYTn1QI15qNtRcUfzLXqHxqKsO0mu5Sop-3yWZkpnb057uoNIEruwc/exec';
+
+    // ── Page navigation ──
+    function goToPage2() {
+      if (!validatePage1()) return;
+      document.getElementById('formPage1').style.display = 'none';
+      document.getElementById('formPage2').style.display = 'block';
+      // Update step indicator
+      document.getElementById('step1Item').classList.replace('active', 'done');
+      document.getElementById('stepConnector').classList.add('done');
+      document.getElementById('step2Item').classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function goToPage1() {
+      document.getElementById('formPage2').style.display = 'none';
+      document.getElementById('formPage1').style.display = 'block';
+      // Update step indicator
+      document.getElementById('step2Item').classList.remove('active');
+      document.getElementById('stepConnector').classList.remove('done');
+      document.getElementById('step1Item').classList.replace('done', 'active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // ── Page 1 validation ──
+    function validatePage1() {
+      clearErrors();
+      let valid = true;
+
+      if (!selectedAccountType) {
+        document.getElementById('accountTypeError').style.display = 'block';
+        valid = false;
+      }
+      if (!selectedAppType) {
+        document.getElementById('appTypeError').style.display = 'block';
+        valid = false;
+      }
+
+      [
+        { id: 'fullName',     msg: 'Full name is required.' },
+        { id: 'emailAddress', msg: 'Email address is required.' },
+        { id: 'phoneNumber',  msg: 'Phone number is required.' },
+        { id: 'panCard',      msg: 'PAN card number is required.' },
+        { id: 'currAddr1',    msg: 'Current address line 1 is required.' },
+        { id: 'permAddr1',    msg: 'Permanent address line 1 is required.' },
+      ].forEach(({ id, msg }) => {
+        const el = document.getElementById(id);
+        if (!el.value.trim()) { markError(id, msg); valid = false; }
+      });
+
+      const pan = document.getElementById('panCard').value.trim().toUpperCase();
+      if (pan && !/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(pan)) {
+        markError('panCard', 'Invalid PAN format — expected ABCDE1234F.'); valid = false;
+      }
+
+      const email = document.getElementById('emailAddress').value.trim();
+      if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        markError('emailAddress', 'Please enter a valid email address.'); valid = false;
+      }
+
+      const aadhaar = document.getElementById('aadhaarNumber').value.replace(/\s/g, '');
+      if (aadhaar && !/^\d{12}$/.test(aadhaar)) {
+        markError('aadhaarNumber', 'Aadhaar must be exactly 12 digits.'); valid = false;
+      }
+
+      if (selectedAccountType === 'joint') {
+        [
+          { id: 'sp_fullName',     msg: 'Spouse full name is required.' },
+          { id: 'sp_emailAddress', msg: 'Spouse email address is required.' },
+          { id: 'sp_phoneNumber',  msg: 'Spouse phone number is required.' },
+          { id: 'sp_panCard',      msg: 'Spouse PAN card number is required.' },
+          { id: 'sp_currAddr1',    msg: 'Spouse current address line 1 is required.' },
+          { id: 'sp_permAddr1',    msg: 'Spouse permanent address line 1 is required.' },
+        ].forEach(({ id, msg }) => {
+          const el = document.getElementById(id);
+          if (el && !el.value.trim()) { markError(id, msg); valid = false; }
+        });
+
+        const spPan = (document.getElementById('sp_panCard').value || '').trim().toUpperCase();
+        if (spPan && !/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(spPan)) {
+          markError('sp_panCard', 'Invalid PAN format — expected ABCDE1234F.'); valid = false;
+        }
+
+        const spEmail = (document.getElementById('sp_emailAddress').value || '').trim();
+        if (spEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(spEmail)) {
+          markError('sp_emailAddress', 'Please enter a valid email address.'); valid = false;
+        }
+
+        const spAadhaar = document.getElementById('sp_aadhaarNumber').value.replace(/\s/g, '');
+        if (spAadhaar && !/^\d{12}$/.test(spAadhaar)) {
+          markError('sp_aadhaarNumber', 'Spouse Aadhaar must be exactly 12 digits.'); valid = false;
+        }
+      }
+
+      // T&C agreement
+      if (!document.getElementById('tncCheckbox').checked) {
+        document.getElementById('tncError').style.display = 'block';
+        valid = false;
+      } else {
+        document.getElementById('tncError').style.display = 'none';
+      }
+
+      if (!valid) {
+        const firstErr = document.querySelector('.field-error') ||
+          document.querySelector('.card-error[style*="block"]') ||
+          document.getElementById('tncError');
+        if (firstErr) firstErr.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+      return valid;
+    }
 
     // ── Fill sample data ──
     function fillSample() {
@@ -1178,6 +1509,9 @@
 
       // Show / hide spouse section
       document.getElementById('spouseSection').style.display = type === 'joint' ? 'block' : 'none';
+
+      // Update doc labels if a doc section is already visible
+      applyJointDocLabels();
     }
 
     // ── Eligibility Path ──
@@ -1287,6 +1621,22 @@
         const row = document.getElementById(p + '_itr_prev_row');
         if (row) row.style.display = (isThreeYear && p === prefix) ? 'block' : 'none';
       });
+
+      // Apply/remove "Combined" label prefix based on account type
+      applyJointDocLabels();
+    }
+
+    // ── Add "Combined" prefix to doc labels for Joint–Spouse applications ──
+    function applyJointDocLabels() {
+      const isJoint = selectedAccountType === 'joint';
+      document.querySelectorAll('.file-item .field-label').forEach(lbl => {
+        // Stash the original innerHTML the first time we see this label
+        if (!lbl.dataset.orig) lbl.dataset.orig = lbl.innerHTML;
+        // Prepend "Combined " to the leading text node, leaving any trailing HTML (e.g. <span class="req">*</span>) intact
+        lbl.innerHTML = isJoint
+          ? lbl.dataset.orig.replace(/^(\s*)([^<]+)/, '$1Combined $2')
+          : lbl.dataset.orig;
+      });
     }
 
     // ── Copy current → permanent address (main applicant) ──
@@ -1323,85 +1673,10 @@
       el.parentNode.appendChild(span);
     }
 
+    // ── Page 2 validation (eligibility, cert method, validity, documents) ──
     function validateForm() {
       clearErrors();
       let valid = true;
-
-      // Account type + residency
-      if (!selectedAccountType) {
-        document.getElementById('accountTypeError').style.display = 'block';
-        valid = false;
-      }
-      if (!selectedAppType) {
-        document.getElementById('appTypeError').style.display = 'block';
-        valid = false;
-      }
-
-      // Main applicant required fields
-      [
-        { id: 'fullName', msg: 'Full name is required.' },
-        { id: 'emailAddress', msg: 'Email address is required.' },
-        { id: 'phoneNumber', msg: 'Phone number is required.' },
-        { id: 'panCard', msg: 'PAN card number is required.' },
-        { id: 'currAddr1', msg: 'Current address line 1 is required.' },
-        { id: 'permAddr1', msg: 'Permanent address line 1 is required.' },
-      ].forEach(({ id, msg }) => {
-        const el = document.getElementById(id);
-        if (!el.value.trim()) { markError(id, msg); valid = false; }
-      });
-
-      const pan = document.getElementById('panCard').value.trim().toUpperCase();
-      if (pan && !/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(pan)) {
-        markError('panCard', 'Invalid PAN format — expected ABCDE1234F.');
-        valid = false;
-      }
-
-      const email = document.getElementById('emailAddress').value.trim();
-      if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-        markError('emailAddress', 'Please enter a valid email address.');
-        valid = false;
-      }
-
-      // Aadhaar — optional, but validate format if a value is entered
-      const aadhaar = document.getElementById('aadhaarNumber').value.replace(/\s/g, '');
-      if (aadhaar && !/^\d{12}$/.test(aadhaar)) {
-        markError('aadhaarNumber', 'Aadhaar must be exactly 12 digits.');
-        valid = false;
-      }
-
-      // Spouse / co-applicant fields — required when Joint–Spouse selected
-      if (selectedAccountType === 'joint') {
-        [
-          { id: 'sp_fullName', msg: 'Spouse full name is required.' },
-          { id: 'sp_emailAddress', msg: 'Spouse email address is required.' },
-          { id: 'sp_phoneNumber', msg: 'Spouse phone number is required.' },
-          { id: 'sp_panCard', msg: 'Spouse PAN card number is required.' },
-          { id: 'sp_currAddr1', msg: 'Spouse current address line 1 is required.' },
-          { id: 'sp_permAddr1', msg: 'Spouse permanent address line 1 is required.' },
-        ].forEach(({ id, msg }) => {
-          const el = document.getElementById(id);
-          if (el && !el.value.trim()) { markError(id, msg); valid = false; }
-        });
-
-        const spPan = (document.getElementById('sp_panCard').value || '').trim().toUpperCase();
-        if (spPan && !/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(spPan)) {
-          markError('sp_panCard', 'Invalid PAN format — expected ABCDE1234F.');
-          valid = false;
-        }
-
-        const spEmail = (document.getElementById('sp_emailAddress').value || '').trim();
-        if (spEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(spEmail)) {
-          markError('sp_emailAddress', 'Please enter a valid email address.');
-          valid = false;
-        }
-
-        // Spouse Aadhaar — optional, but validate format if a value is entered
-        const spAadhaar = document.getElementById('sp_aadhaarNumber').value.replace(/\s/g, '');
-        if (spAadhaar && !/^\d{12}$/.test(spAadhaar)) {
-          markError('sp_aadhaarNumber', 'Spouse Aadhaar must be exactly 12 digits.');
-          valid = false;
-        }
-      }
 
       if (!selectedEligibility) {
         document.getElementById('eligibilityError').style.display = 'block';
@@ -1606,10 +1881,23 @@
         document.getElementById('certMethodSection').style.display = 'none';
         document.getElementById('spouseSection').style.display = 'none';
         selectedAccountType = '';
-        selectedAppType = '';
+        selectedAppType     = '';
         selectedEligibility = '';
-        selectedCertMethod = '';
-        selectedValidity = '';
+        selectedCertMethod  = '';
+        selectedValidity    = '';
+
+        // Reset T&C
+        document.getElementById('tncCheckbox').checked = false;
+        document.getElementById('tncError').style.display = 'none';
+
+        // Return to Page 1 and reset step indicator
+        document.getElementById('formPage2').style.display = 'none';
+        document.getElementById('formPage1').style.display = 'block';
+        document.getElementById('step2Item').classList.remove('active');
+        document.getElementById('stepConnector').classList.remove('done');
+        document.getElementById('step1Item').classList.remove('done');
+        document.getElementById('step1Item').classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
 
       } catch (err) {
         console.error(err);
