@@ -61,11 +61,17 @@ function doPost(e) {
     // ─────────────────────────────────────────────────────────────────
 
     const docs = data.documents || {};
-    const path = (data.eligibilityPath || '').toLowerCase();
+    // Form sends eligibilityPath 'Net Worth' / 'Hybrid' / 'Income' —
+    // normalize to 'networth' / 'hybrid' / 'income' so the branches match
+    const path = (data.eligibilityPath || '').toLowerCase().replace(/\s+/g, '');
 
     // ITR — present for all three paths
     const itrUrl     = uploadFile(docs.itr,     name + '_ITR_Latest');
     const itrPrevUrl = docs.itrPrev ? uploadFile(docs.itrPrev, name + '_ITR_Previous') : '';
+
+    // Net Worth Certificate — sent instead of the path documents when the
+    // certification method is 'Net Worth by CA'
+    const nwCertUrl = uploadFile(docs.nwCertificate, name + '_NetWorth_Certificate');
 
     // Path-specific document URLs (declared upfront, populated per path)
     let casUrl              = '';
@@ -112,12 +118,28 @@ function doPost(e) {
     const curr = data.currentAddress   || {};
     const perm = data.permanentAddress || {};
 
-    // Human-readable labels for sheet
-    const appTypeLabel =
-      data.applicationType === 'nri' ? 'Individual (NRI)' : 'Individual (Indian Resident)';
+    // Spouse co-applicant — null unless accountType is 'Joint – Spouse'
+    const spouse = data.spouse || {};
+    const spCurr = spouse.currentAddress   || {};
+    const spPerm = spouse.permanentAddress || {};
 
+    // Compact an address object into a single sheet cell
+    function formatAddress(a) {
+      return [a.line1, a.line2, a.city, a.country, a.pincode]
+        .filter(p => p && String(p).trim())
+        .join(', ');
+    }
+
+    // Human-readable labels for sheet
+    // Form sends applicationType 'NRI' / 'Indian Resident'
+    const appTypeLabel =
+      (data.applicationType || '').toLowerCase() === 'nri'
+        ? 'Individual (NRI)' : 'Individual (Indian Resident)';
+
+    // Form sends certValidity '3-Year' / '2-Year' (legacy: 'threeyear')
+    const validityRaw = (data.certValidity || '').toLowerCase().replace(/[^a-z0-9]/g, '');
     const validityLabel =
-      data.certValidity === 'threeyear' ? '3-Year' : '2-Year';
+      (validityRaw === '3year' || validityRaw === 'threeyear') ? '3-Year' : '2-Year';
 
     const pathLabel =
       path === 'networth' ? 'Net Worth' :
@@ -163,6 +185,18 @@ function doPost(e) {
       loansUrls,              // AE – Loan Statements (Drive Links) [Net Worth & Hybrid]
       realEstateUrls_hy,      // AF – Real Estate Documents (Drive Links) [Hybrid]
       goldUrls_hy,            // AG – Gold / Jewellery Documents (Drive Links) [Hybrid]
+      data.accountType   || '',  // AH – Account Type
+      data.aadhaarNumber || '',  // AI – Aadhaar Number
+      data.certMethod    || '',  // AJ – Certification Method
+      nwCertUrl,              // AK – Net Worth Certificate (Drive Link) [CA method]
+      spouse.fullName      || '',  // AL – Spouse Full Name
+      spouse.organization  || '',  // AM – Spouse Organization
+      spouse.emailAddress  || '',  // AN – Spouse Email Address
+      spouse.phoneNumber   || '',  // AO – Spouse Phone Number
+      spouse.panCard       || '',  // AP – Spouse PAN Number
+      spouse.aadhaarNumber || '',  // AQ – Spouse Aadhaar Number
+      formatAddress(spCurr),  // AR – Spouse Current Address
+      formatAddress(spPerm),  // AS – Spouse Permanent Address
     ]);
 
     return ContentService
@@ -225,6 +259,18 @@ function setupSheetHeaders() {
     'Loan Statements (Drive Links) [Net Worth & Hybrid]',         // AE
     'Real Estate Documents (Drive Links) [Hybrid]',               // AF
     'Gold / Jewellery Documents (Drive Links) [Hybrid]',          // AG
+    'Account Type',                                                // AH
+    'Aadhaar Number',                                              // AI
+    'Certification Method',                                        // AJ
+    'Net Worth Certificate (Drive Link) [CA method]',             // AK
+    'Spouse – Full Name',                                          // AL
+    'Spouse – Organization',                                       // AM
+    'Spouse – Email Address',                                      // AN
+    'Spouse – Phone Number',                                       // AO
+    'Spouse – PAN Number',                                         // AP
+    'Spouse – Aadhaar Number',                                     // AQ
+    'Spouse – Current Address',                                    // AR
+    'Spouse – Permanent Address',                                  // AS
   ];
 
   const headerRange = sheet.getRange(1, 1, 1, headers.length);
