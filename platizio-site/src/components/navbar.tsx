@@ -5,7 +5,13 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Menu, X } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { ArrowRight, ChevronDown, FileCheck2, FileSignature, Menu, X } from "lucide-react";
 
 const LINKS = [
   { href: "/#why", label: "Why Accreditation" },
@@ -13,6 +19,21 @@ const LINKS = [
   { href: "/#process", label: "Process" },
   { href: "/#fees", label: "Fees" },
   { href: "/#faq", label: "FAQ" },
+];
+
+const APPLY_LINKS = [
+  {
+    href: "/apply/net-worth",
+    icon: FileCheck2,
+    label: "Apply for Net-Worth Certificate",
+    desc: "Get a CA-issued certificate",
+  },
+  {
+    href: "/apply/accreditation",
+    icon: FileSignature,
+    label: "Apply for Accreditation",
+    desc: "Already have a certificate",
+  },
 ];
 
 export function Navbar() {
@@ -62,11 +83,32 @@ export function Navbar() {
         </div>
 
         <div className="flex items-center gap-2">
-          <Button asChild size="lg" className="hidden bg-brand hover:bg-brand-deep md:inline-flex">
-            <Link href="/apply">
-              Apply Now <ArrowRight data-icon="inline-end" />
-            </Link>
-          </Button>
+          {/* Desktop: Apply dropdown */}
+          <div className="hidden md:block">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button size="lg" className="bg-brand hover:bg-brand-deep">
+                  Apply Now <ChevronDown data-icon="inline-end" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-72">
+                {APPLY_LINKS.map((a) => (
+                  <DropdownMenuItem key={a.href} asChild>
+                    <Link href={a.href} className="flex cursor-pointer items-start gap-3 py-2.5">
+                      <span className="mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-md bg-accent text-brand">
+                        <a.icon className="size-4" />
+                      </span>
+                      <span className="flex flex-col">
+                        <span className="text-sm font-semibold text-foreground">{a.label}</span>
+                        <span className="text-xs text-muted-foreground">{a.desc}</span>
+                      </span>
+                    </Link>
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+
           <button
             className="rounded-md p-2 text-foreground md:hidden"
             onClick={() => setOpen(!open)}
@@ -94,11 +136,16 @@ export function Navbar() {
                 {l.label}
               </Link>
             ))}
-            <Button asChild className="mt-2 bg-brand hover:bg-brand-deep">
-              <Link href="/apply" onClick={() => setOpen(false)}>
-                Apply Now <ArrowRight data-icon="inline-end" />
-              </Link>
-            </Button>
+            <div className="mt-2 flex flex-col gap-2">
+              {APPLY_LINKS.map((a) => (
+                <Button key={a.href} asChild className="justify-start bg-brand hover:bg-brand-deep">
+                  <Link href={a.href} onClick={() => setOpen(false)}>
+                    <a.icon data-icon="inline-start" /> {a.label}
+                    <ArrowRight data-icon="inline-end" className="ml-auto" />
+                  </Link>
+                </Button>
+              ))}
+            </div>
           </div>
         </motion.div>
       )}

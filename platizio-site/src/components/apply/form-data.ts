@@ -185,6 +185,45 @@ export const DOC_SECTIONS: Record<DocPrefix, DocCategory[]> = {
   ],
 };
 
+// ── Accreditation Application — fixed document set ──
+// (the Net Worth Certificate is already obtained and uploaded here, so there is
+//  no eligibility-driven financial-document collection)
+export const ACCREDITATION_DOCS: DocCategory[] = [
+  {
+    title: "Net Worth Certificate",
+    required: true,
+    desc: "Net Worth Certificate issued by a Chartered Accountant as per SEBI guidelines. PDF format only.",
+    fields: [{ id: "acc_nw_cert", label: "Net Worth Certificate", required: true, accept: ".pdf" }],
+  },
+  {
+    title: "Identity Proof",
+    required: true,
+    desc: "Copy of PAN is mandatory; Aadhaar is optional.",
+    fields: [
+      { id: "acc_pan", label: "Copy of PAN", required: true, accept: ".pdf,image/jpeg,image/png" },
+      { id: "acc_aadhaar", label: "Copy of Aadhaar", note: "(if provided)", accept: ".pdf,image/jpeg,image/png" },
+    ],
+  },
+  {
+    title: "Signed Undertakings",
+    required: true,
+    desc: "Signed undertakings as per SEBI-approved templates. Multiple files accepted.",
+    fields: [
+      { id: "acc_undertakings", label: "Signed Undertakings", required: true, multiple: true, accept: ".pdf" },
+    ],
+  },
+];
+
+// Inserted before "Signed Undertakings" only for Joint – Spouse applications.
+export const ACC_MARRIAGE_DOC: DocCategory = {
+  title: "Marriage Certificate",
+  required: true,
+  desc: "Required for Joint – Spouse applications to establish the co-applicant relationship.",
+  fields: [
+    { id: "acc_marriage", label: "Marriage Certificate", required: true, accept: ".pdf,image/jpeg,image/png" },
+  ],
+};
+
 export const TNC_POINTS = [
   "The information, declarations, and documents submitted by me are true, correct, complete, and belong to me / the applicant entity.",
   "I understand that submission of this application does not guarantee grant of Accredited Investor status, and the final approval shall be subject to verification and approval by the relevant accreditation agency and applicable regulatory framework.",

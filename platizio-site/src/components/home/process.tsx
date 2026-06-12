@@ -18,8 +18,8 @@ const STEPS = [
   },
   {
     icon: Send,
-    title: "Submission to CDSL",
-    desc: "Your application and verified documents are submitted to the accreditation agency — CDSL Ventures Limited (CVL).",
+    title: "Submission to NDML",
+    desc: "Your application and verified documents are submitted to the accreditation agency — NSDL Database Management Limited (NDML).",
   },
   {
     icon: Award,

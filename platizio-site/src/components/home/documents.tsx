@@ -19,7 +19,7 @@ const GROUPS = [
     items: [
       "Net Worth Certificate issued by a Chartered Accountant",
       "Copy of PAN (and Aadhaar, if provided)",
-      "Signed Letter of Authority",
+      "Marriage Certificate for Joint – Spouse applications",
       "Signed undertakings as per SEBI-approved templates",
     ],
   },

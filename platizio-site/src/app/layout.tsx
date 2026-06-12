@@ -17,7 +17,7 @@ const instrumentSerif = Instrument_Serif({
 export const metadata: Metadata = {
   title: "Platizio — Become a SEBI Accredited Investor",
   description:
-    "End-to-end support to obtain your SEBI Accredited Investor certificate through CDSL — net worth certification, document handling, and application processing in one place.",
+    "End-to-end support to obtain your SEBI Accredited Investor certificate through NDML — net worth certification, document handling, and application processing in one place.",
 };
 
 export default function RootLayout({

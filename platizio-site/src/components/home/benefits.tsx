@@ -1,10 +1,33 @@
 import { Reveal, Stagger, StaggerItem } from "@/components/motion";
 import {
   CircleDollarSign,
-  Rocket,
   ShieldCheck,
   SlidersHorizontal,
 } from "lucide-react";
+
+function AngelWings({ className }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.7}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      aria-hidden="true"
+    >
+      {/* Halo */}
+      <ellipse cx="12" cy="4" rx="3.4" ry="1.4" />
+      {/* Left wing */}
+      <path d="M12 9.2c-1.1-1.2-2.7-1.9-4.3-1.6.9.5 1.5 1.3 1.8 2.2-1.3-.8-2.9-1-4.4-.4 1.1.6 1.9 1.5 2.2 2.6-1.4-.6-3-.5-4.3.4 1.5.4 2.6 1.4 3.3 2.7.8 1.4 2.4 2.2 4 2" />
+      {/* Right wing */}
+      <path d="M12 9.2c1.1-1.2 2.7-1.9 4.3-1.6-.9.5-1.5 1.3-1.8 2.2 1.3-.8 2.9-1 4.4-.4-1.1.6-1.9 1.5-2.2 2.6 1.4-.6 3-.5 4.3.4-1.5.4-2.6 1.4-3.3 2.7-.8 1.4-2.4 2.2-4 2" />
+      {/* Body */}
+      <path d="M12 9.2V19" />
+    </svg>
+  );
+}
 
 const BENEFITS = [
   {
@@ -18,7 +41,7 @@ const BENEFITS = [
     desc: "Benefit from relaxations in investment agreements, prudential norms and investment conditions under SEBI's framework.",
   },
   {
-    icon: Rocket,
+    icon: AngelWings,
     title: "Angel Fund Access",
     desc: "Participate in Angel Funds and Co-Investment Vehicles (CIVs) that are open only to accredited investors.",
   },

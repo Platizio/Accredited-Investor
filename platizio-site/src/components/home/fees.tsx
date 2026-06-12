@@ -8,15 +8,21 @@ const PLANS = [
   {
     name: "2-Year Certificate",
     tagline: "Standard validity",
-    caFee: "₹9,000",
-    cdslFee: "₹10,000",
+    ndml: "₹10,000",
+    options: [
+      { label: "With CA-issued Net Worth Certificate", processing: "₹8,000", total: "₹18,000" },
+      { label: "Without CA-issued Net Worth Certificate", processing: "₹3,000", total: "₹13,000" },
+    ],
     itrNote: "Latest year ITR required",
   },
   {
     name: "3-Year Certificate",
     tagline: "Extended validity",
-    caFee: "₹13,500",
-    cdslFee: "₹14,500",
+    ndml: "₹14,500",
+    options: [
+      { label: "With CA-issued Net Worth Certificate", processing: "₹8,000", total: "₹22,500" },
+      { label: "Without CA-issued Net Worth Certificate", processing: "₹3,000", total: "₹17,500" },
+    ],
     itrNote: "Latest + previous year ITR required",
     featured: true,
   },
@@ -35,8 +41,10 @@ export function Fees() {
             <span className="font-display italic text-brand">surprises</span>
           </h2>
           <p className="mt-4 text-muted-foreground">
-            Two components: the CA certification fee payable now, and the CDSL
-            certificate fee payable later at registration. GST applies to both.
+            Two parts: a Processing fee and the NDML certificate fee. The Processing
+            fee depends on whether Platizio arranges your Net Worth Certificate —
+            ₹3,000 if you already hold one, ₹8,000 if we issue it through our
+            affiliated CA.
           </p>
         </Reveal>
 
@@ -57,28 +65,34 @@ export function Fees() {
                   {p.tagline}
                 </div>
                 <h3 className="mt-1 text-2xl font-bold">{p.name}</h3>
+                <div className="mt-1 text-xs text-muted-foreground">
+                  NDML Fees{" "}
+                  <span className="font-semibold text-foreground/70">{p.ndml}</span>
+                </div>
 
-                <div className="mt-6 space-y-4">
-                  <div className="flex items-baseline justify-between border-b border-dashed border-border pb-4">
-                    <div>
-                      <div className="text-sm font-medium">CA certification fee</div>
-                      <div className="text-xs text-muted-foreground">payable now</div>
+                <div className="mt-6 space-y-3">
+                  {p.options.map((o) => (
+                    <div
+                      key={o.label}
+                      className="rounded-xl border border-border bg-cream/40 p-4"
+                    >
+                      <div className="text-xs font-semibold text-brand-deep">{o.label}</div>
+                      <div className="mt-3 space-y-1.5 text-sm">
+                        <div className="flex items-baseline justify-between text-muted-foreground">
+                          <span>Processing Fees</span>
+                          <span className="font-medium text-foreground/80">{o.processing}</span>
+                        </div>
+                        <div className="flex items-baseline justify-between text-muted-foreground">
+                          <span>NDML Fees</span>
+                          <span className="font-medium text-foreground/80">{p.ndml}</span>
+                        </div>
+                        <div className="flex items-baseline justify-between border-t border-dashed border-border pt-2">
+                          <span className="text-sm font-semibold">Total</span>
+                          <span className="text-xl font-bold text-brand-deep">{o.total}</span>
+                        </div>
+                      </div>
                     </div>
-                    <div className="text-xl font-bold text-brand-deep">
-                      {p.caFee}
-                      <span className="ml-1 text-xs font-medium text-muted-foreground">+ GST</span>
-                    </div>
-                  </div>
-                  <div className="flex items-baseline justify-between">
-                    <div>
-                      <div className="text-sm font-medium">CDSL certificate fee</div>
-                      <div className="text-xs text-muted-foreground">payable later</div>
-                    </div>
-                    <div className="text-xl font-bold text-brand-deep">
-                      {p.cdslFee}
-                      <span className="ml-1 text-xs font-medium text-muted-foreground">+ GST</span>
-                    </div>
-                  </div>
+                  ))}
                 </div>
 
                 <p className="mt-6 text-xs text-muted-foreground">{p.itrNote}</p>

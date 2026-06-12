@@ -11,7 +11,7 @@ export function Footer() {
             </div>
             <p className="mt-3 max-w-xs text-sm leading-relaxed">
               Your gateway to SEBI Accredited Investor status — net worth
-              certification, documentation, and CDSL application support,
+              certification, documentation, and NDML application support,
               end to end.
             </p>
           </div>
@@ -48,7 +48,7 @@ export function Footer() {
 
         <div className="mt-12 flex flex-col items-center justify-between gap-3 border-t border-white/10 pt-6 text-xs sm:flex-row">
           <span>© {new Date().getFullYear()} Platizio. All rights reserved.</span>
-          <span>SEBI Accredited Investor framework · Certificates issued via CDSL</span>
+          <span>SEBI Accredited Investor framework · Certificates issued via NDML</span>
         </div>
       </div>
     </footer>

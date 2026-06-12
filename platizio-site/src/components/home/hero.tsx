@@ -45,7 +45,7 @@ export function Hero() {
               className="gap-1.5 border border-brand/20 bg-accent px-3 py-1 text-[13px] font-medium text-brand-deep"
             >
               <ShieldCheck className="size-3.5" />
-              SEBI Accredited Investor framework · Certified via CDSL
+              SEBI Accredited Investor framework · Certified via NDML
             </Badge>
           </motion.div>
 
@@ -69,7 +69,7 @@ export function Hero() {
             Become a SEBI Accredited Investor and unlock AIFs, PMS, Angel Funds
             and Co-Investment Vehicles with lower minimums and lighter
             regulatory conditions. Platizio handles your net worth
-            certification and CDSL application, end to end.
+            certification and NDML application, end to end.
           </motion.p>
 
           <motion.div
@@ -111,7 +111,7 @@ export function Hero() {
             <BadgeCheck className="size-5 text-brand" />
             <div className="text-left text-sm">
               <div className="font-semibold">Certificate issued</div>
-              <div className="text-xs text-muted-foreground">via CDSL · 2 or 3-year validity</div>
+              <div className="text-xs text-muted-foreground">via NDML · 2 or 3-year validity</div>
             </div>
           </motion.div>
         </motion.div>

@@ -25,11 +25,11 @@ const FAQS = [
   },
   {
     q: "What is the difference between the 2-year and 3-year certificates?",
-    a: "The validity period and the documentation. A 2-year certificate needs your latest year's ITR, while a 3-year certificate needs ITRs for the latest two years. Fees also differ: ₹9,000 + GST (CA) and ₹10,000 + GST (CDSL) for 2-year, versus ₹13,500 + GST and ₹14,500 + GST for 3-year.",
+    a: "The validity period and the documentation. A 2-year certificate needs your latest year's ITR, while a 3-year certificate needs ITRs for the latest two years. Fees also differ: a 2-year certificate totals ₹13,000–₹18,000 and a 3-year certificate totals ₹17,500–₹22,500, depending on whether Platizio arranges your Net Worth Certificate (Processing ₹3,000 without it or ₹8,000 with it, plus the NDML fee of ₹10,000 for 2-year or ₹14,500 for 3-year).",
   },
   {
     q: "Who issues the final certificate?",
-    a: "The Accredited Investor Certificate is issued by CDSL Ventures Limited (CVL), the accreditation agency. Platizio prepares and submits your application — including the CA-issued Net Worth Certificate where required — and the agency grants the final approval.",
+    a: "The Accredited Investor Certificate is issued by NSDL Database Management Limited (NDML), the accreditation agency. Platizio prepares and submits your application — including the CA-issued Net Worth Certificate where required — and the agency grants the final approval.",
   },
   {
     q: "What happens to my data and documents?",

@@ -19,7 +19,7 @@ export function Cta() {
           <p className="mx-auto mt-5 max-w-xl text-white/70">
             The application takes minutes. Pick your eligibility path, upload
             your documents, and Platizio handles certification and submission
-            to CDSL.
+            to NDML.
           </p>
           <Button
             asChild
