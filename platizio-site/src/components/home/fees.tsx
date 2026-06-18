@@ -10,8 +10,8 @@ const PLANS = [
     tagline: "Standard validity",
     ndml: "₹10,000+GST",
     options: [
-      { label: "With CA-issued Net Worth Certificate", processing: "₹7,000+GST", total: "₹17,000+GST" },
-      { label: "Without CA-issued Net Worth Certificate", processing: "₹2,000+GST", total: "₹12,000+GST" },
+      { label: "Net Worth Certificate Arranged by Platizio", processing: "₹7,000+GST", total: "₹17,000+GST" },
+      { label: "Net Worth Certificate arranged by self", processing: "₹2,000+GST", total: "₹12,000+GST" },
     ],
     itrNote: "Latest year ITR required",
   },
@@ -20,8 +20,8 @@ const PLANS = [
     tagline: "Extended validity",
     ndml: "₹14,500+GST",
     options: [
-      { label: "With CA-issued Net Worth Certificate", processing: "₹10,000+GST", total: "₹24,500+GST" },
-      { label: "Without CA-issued Net Worth Certificate", processing: "₹5,000+GST", total: "₹19,500+GST" },
+      { label: "Net Worth Certificate Arranged by Platizio", processing: "₹10,000+GST", total: "₹24,500+GST" },
+      { label: "Net Worth Certificate arranged by self", processing: "₹5,000+GST", total: "₹19,500+GST" },
     ],
     itrNote: "Latest + previous year ITR required",
     featured: true,
