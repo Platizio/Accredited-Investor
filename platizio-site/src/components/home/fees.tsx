@@ -8,20 +8,20 @@ const PLANS = [
   {
     name: "2-Year Certificate",
     tagline: "Standard validity",
-    ndml: "₹10,000",
+    ndml: "₹10,000+GST",
     options: [
-      { label: "With CA-issued Net Worth Certificate", processing: "₹8,000", total: "₹18,000" },
-      { label: "Without CA-issued Net Worth Certificate", processing: "₹3,000", total: "₹13,000" },
+      { label: "With CA-issued Net Worth Certificate", processing: "₹7,000+GST", total: "₹17,000+GST" },
+      { label: "Without CA-issued Net Worth Certificate", processing: "₹2,000+GST", total: "₹12,000+GST" },
     ],
     itrNote: "Latest year ITR required",
   },
   {
     name: "3-Year Certificate",
     tagline: "Extended validity",
-    ndml: "₹14,500",
+    ndml: "₹14,500+GST",
     options: [
-      { label: "With CA-issued Net Worth Certificate", processing: "₹8,000", total: "₹22,500" },
-      { label: "Without CA-issued Net Worth Certificate", processing: "₹3,000", total: "₹17,500" },
+      { label: "With CA-issued Net Worth Certificate", processing: "₹10,000+GST", total: "₹24,500+GST" },
+      { label: "Without CA-issued Net Worth Certificate", processing: "₹5,000+GST", total: "₹19,500+GST" },
     ],
     itrNote: "Latest + previous year ITR required",
     featured: true,
@@ -36,7 +36,7 @@ export function Fees() {
           <span className="text-sm font-semibold uppercase tracking-widest text-brand">
             Transparent pricing
           </span>
-          <h2 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">
+          <h2 className="mt-3 text-3xl font-display font-bold tracking-tight sm:text-4xl">
             Simple fees, no{" "}
             <span className="font-display italic text-brand">surprises</span>
           </h2>
@@ -52,9 +52,8 @@ export function Fees() {
           {PLANS.map((p) => (
             <StaggerItem key={p.name} className="h-full">
               <div
-                className={`relative h-full rounded-2xl border bg-card p-7 shadow-sm transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl hover:shadow-brand/10 ${
-                  p.featured ? "border-brand/40 ring-1 ring-brand/20" : "border-border"
-                }`}
+                className={`relative h-full rounded-2xl border bg-card p-7 shadow-sm transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl hover:shadow-brand/10 ${p.featured ? "border-brand/40 ring-1 ring-brand/20" : "border-border"
+                  }`}
               >
                 {p.featured && (
                   <Badge className="absolute -top-2.5 right-6 bg-brand text-white">

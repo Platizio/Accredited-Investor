@@ -4,7 +4,16 @@ import { useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowLeft, ArrowRight, Loader2, Zap } from "lucide-react";
 import { WEB_APP_URL } from "@/lib/site";
-import { ACCREDITATION_DOCS, ACC_MARRIAGE_DOC, DocCategory, Eligibility, Validity } from "./form-data";
+import {
+  ACC_IDENTITY_DOC,
+  ACC_ITR_DOC,
+  ACC_MARRIAGE_DOC,
+  ACC_NW_CERT_DOC,
+  ACC_UNDERTAKINGS_DOC,
+  DocCategory,
+  Eligibility,
+  Validity,
+} from "./form-data";
 import {
   ApplicantStep,
   Button,
@@ -45,10 +54,28 @@ function AccreditationInner({ onRestart }: { onRestart: () => void }) {
   const isThreeYear = validity === "threeyear";
   const { isJoint } = ctrl;
 
-  // Documents: insert the Marriage Certificate (joint only) before Signed Undertakings.
-  const docCategories: DocCategory[] = isJoint
-    ? [ACCREDITATION_DOCS[0], ACCREDITATION_DOCS[1], ACC_MARRIAGE_DOC, ACCREDITATION_DOCS[2]]
-    : ACCREDITATION_DOCS;
+  // Path-specific proof: Net Worth → certificate, Income → ITR, Hybrid → both.
+  const needsNwCert = eligibility === "networth" || eligibility === "hybrid";
+  const needsItr = eligibility === "income" || eligibility === "hybrid";
+
+  const pathLabelText =
+    eligibility === "networth" ? "Net Worth"
+    : eligibility === "hybrid" ? "Hybrid"
+    : eligibility === "income" ? "Income" : "";
+
+  const itrDesc = isThreeYear
+    ? "Upload the latest and previous year ITR or acknowledgements (both required for a 3-year certificate). PDF format only."
+    : "Upload the latest year ITR or ITR acknowledgement. PDF format only.";
+
+  // Assemble the document list: path-specific proof first, then the common docs.
+  // (Income → ITR, Net Worth → certificate, Hybrid → both.)
+  const docCategories: DocCategory[] = [
+    ...(needsItr ? [ACC_ITR_DOC] : []),
+    ...(needsNwCert ? [ACC_NW_CERT_DOC] : []),
+    ACC_IDENTITY_DOC,
+    ...(isJoint ? [ACC_MARRIAGE_DOC] : []),
+    ACC_UNDERTAKINGS_DOC,
+  ];
 
   const clearError = (key: string) =>
     setErrors((e) => {
@@ -95,7 +122,9 @@ function AccreditationInner({ onRestart }: { onRestart: () => void }) {
     const errs: Record<string, string> = {};
     if (!eligibility) errs.eligibility = "Please select an eligibility path.";
     if (!validity) errs.validity = "Please select a certificate validity period.";
-    if (!filesRef.current.acc_nw_cert?.[0]) errs.acc_nw_cert = "Net Worth Certificate is required.";
+    if (needsNwCert && !filesRef.current.acc_nw_cert?.[0]) errs.acc_nw_cert = "Net Worth Certificate is required.";
+    if (needsItr && !filesRef.current.acc_itr?.[0]) errs.acc_itr = "Latest year ITR is required.";
+    if (needsItr && isThreeYear && !filesRef.current.acc_itr_prev?.[0]) errs.acc_itr_prev = "Previous year ITR is required for a 3-year certificate.";
     if (!filesRef.current.acc_pan?.[0]) errs.acc_pan = "Copy of PAN is required.";
     if (isJoint && !filesRef.current.acc_marriage?.[0]) errs.acc_marriage = "Marriage Certificate is required for joint applications.";
     if (!filesRef.current.acc_undertakings?.length) errs.acc_undertakings = "Signed undertakings are required.";
@@ -126,7 +155,9 @@ function AccreditationInner({ onRestart }: { onRestart: () => void }) {
     setStatusMsg("");
     try {
       const documents = {
-        nwCertificate: await encodeFile("acc_nw_cert"),
+        nwCertificate: needsNwCert ? await encodeFile("acc_nw_cert") : null,
+        itr: needsItr ? await encodeFile("acc_itr") : null,
+        itrPrev: needsItr && isThreeYear ? await encodeFile("acc_itr_prev") : null,
         panCopy: await encodeFile("acc_pan"),
         aadhaarCopy: await encodeFile("acc_aadhaar"),
         marriageCertificate: isJoint ? await encodeFile("acc_marriage") : null,
@@ -272,19 +303,36 @@ function AccreditationInner({ onRestart }: { onRestart: () => void }) {
                   Accepted formats: PDF, JPG, PNG · Max 5 MB per file · Please self-attest physical documents before uploading.
                 </p>
                 <div className="mb-5 rounded-lg border border-brand/25 bg-accent/60 px-4 py-3 text-[13px] leading-relaxed text-brand-deep">
-                  Documents required by the accreditation agency (<strong>NDML</strong>) to process your Accredited Investor application.
+                  Documents required by the accreditation agency (<strong>NDML</strong>) to process your Accredited Investor application
+                  {pathLabelText ? <> via the <strong>{pathLabelText}</strong> path</> : ""}.
                 </div>
+
+                {!eligibility && (
+                  <p className="mb-5 text-xs font-semibold text-brand">
+                    ← Select an eligibility path above to see the documents required for your path.
+                  </p>
+                )}
+
+                {needsNwCert && (
+                  <div className="mb-5 rounded-lg border border-amber-300 bg-amber-50 px-4 py-3 text-[13px] font-medium text-amber-800">
+                    ⚠ Your Net Worth Certificate must be dated within the last 6 months — certificates older than 6 months will not be accepted.
+                  </div>
+                )}
 
                 {docCategories.map((cat) => (
                   <div key={cat.title} className="mb-6">
                     <div className="text-sm font-bold">
                       {cat.title} {cat.required && <span className="text-red-600">*</span>}
                     </div>
-                    <p className="mt-0.5 mb-3 text-xs text-muted-foreground">{cat.desc}</p>
+                    <p className="mt-0.5 mb-3 text-xs text-muted-foreground">
+                      {cat.isItr ? itrDesc : cat.desc}
+                    </p>
                     <div className="grid gap-3 sm:grid-cols-2">
-                      {cat.fields.map((f) => (
-                        <FileField key={f.id} field={f} error={errors[f.id]} onFiles={onFiles} />
-                      ))}
+                      {cat.fields
+                        .filter((f) => !f.prevYear || isThreeYear)
+                        .map((f) => (
+                          <FileField key={f.id} field={f} error={errors[f.id]} onFiles={onFiles} />
+                        ))}
                     </div>
                   </div>
                 ))}

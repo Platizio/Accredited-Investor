@@ -311,6 +311,10 @@ export function validateApplicant(ctrl: ApplicantController): Record<string, str
   const email = fields.emailAddress.trim();
   if (email && !EMAIL_RE.test(email)) errs.emailAddress = "Please enter a valid email address.";
 
+  const phoneDigits = fields.phoneNumber.replace(/\D/g, "");
+  if (fields.phoneNumber.trim() && (phoneDigits.length < 8 || phoneDigits.length > 15))
+    errs.phoneNumber = "Please enter a valid phone number (8–15 digits).";
+
   const aadhaar = fields.aadhaarNumber.replace(/\s/g, "");
   if (aadhaar && !/^\d{12}$/.test(aadhaar)) errs.aadhaarNumber = "Aadhaar must be exactly 12 digits.";
 
@@ -332,6 +336,10 @@ export function validateApplicant(ctrl: ApplicantController): Record<string, str
 
     const spEmail = fields.sp_emailAddress.trim();
     if (spEmail && !EMAIL_RE.test(spEmail)) errs.sp_emailAddress = "Please enter a valid email address.";
+
+    const spPhoneDigits = fields.sp_phoneNumber.replace(/\D/g, "");
+    if (fields.sp_phoneNumber.trim() && (spPhoneDigits.length < 8 || spPhoneDigits.length > 15))
+      errs.sp_phoneNumber = "Please enter a valid spouse phone number (8–15 digits).";
 
     const spAadhaar = fields.sp_aadhaarNumber.replace(/\s/g, "");
     if (spAadhaar && !/^\d{12}$/.test(spAadhaar))
@@ -396,6 +404,13 @@ export function ApplicantStep({
   jointDesc?: string;
 }) {
   const { residency, accountType, isJoint, countryOptions, phonePlaceholder, bind, copyCurrentAddress, copySpouseAddress } = ctrl;
+
+  // Phone fields: bind the value but sanitize on change so only valid phone
+  // characters (digits, spaces, +, -, parentheses) are ever stored.
+  const bindPhone = (id: string) => ({
+    value: ctrl.fields[id] ?? "",
+    onChange: (v: string) => ctrl.setField(id, v.replace(/[^\d+()\-\s]/g, "")),
+  });
 
   const addressBlock = (p: "curr" | "perm" | "sp_curr" | "sp_perm") => (
     <div className="space-y-4 rounded-xl border border-border bg-background/60 p-4">
@@ -463,7 +478,7 @@ export function ApplicantStep({
         <TextField id="fullName" label="Full Name" required placeholder="As per PAN card" error={errors.fullName} {...bind("fullName")} />
         <TextField id="organization" label="Organization" placeholder="Company / Firm (optional)" {...bind("organization")} />
         <TextField id="emailAddress" label="Email Address" required type="email" placeholder="you@example.com" error={errors.emailAddress} {...bind("emailAddress")} />
-        <TextField id="phoneNumber" label="Phone Number" required type="tel" placeholder={phonePlaceholder} error={errors.phoneNumber} {...bind("phoneNumber")} />
+        <TextField id="phoneNumber" label="Phone Number" required type="tel" inputMode="tel" maxLength={18} placeholder={phonePlaceholder} error={errors.phoneNumber} {...bindPhone("phoneNumber")} />
         <TextField id="panCard" label="PAN Card Number" required placeholder="ABCDE1234F" maxLength={10} className="h-10 bg-card uppercase" hint="Format: 5 letters · 4 digits · 1 letter" error={errors.panCard} {...bind("panCard")} />
         <TextField id="aadhaarNumber" label="Aadhaar Number" placeholder="XXXX XXXX XXXX" maxLength={14} inputMode="numeric" hint="12-digit Aadhaar number (optional)" error={errors.aadhaarNumber} {...bind("aadhaarNumber")} />
       </div>
@@ -492,7 +507,7 @@ export function ApplicantStep({
             <TextField id="sp_fullName" label="Full Name" required placeholder="As per PAN card" error={errors.sp_fullName} {...bind("sp_fullName")} />
             <TextField id="sp_organization" label="Organization" placeholder="Company / Firm (optional)" {...bind("sp_organization")} />
             <TextField id="sp_emailAddress" label="Email Address" required type="email" placeholder="spouse@example.com" error={errors.sp_emailAddress} {...bind("sp_emailAddress")} />
-            <TextField id="sp_phoneNumber" label="Phone Number" required type="tel" placeholder={phonePlaceholder} error={errors.sp_phoneNumber} {...bind("sp_phoneNumber")} />
+            <TextField id="sp_phoneNumber" label="Phone Number" required type="tel" inputMode="tel" maxLength={18} placeholder={phonePlaceholder} error={errors.sp_phoneNumber} {...bindPhone("sp_phoneNumber")} />
             <TextField id="sp_panCard" label="PAN Card Number" required placeholder="ABCDE1234F" maxLength={10} className="h-10 bg-card uppercase" hint="Format: 5 letters · 4 digits · 1 letter" error={errors.sp_panCard} {...bind("sp_panCard")} />
             <TextField id="sp_aadhaarNumber" label="Aadhaar Number" placeholder="XXXX XXXX XXXX" maxLength={14} inputMode="numeric" hint="12-digit Aadhaar number (optional)" error={errors.sp_aadhaarNumber} {...bind("sp_aadhaarNumber")} />
           </div>

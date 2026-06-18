@@ -185,34 +185,53 @@ export const DOC_SECTIONS: Record<DocPrefix, DocCategory[]> = {
   ],
 };
 
-// ── Accreditation Application — fixed document set ──
-// (the Net Worth Certificate is already obtained and uploaded here, so there is
-//  no eligibility-driven financial-document collection)
-export const ACCREDITATION_DOCS: DocCategory[] = [
-  {
-    title: "Net Worth Certificate",
-    required: true,
-    desc: "Net Worth Certificate issued by a Chartered Accountant as per SEBI guidelines. PDF format only.",
-    fields: [{ id: "acc_nw_cert", label: "Net Worth Certificate", required: true, accept: ".pdf" }],
-  },
-  {
-    title: "Identity Proof",
-    required: true,
-    desc: "Copy of PAN is mandatory; Aadhaar is optional.",
-    fields: [
-      { id: "acc_pan", label: "Copy of PAN", required: true, accept: ".pdf,image/jpeg,image/png" },
-      { id: "acc_aadhaar", label: "Copy of Aadhaar", note: "(if provided)", accept: ".pdf,image/jpeg,image/png" },
-    ],
-  },
-  {
-    title: "Signed Undertakings",
-    required: true,
-    desc: "Signed undertakings as per SEBI-approved templates. Multiple files accepted.",
-    fields: [
-      { id: "acc_undertakings", label: "Signed Undertakings", required: true, multiple: true, accept: ".pdf" },
-    ],
-  },
-];
+// ── Accreditation Application — document categories ──
+// The path-specific proof depends on the eligibility path:
+//   • Net Worth path → Net Worth Certificate
+//   • Income path    → Income Tax Returns (as per certificate validity)
+//   • Hybrid path    → BOTH the ITR and the Net Worth Certificate
+// The common docs (Identity Proof, Marriage Certificate if joint, Signed
+// Undertakings) are required for every path.
+
+// Net Worth Certificate — required for Net Worth & Hybrid paths
+export const ACC_NW_CERT_DOC: DocCategory = {
+  title: "Net Worth Certificate",
+  required: true,
+  desc: "Net Worth Certificate issued by a Chartered Accountant as per SEBI guidelines. Must be dated within the last 6 months. PDF format only.",
+  fields: [{ id: "acc_nw_cert", label: "Net Worth Certificate", required: true, accept: ".pdf" }],
+};
+
+// Income Tax Returns — required for Income & Hybrid paths (previous year added for 3-year certificates)
+export const ACC_ITR_DOC: DocCategory = {
+  title: "Income Tax Returns",
+  required: true,
+  isItr: true,
+  fields: [
+    { id: "acc_itr", label: "Latest Year ITR", required: true, accept: ".pdf" },
+    { id: "acc_itr_prev", label: "Previous Year ITR", required: true, accept: ".pdf", prevYear: true },
+  ],
+};
+
+// Identity Proof — required for every path
+export const ACC_IDENTITY_DOC: DocCategory = {
+  title: "Identity Proof",
+  required: true,
+  desc: "Copy of PAN is mandatory; Aadhaar is optional.",
+  fields: [
+    { id: "acc_pan", label: "Copy of PAN", required: true, accept: ".pdf,image/jpeg,image/png" },
+    { id: "acc_aadhaar", label: "Copy of Aadhaar", note: "(if provided)", accept: ".pdf,image/jpeg,image/png" },
+  ],
+};
+
+// Signed Undertakings — required for every path
+export const ACC_UNDERTAKINGS_DOC: DocCategory = {
+  title: "Signed Undertakings",
+  required: true,
+  desc: "Signed undertakings as per SEBI-approved templates. Multiple files accepted.",
+  fields: [
+    { id: "acc_undertakings", label: "Signed Undertakings", required: true, multiple: true, accept: ".pdf" },
+  ],
+};
 
 // Inserted before "Signed Undertakings" only for Joint – Spouse applications.
 export const ACC_MARRIAGE_DOC: DocCategory = {

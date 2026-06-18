@@ -38,7 +38,7 @@ export default function ApplyChooser() {
       <main className="flex-1 bg-cream">
         <section className="mx-auto max-w-5xl px-4 pt-28 pb-20 sm:px-6">
           <div className="mb-12 text-center">
-            <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
+            <h1 className="text-3xl font-display font-bold tracking-tight sm:text-4xl">
               How would you like to{" "}
               <span className="font-display italic text-brand">begin</span>?
             </h1>

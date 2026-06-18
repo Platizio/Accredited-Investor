@@ -43,7 +43,7 @@ export function Process() {
           <span className="text-sm font-semibold uppercase tracking-widest text-brand">
             How it works
           </span>
-          <h2 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">
+          <h2 className="mt-3 text-3xl font-display font-bold tracking-tight sm:text-4xl">
             Four steps to your{" "}
             <span className="font-display italic text-brand">certificate</span>
           </h2>

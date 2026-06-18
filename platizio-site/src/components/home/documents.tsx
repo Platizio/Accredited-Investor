@@ -33,7 +33,7 @@ export function Documents() {
           <span className="text-sm font-semibold uppercase tracking-widest text-brand">
             Process &amp; documentation
           </span>
-          <h2 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">
+          <h2 className="mt-3 text-3xl font-display font-bold tracking-tight sm:text-4xl">
             Keep these documents{" "}
             <span className="font-display italic text-brand">ready</span>
           </h2>

@@ -11,7 +11,6 @@ const PATHS = [
       "Total net worth ≥ ₹7.5 Crore",
       "Of which financial assets ≥ ₹3.75 Crore",
     ],
-    note: "Best if your wealth sits in investments, property and other assets.",
   },
   {
     letter: "B",
@@ -21,13 +20,11 @@ const PATHS = [
       "Total net worth ≥ ₹5 Crore",
       "Of which financial assets ≥ ₹2.5 Crore",
     ],
-    note: "A balanced route combining income and net worth thresholds.",
   },
   {
     letter: "C",
     title: "Income",
     rules: ["Annual income ≥ ₹2 Crore"],
-    note: "The simplest route — qualify on your income tax returns alone.",
   },
 ];
 
@@ -39,7 +36,7 @@ export function Eligibility() {
           <span className="text-sm font-semibold uppercase tracking-widest text-brand">
             Who can apply
           </span>
-          <h2 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">
+          <h2 className="mt-3 text-3xl font-display font-bold tracking-tight sm:text-4xl">
             Three ways to{" "}
             <span className="font-display italic text-brand">qualify</span>
           </h2>
@@ -68,9 +65,6 @@ export function Eligibility() {
                     </li>
                   ))}
                 </ul>
-                <p className="mt-5 text-xs leading-relaxed text-muted-foreground">
-                  {p.note}
-                </p>
               </div>
             </StaggerItem>
           ))}

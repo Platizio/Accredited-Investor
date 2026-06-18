@@ -9,7 +9,7 @@ export function Cta() {
       <div className="absolute -top-32 left-1/2 h-96 w-96 -translate-x-1/2 rounded-full bg-brand/25 blur-[120px]" />
       <div className="relative mx-auto max-w-3xl px-4 text-center sm:px-6">
         <Reveal>
-          <h2 className="text-3xl font-bold tracking-tight text-white sm:text-5xl">
+          <h2 className="text-3xl font-display font-bold tracking-tight text-white sm:text-5xl">
             Ready to join India&apos;s{" "}
             <span className="font-display italic text-brand-light">
               accredited

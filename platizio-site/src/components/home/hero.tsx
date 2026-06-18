@@ -7,8 +7,22 @@ import { Badge } from "@/components/ui/badge";
 import { ArrowRight, BadgeCheck, Landmark, ShieldCheck } from "lucide-react";
 import { CountUp } from "@/components/motion";
 
-const STATS = [
+type Stat = {
+  value?: number;
+  static?: string;
+  prefix: string;
+  suffix: string;
+  label: string;
+};
+
+const STATS: Stat[] = [
   { value: 7.5, prefix: "₹", suffix: " Cr", label: "Net worth path threshold" },
+  {
+    static: "₹1 + ₹5 Cr",
+    prefix: "",
+    suffix: "",
+    label: "Hybrid threshold (income · net worth)",
+  },
   { value: 2, prefix: "₹", suffix: " Cr", label: "Income path threshold" },
   { value: 3, prefix: "", suffix: " yrs", label: "Maximum certificate validity" },
   { value: 100, prefix: "", suffix: "%", label: "Digital application process" },
@@ -53,7 +67,7 @@ export function Hero() {
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="mt-6 text-4xl font-bold tracking-tight text-foreground sm:text-6xl"
+            className="mt-6 text-4xl font-display font-bold tracking-tight text-foreground sm:text-6xl"
           >
             Your gateway to India&apos;s{" "}
             <span className="font-display italic text-brand">exclusive</span>{" "}
@@ -67,7 +81,7 @@ export function Hero() {
             className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground"
           >
             Become a SEBI Accredited Investor and unlock AIFs, PMS, Angel Funds
-            and Co-Investment Vehicles with lower minimums and lighter
+            and Co-Investment Vehicles with lower minimum investments and lighter
             regulatory conditions. Platizio handles your net worth
             certification and NDML application, end to end.
           </motion.p>
@@ -111,7 +125,7 @@ export function Hero() {
             <BadgeCheck className="size-5 text-brand" />
             <div className="text-left text-sm">
               <div className="font-semibold">Certificate issued</div>
-              <div className="text-xs text-muted-foreground">via NDML · 2 or 3-year validity</div>
+              <div className="text-xs text-muted-foreground">via NDML · 2-year or 3-year validity</div>
             </div>
           </motion.div>
         </motion.div>
@@ -127,7 +141,7 @@ export function Hero() {
             <Landmark className="size-5 text-brand" />
             <div className="text-left text-sm">
               <div className="font-semibold">AIF · PMS · Angel Funds</div>
-              <div className="text-xs text-muted-foreground">access with relaxed minimums</div>
+              <div className="text-xs text-muted-foreground">access with relaxed minimum investment</div>
             </div>
           </motion.div>
         </motion.div>
@@ -137,17 +151,21 @@ export function Hero() {
           initial={{ opacity: 0, y: 32 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.45 }}
-          className="mx-auto mt-16 grid max-w-4xl grid-cols-2 gap-px overflow-hidden rounded-2xl border border-border bg-border shadow-sm sm:grid-cols-4"
+          className="mx-auto mt-16 grid max-w-5xl grid-cols-2 gap-px overflow-hidden rounded-2xl border border-border bg-border shadow-sm md:grid-cols-5"
         >
           {STATS.map((s) => (
             <div key={s.label} className="bg-card px-5 py-6 text-center">
               <div className="text-2xl font-bold text-brand-deep sm:text-3xl">
-                <CountUp
-                  value={s.value}
-                  prefix={s.prefix}
-                  suffix={s.suffix}
-                  decimals={s.value % 1 !== 0 ? 1 : 0}
-                />
+                {s.static ? (
+                  s.static
+                ) : (
+                  <CountUp
+                    value={s.value ?? 0}
+                    prefix={s.prefix}
+                    suffix={s.suffix}
+                    decimals={(s.value ?? 0) % 1 !== 0 ? 1 : 0}
+                  />
+                )}
               </div>
               <div className="mt-1 text-xs text-muted-foreground sm:text-sm">
                 {s.label}

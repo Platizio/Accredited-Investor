@@ -60,7 +60,7 @@ export function Benefits() {
           <span className="text-sm font-semibold uppercase tracking-widest text-brand">
             Why get accredited
           </span>
-          <h2 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">
+          <h2 className="mt-3 text-3xl font-display font-bold tracking-tight sm:text-4xl">
             Accreditation opens doors that stay{" "}
             <span className="font-display italic text-brand">closed</span> to
             retail investors

@@ -6,14 +6,25 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 
-const FAQS = [
+type Faq = {
+  q: string;
+  a: string;
+  bullets?: string[];
+};
+
+const FAQS: Faq[] = [
   {
     q: "What is an Accredited Investor?",
     a: "An Accredited Investor is an individual or entity recognised under SEBI's framework as financially sophisticated — based on income, net worth, or both. Accreditation unlocks investment products such as AIFs, PMS, SIFs, Angel Funds and Co-Investment Vehicles with lower minimum ticket sizes and relaxed regulatory conditions.",
   },
   {
     q: "Who is eligible to apply?",
-    a: "You can qualify through any one of three paths: (A) Net Worth — total net worth of ₹7.5 Crore or more, with at least ₹3.75 Crore in financial assets; (B) Hybrid — annual income of ₹1 Crore or more plus net worth of ₹5 Crore with at least ₹2.5 Crore in financial assets; or (C) Income — annual income of ₹2 Crore or more.",
+    a: "You can qualify through any one of three paths:",
+    bullets: [
+      "Net Worth — total net worth of ₹7.5 Crore or more, with at least ₹3.75 Crore in financial assets.",
+      "Hybrid — annual income of ₹1 Crore or more, plus net worth of ₹5 Crore with at least ₹2.5 Crore in financial assets.",
+      "Income — annual income of ₹2 Crore or more.",
+    ],
   },
   {
     q: "Can I apply jointly with my spouse?",
@@ -45,7 +56,7 @@ export function Faq() {
           <span className="text-sm font-semibold uppercase tracking-widest text-brand">
             FAQ
           </span>
-          <h2 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">
+          <h2 className="mt-3 text-3xl font-display font-bold tracking-tight sm:text-4xl">
             Frequently asked{" "}
             <span className="font-display italic text-brand">questions</span>
           </h2>
@@ -63,7 +74,18 @@ export function Faq() {
                   {f.q}
                 </AccordionTrigger>
                 <AccordionContent className="text-sm leading-relaxed text-muted-foreground">
-                  {f.a}
+                  {f.bullets ? (
+                    <>
+                      <p>{f.a}</p>
+                      <ul className="mt-2 list-disc space-y-1 pl-5">
+                        {f.bullets.map((b) => (
+                          <li key={b}>{b}</li>
+                        ))}
+                      </ul>
+                    </>
+                  ) : (
+                    f.a
+                  )}
                 </AccordionContent>
               </AccordionItem>
             ))}
