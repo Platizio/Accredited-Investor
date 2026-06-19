@@ -43,6 +43,14 @@ export function Footer() {
               Disputes are subject to the exclusive jurisdiction of the courts
               of Delhi, India, under the governing law of India.
             </p>
+            <p className="mt-3 text-xs leading-relaxed">
+              Platizio is an independent facilitator and is not affiliated with,
+              endorsed by, or acting on behalf of SEBI or NDML.
+            </p>
+            <ul className="mt-4 space-y-2 text-sm">
+              <li><Link href="/privacy" className="hover:text-white">Privacy Policy</Link></li>
+              <li><Link href="/terms" className="hover:text-white">Terms of Service</Link></li>
+            </ul>
           </div>
         </div>
 

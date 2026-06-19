@@ -30,7 +30,7 @@ const PATHS = [
 
 export function Eligibility() {
   return (
-    <section id="eligibility" className="scroll-mt-20 bg-cream py-20 sm:py-28">
+    <section id="eligibility" className="scroll-mt-20 py-20 sm:py-28">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <Reveal className="mx-auto max-w-2xl text-center">
           <span className="text-sm font-semibold uppercase tracking-widest text-brand">

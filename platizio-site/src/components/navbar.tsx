@@ -14,8 +14,8 @@ import {
 import { ArrowRight, ChevronDown, FileCheck2, FileSignature, Menu, X } from "lucide-react";
 
 const LINKS = [
-  { href: "/#why", label: "Why Accreditation" },
   { href: "/#eligibility", label: "Eligibility" },
+  { href: "/#why", label: "Why Accreditation" },
   { href: "/#process", label: "Process" },
   { href: "/#fees", label: "Fees" },
   { href: "/#faq", label: "FAQ" },

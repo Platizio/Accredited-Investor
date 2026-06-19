@@ -1,13 +1,35 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { ArrowRight, FileCheck2, FileSignature } from "lucide-react";
+import { buildMetadata } from "@/lib/seo";
+import { SITE } from "@/lib/site";
+import { JsonLd } from "@/components/json-ld";
 
-export const metadata: Metadata = {
-  title: "Apply — Platizio",
+export const metadata = buildMetadata({
+  title: "Apply",
   description:
     "Choose your application: get a Net Worth Certificate issued by our affiliated CA, or apply directly for SEBI Accreditation if you already hold one.",
+  path: "/apply",
+});
+
+const breadcrumbJsonLd: Record<string, unknown> = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    {
+      "@type": "ListItem",
+      position: 1,
+      name: "Home",
+      item: SITE.url + "/",
+    },
+    {
+      "@type": "ListItem",
+      position: 2,
+      name: "Apply",
+      item: SITE.url + "/apply",
+    },
+  ],
 };
 
 const CHOICES = [
@@ -17,7 +39,7 @@ const CHOICES = [
     eyebrow: "Step 1 · If you don't have a certificate",
     title: "Apply for Net-Worth Certificate",
     desc: "Our affiliated Chartered Accountants prepare and issue your Net Worth Certificate. Upload your financial documents and we handle the certification.",
-    points: ["Issued by our affiliated CA", "2-year or 3-year validity", "Processing fee ₹8,000"],
+    points: ["Issued by our affiliated CA", "2-year or 3-year validity", "All-inclusive ₹17,000–₹23,500+GST"],
     cta: "Start Net-Worth application",
   },
   {
@@ -26,7 +48,7 @@ const CHOICES = [
     eyebrow: "Step 2 · If you already hold a certificate",
     title: "Apply for Accreditation",
     desc: "Already have a Net Worth Certificate? Apply directly for SEBI Accredited Investor status. We verify and submit your application to NDML.",
-    points: ["Upload your Net Worth Certificate", "Submitted to NDML", "From ₹13,000 all-inclusive"],
+    points: ["Upload your Net Worth Certificate", "Submitted to NDML", "From ₹12,000+GST all-inclusive"],
     cta: "Start Accreditation application",
   },
 ];
@@ -35,6 +57,7 @@ export default function ApplyChooser() {
   return (
     <>
       <Navbar />
+      <JsonLd data={breadcrumbJsonLd} />
       <main className="flex-1 bg-cream">
         <section className="mx-auto max-w-5xl px-4 pt-28 pb-20 sm:px-6">
           <div className="mb-12 text-center">

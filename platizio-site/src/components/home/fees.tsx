@@ -20,8 +20,8 @@ const PLANS = [
     tagline: "Extended validity",
     ndml: "₹14,500+GST",
     options: [
-      { label: "Net Worth Certificate Arranged by Platizio", processing: "₹10,000+GST", total: "₹24,500+GST" },
-      { label: "Net Worth Certificate arranged by self", processing: "₹5,000+GST", total: "₹19,500+GST" },
+      { label: "Net Worth Certificate Arranged by Platizio", processing: "₹9,000+GST", total: "₹23,500+GST" },
+      { label: "Net Worth Certificate arranged by self", processing: "₹2,000+GST", total: "₹16,500+GST" },
     ],
     itrNote: "Latest + previous year ITR required",
     featured: true,
@@ -43,8 +43,8 @@ export function Fees() {
           <p className="mt-4 text-muted-foreground">
             Two parts: a Processing fee and the NDML certificate fee. The Processing
             fee depends on whether Platizio arranges your Net Worth Certificate —
-            ₹3,000 if you already hold one, ₹8,000 if we issue it through our
-            affiliated CA.
+            ₹2,000+GST if you already hold one, or ₹7,000+GST (2-year) / ₹9,000+GST
+            (3-year) if we arrange it through our affiliated CA. GST applies to all fees.
           </p>
         </Reveal>
 

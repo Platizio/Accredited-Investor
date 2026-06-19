@@ -15,7 +15,7 @@ const GROUPS = [
   },
   {
     icon: FolderCheck,
-    step: "For the Accreditation Agency",
+    step: "For Accreditation",
     items: [
       "Net Worth Certificate issued by a Chartered Accountant",
       "Copy of PAN (and Aadhaar, if provided)",

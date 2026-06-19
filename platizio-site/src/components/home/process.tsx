@@ -14,7 +14,7 @@ const STEPS = [
   {
     icon: FileCheck2,
     title: "Net Worth Certification",
-    desc: "For the Net Worth and Hybrid paths, your own CA or a Platizio-empanelled CA issues the Net Worth Certificate. The Income path skips straight ahead on your ITR.",
+    desc: "For the Net Worth and Hybrid paths, your own CA or a Platizio-empanelled CA issues the Net Worth Certificate whereas the Income path only requires your ITR.",
   },
   {
     icon: Send,

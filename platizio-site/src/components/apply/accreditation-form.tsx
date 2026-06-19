@@ -268,8 +268,8 @@ function AccreditationInner({ onRestart }: { onRestart: () => void }) {
                 <div className="grid gap-3 sm:grid-cols-2" role="radiogroup">
                   {(
                     [
-                      { v: "twoyear", name: "2-Year Certificate", ndml: "₹10,000", total: "₹13,000" },
-                      { v: "threeyear", name: "3-Year Certificate", ndml: "₹14,500", total: "₹17,500" },
+                      { v: "twoyear", name: "2-Year Certificate", ndml: "₹10,000+GST", total: "₹12,000+GST" },
+                      { v: "threeyear", name: "3-Year Certificate", ndml: "₹14,500+GST", total: "₹16,500+GST" },
                     ] as const
                   ).map((plan) => (
                     <button
@@ -284,7 +284,7 @@ function AccreditationInner({ onRestart }: { onRestart: () => void }) {
                     >
                       <div className="text-[15px] font-bold">{plan.name}</div>
                       <div className="mt-2 space-y-1 text-xs text-muted-foreground">
-                        <div className="flex justify-between"><span className="font-semibold text-foreground/70">Processing Fees</span><span>₹3,000</span></div>
+                        <div className="flex justify-between"><span className="font-semibold text-foreground/70">Processing Fees</span><span>₹2,000+GST</span></div>
                         <div className="flex justify-between"><span className="font-semibold text-foreground/70">NDML Fees</span><span>{plan.ndml}</span></div>
                         <div className="mt-1 flex justify-between border-t border-dashed border-border pt-1"><span className="font-semibold text-foreground/70">Total</span><span className="font-bold text-brand-deep">{plan.total}</span></div>
                       </div>
@@ -293,7 +293,7 @@ function AccreditationInner({ onRestart }: { onRestart: () => void }) {
                 </div>
                 <CardError show={!!errors.validity}>{errors.validity}</CardError>
                 <p className="mt-2 text-[11px] text-muted-foreground">
-                  Processing fee is ₹3,000 because you already hold your Net Worth Certificate. Don&apos;t have one yet?{" "}
+                  Processing fee is ₹2,000+GST because you provide your own documents. Don&apos;t have a Net Worth Certificate yet?{" "}
                   <a href="/apply/net-worth" className="font-semibold text-brand hover:underline">Apply for a Net Worth Certificate first.</a>
                 </p>
 

@@ -5,29 +5,6 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ArrowRight, BadgeCheck, Landmark, ShieldCheck } from "lucide-react";
-import { CountUp } from "@/components/motion";
-
-type Stat = {
-  value?: number;
-  static?: string;
-  prefix: string;
-  suffix: string;
-  label: string;
-};
-
-const STATS: Stat[] = [
-  { value: 7.5, prefix: "₹", suffix: " Cr", label: "Net worth path threshold" },
-  {
-    static: "₹1 + ₹5 Cr",
-    prefix: "",
-    suffix: "",
-    label: "Hybrid threshold (income · net worth)",
-  },
-  { value: 2, prefix: "₹", suffix: " Cr", label: "Income path threshold" },
-  { value: 3, prefix: "", suffix: " yrs", label: "Maximum certificate validity" },
-  { value: 100, prefix: "", suffix: "%", label: "Digital application process" },
-];
-
 export function Hero() {
   const { scrollY } = useScroll();
   const glowY = useTransform(scrollY, [0, 600], [0, 120]);
@@ -144,34 +121,6 @@ export function Hero() {
               <div className="text-xs text-muted-foreground">access with relaxed minimum investment</div>
             </div>
           </motion.div>
-        </motion.div>
-
-        {/* Stat strip */}
-        <motion.div
-          initial={{ opacity: 0, y: 32 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.45 }}
-          className="mx-auto mt-16 grid max-w-5xl grid-cols-2 gap-px overflow-hidden rounded-2xl border border-border bg-border shadow-sm md:grid-cols-5"
-        >
-          {STATS.map((s) => (
-            <div key={s.label} className="bg-card px-5 py-6 text-center">
-              <div className="text-2xl font-bold text-brand-deep sm:text-3xl">
-                {s.static ? (
-                  s.static
-                ) : (
-                  <CountUp
-                    value={s.value ?? 0}
-                    prefix={s.prefix}
-                    suffix={s.suffix}
-                    decimals={(s.value ?? 0) % 1 !== 0 ? 1 : 0}
-                  />
-                )}
-              </div>
-              <div className="mt-1 text-xs text-muted-foreground sm:text-sm">
-                {s.label}
-              </div>
-            </div>
-          ))}
         </motion.div>
       </div>
     </section>
