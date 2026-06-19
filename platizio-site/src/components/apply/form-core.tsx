@@ -10,6 +10,8 @@ import { COUNTRIES } from "@/lib/site";
 import {
   AccountType,
   DocField,
+  GENDERS,
+  OCCUPATIONS,
   Residency,
   SAMPLE_FIELDS,
   TNC_JURISDICTION,
@@ -22,7 +24,7 @@ import {
 
 export const INITIAL_FIELDS: Record<string, string> = {
   fullName: "", organization: "", emailAddress: "", phoneNumber: "",
-  panCard: "", aadhaarNumber: "",
+  panCard: "", aadhaarNumber: "", gender: "", occupation: "",
   currAddr1: "", currAddr2: "", currCity: "", currCountry: "India", currPincode: "",
   permAddr1: "", permAddr2: "", permCity: "", permCountry: "India", permPincode: "",
   sp_fullName: "", sp_organization: "", sp_emailAddress: "", sp_phoneNumber: "",
@@ -122,6 +124,40 @@ export function CountryField({
           <option key={c} value={c}>{c}</option>
         ))}
       </select>
+    </div>
+  );
+}
+
+export function SelectField({
+  id, label, value, options, onChange, required, error, placeholder = "Select…",
+}: {
+  id: string;
+  label: string;
+  value: string;
+  options: readonly string[];
+  onChange: (v: string) => void;
+  required?: boolean;
+  error?: string;
+  placeholder?: string;
+}) {
+  return (
+    <div>
+      <label htmlFor={id} className="mb-1.5 block text-[13px] font-semibold text-foreground/80">
+        {label} {required && <span className="text-brand">*</span>}
+      </label>
+      <select
+        id={id}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        aria-invalid={!!error}
+        className="h-10 w-full rounded-lg border border-input bg-card px-3 text-sm outline-none transition-colors focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+      >
+        <option value="">{placeholder}</option>
+        {options.map((o) => (
+          <option key={o} value={o}>{o}</option>
+        ))}
+      </select>
+      <FieldError msg={error} />
     </div>
   );
 }
@@ -263,13 +299,25 @@ export function useApplicant() {
   };
 }
 
-/** Validates the applicant (page 1) fields. Returns an errors map (T&C handled by the form). */
-export function validateApplicant(ctrl: ApplicantController): Record<string, string> {
+/**
+ * Validates the applicant (page 1) fields. Returns an errors map (T&C handled
+ * by the form). Pass `{ requirePersonalDetails: true }` to also require the
+ * gender + occupation fields (accreditation form).
+ */
+export function validateApplicant(
+  ctrl: ApplicantController,
+  opts: { requirePersonalDetails?: boolean } = {},
+): Record<string, string> {
   const { fields, residency, accountType, isJoint } = ctrl;
   const errs: Record<string, string> = {};
 
   if (!residency) errs.appType = "Please select a residency status.";
   if (!accountType) errs.accountType = "Please select an account type.";
+
+  if (opts.requirePersonalDetails) {
+    if (!fields.gender?.trim()) errs.gender = "Please select a gender.";
+    if (!fields.occupation?.trim()) errs.occupation = "Please select an occupation.";
+  }
 
   const required: Array<[string, string]> = [
     ["fullName", "Full name is required."],
@@ -374,12 +422,15 @@ export function buildApplicantPayload(ctrl: ApplicantController) {
 
 export function ApplicantStep({
   ctrl, errors, clearError, jointTitle = "Joint – Spouse", jointDesc = "Joint application with your spouse as co-applicant",
+  personalDetails = false,
 }: {
   ctrl: ApplicantController;
   errors: Record<string, string>;
   clearError: (key: string) => void;
   jointTitle?: string;
   jointDesc?: string;
+  /** Show Gender + Occupation selects in Basic Details (accreditation form). */
+  personalDetails?: boolean;
 }) {
   const { residency, accountType, isJoint, countryOptions, phonePlaceholder, bind, copyCurrentAddress, copySpouseAddress } = ctrl;
 
@@ -459,6 +510,30 @@ export function ApplicantStep({
         <TextField id="phoneNumber" label="Phone Number" required type="tel" inputMode="tel" maxLength={18} placeholder={phonePlaceholder} error={errors.phoneNumber} {...bindPhone("phoneNumber")} />
         <TextField id="panCard" label="PAN Card Number" required placeholder="ABCDE1234F" maxLength={10} className="h-10 bg-card uppercase" hint="Format: 5 letters · 4 digits · 1 letter" error={errors.panCard} {...bind("panCard")} />
         <TextField id="aadhaarNumber" label="Aadhaar Number" placeholder="XXXX XXXX XXXX" maxLength={14} inputMode="numeric" hint="12-digit Aadhaar number (optional)" error={errors.aadhaarNumber} {...bind("aadhaarNumber")} />
+        {personalDetails && (
+          <>
+            <SelectField
+              id="gender"
+              label="Gender"
+              required
+              options={GENDERS}
+              value={ctrl.fields.gender}
+              onChange={(v) => { ctrl.setField("gender", v); if (v) clearError("gender"); }}
+              error={errors.gender}
+              placeholder="Select gender"
+            />
+            <SelectField
+              id="occupation"
+              label="Occupation"
+              required
+              options={OCCUPATIONS}
+              value={ctrl.fields.occupation}
+              onChange={(v) => { ctrl.setField("occupation", v); if (v) clearError("occupation"); }}
+              error={errors.occupation}
+              placeholder="Select occupation"
+            />
+          </>
+        )}
       </div>
 
       <SubLabel>Current Address</SubLabel>

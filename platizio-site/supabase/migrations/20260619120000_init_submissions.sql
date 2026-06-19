@@ -51,6 +51,8 @@ create table if not exists public.accreditation_submissions (
   current_address    jsonb,
   permanent_address  jsonb,
   spouse             jsonb,
+  gender             text,         -- Male | Female | Other
+  occupation         text,         -- e.g. Professional, Retired, Student …
   -- form-specific
   eligibility_path   text,         -- 'Net Worth' | 'Hybrid' | 'Income'
   cert_validity      text,

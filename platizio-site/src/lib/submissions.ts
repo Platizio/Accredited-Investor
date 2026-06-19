@@ -153,6 +153,8 @@ export async function submitNetWorth(args: {
 export async function submitAccreditation(args: {
   id: string;
   applicant: ApplicantPayload;
+  gender: string;
+  occupation: string;
   eligibilityPath: string;
   certValidity: string;
   tncAccepted: boolean;
@@ -161,6 +163,8 @@ export async function submitAccreditation(args: {
   const { error } = await supabase.from("accreditation_submissions").insert({
     id: args.id,
     ...applicantColumns(args.applicant),
+    gender: args.gender,
+    occupation: args.occupation,
     eligibility_path: args.eligibilityPath,
     cert_validity: args.certValidity,
     tnc_accepted: args.tncAccepted,

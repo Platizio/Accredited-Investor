@@ -110,7 +110,7 @@ function AccreditationInner({ onRestart }: { onRestart: () => void }) {
 
   // ── Validation ──
   const validatePage1 = () => {
-    const errs = validateApplicant(ctrl);
+    const errs = validateApplicant(ctrl, { requirePersonalDetails: true });
     if (!tnc) errs.tnc = "You must agree to the Terms & Conditions to proceed.";
     setErrors(errs);
     if (Object.keys(errs).length) {
@@ -175,6 +175,8 @@ function AccreditationInner({ onRestart }: { onRestart: () => void }) {
       await submitAccreditation({
         id: submissionId,
         applicant: buildApplicantPayload(ctrl),
+        gender: ctrl.fields.gender,
+        occupation: ctrl.fields.occupation,
         eligibilityPath: pathLabel,
         certValidity: isThreeYear ? "3-Year" : "2-Year",
         tncAccepted: tnc,
@@ -225,6 +227,7 @@ function AccreditationInner({ onRestart }: { onRestart: () => void }) {
                   clearError={clearError}
                   jointTitle="Joint Applicant"
                   jointDesc="Joint application with your spouse as co-applicant"
+                  personalDetails
                 />
                 <TermsBlock checked={tnc} onChange={(v) => { setTnc(v); if (v) clearError("tnc"); }} error={errors.tnc} />
                 <Button type="button" onClick={goToPage2} size="lg" className="mt-7 h-12 w-full bg-brand text-base hover:bg-brand-deep">

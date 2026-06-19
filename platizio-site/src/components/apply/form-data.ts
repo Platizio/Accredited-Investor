@@ -5,6 +5,20 @@ export type CertMethod = "" | "ca" | "platizio";
 export type Validity = "" | "twoyear" | "threeyear";
 export type DocPrefix = "nw" | "hy" | "in" | "ca";
 
+// ── Personal-detail option lists (accreditation form) ──
+export const GENDERS = ["Male", "Female", "Other"] as const;
+
+export const OCCUPATIONS = [
+  "Central Govt Employee",
+  "State Govt Employee",
+  "Corporate/Private Employee",
+  "Retired",
+  "House Wife",
+  "Student",
+  "Professional",
+  "Agriculturist",
+] as const;
+
 export type DocField = {
   id: string;
   label: string;
@@ -265,6 +279,8 @@ export const SAMPLE_FIELDS: Record<string, string> = {
   emailAddress: "arjun.mehta@mehtacapital.in",
   phoneNumber: "+91 98765 43210",
   panCard: "ABCPM1234A",
+  gender: "Male",
+  occupation: "Professional",
   currAddr1: "14B, Palm Grove Residency",
   currAddr2: "Sector 62, NOIDA",
   currCity: "Noida",
