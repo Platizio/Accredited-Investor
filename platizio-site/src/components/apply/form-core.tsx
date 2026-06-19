@@ -34,28 +34,6 @@ export const INITIAL_FIELDS: Record<string, string> = {
 export const PAN_RE = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
 export const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-export const toBase64 = (file: File) =>
-  new Promise<string>((res, rej) => {
-    const r = new FileReader();
-    r.readAsDataURL(file);
-    r.onload = () => res(r.result as string);
-    r.onerror = (err) => rej(err);
-  });
-
-/** Encoders bound to a filesRef map ({ [fieldId]: File[] }). */
-export function makeEncoders(filesRef: React.RefObject<Record<string, File[]>>) {
-  const encodeFile = async (id: string) => {
-    const f = filesRef.current[id]?.[0];
-    if (!f) return { data: "", name: "", type: "" };
-    return { data: await toBase64(f), name: f.name, type: f.type };
-  };
-  const encodeMultiFile = async (id: string) => {
-    const fs = filesRef.current[id] ?? [];
-    return Promise.all(fs.map(async (f) => ({ data: await toBase64(f), name: f.name, type: f.type })));
-  };
-  return { encodeFile, encodeMultiFile };
-}
-
 export const scrollToFirstError = () =>
   requestAnimationFrame(() => {
     document.querySelector("[data-form-error]")?.scrollIntoView({ behavior: "smooth", block: "center" });

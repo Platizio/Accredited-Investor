@@ -1,6 +1,3 @@
-export const WEB_APP_URL =
-  "https://script.google.com/macros/s/AKfycbz4GDAAur1ItGhYTn1QI15qNtRcUfzLXqHxqKsO0mu5Sop-3yWZkpnb057uoNIEruwc/exec";
-
 // TODO(launch): set the real production domain in .env (NEXT_PUBLIC_SITE_URL).
 export const SITE = {
   url: (process.env.NEXT_PUBLIC_SITE_URL ?? "https://platizio.com").replace(/\/$/, ""),

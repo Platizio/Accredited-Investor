@@ -98,8 +98,8 @@ async function uploadOne(dir: string, slot: string, index: number, file: File): 
 
 /**
  * File uploaders bound to a form's filesRef map and a per-submission storage
- * directory. Mirrors makeEncoders() in form-core, but uploads the real File to
- * Supabase Storage and returns its metadata instead of a base64 blob.
+ * directory. Uploads the real File to Supabase Storage and returns its
+ * metadata (replacing the old base64-encode flow).
  */
 export function makeUploaders(filesRef: FilesRef, dir: string) {
   const uploadFile = async (slot: string): Promise<FileMeta | null> => {
