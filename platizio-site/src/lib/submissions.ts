@@ -1,4 +1,4 @@
-import { supabase, SUBMISSIONS_BUCKET } from "./supabase";
+import { getSupabase, SUBMISSIONS_BUCKET } from "./supabase";
 
 // ─────────────────────────────────────────────────────────────────────────────
 //  Types
@@ -88,7 +88,7 @@ function contentTypeOf(file: File): string {
 
 async function uploadOne(dir: string, slot: string, index: number, file: File): Promise<FileMeta> {
   const path = `${dir}/${slot}-${index}-${sanitize(file.name)}`;
-  const { error } = await supabase.storage.from(SUBMISSIONS_BUCKET).upload(path, file, {
+  const { error } = await getSupabase().storage.from(SUBMISSIONS_BUCKET).upload(path, file, {
     contentType: contentTypeOf(file),
     upsert: false,
   });
@@ -140,7 +140,7 @@ export async function submitNetWorth(args: {
   tncAccepted: boolean;
   documents: DocumentMap;
 }): Promise<void> {
-  const { error } = await supabase.from("net_worth_submissions").insert({
+  const { error } = await getSupabase().from("net_worth_submissions").insert({
     id: args.id,
     ...applicantColumns(args.applicant),
     cert_validity: args.certValidity,
@@ -160,7 +160,7 @@ export async function submitAccreditation(args: {
   tncAccepted: boolean;
   documents: DocumentMap;
 }): Promise<void> {
-  const { error } = await supabase.from("accreditation_submissions").insert({
+  const { error } = await getSupabase().from("accreditation_submissions").insert({
     id: args.id,
     ...applicantColumns(args.applicant),
     gender: args.gender,
