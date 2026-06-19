@@ -3,7 +3,6 @@
 import { useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowLeft, ArrowRight, Loader2, Zap } from "lucide-react";
-import { WEB_APP_URL } from "@/lib/site";
 import {
   ACC_IDENTITY_DOC,
   ACC_ITR_DOC,
@@ -14,6 +13,7 @@ import {
   Eligibility,
   Validity,
 } from "./form-data";
+import { MAX_FILE_BYTES, makeUploaders, newId, submitAccreditation } from "@/lib/submissions";
 import {
   ApplicantStep,
   Button,
@@ -25,7 +25,6 @@ import {
   SuccessScreen,
   TermsBlock,
   buildApplicantPayload,
-  makeEncoders,
   scrollToFirstError,
   useApplicant,
   validateApplicant,
@@ -49,7 +48,6 @@ function AccreditationInner({ onRestart }: { onRestart: () => void }) {
 
   const filesRef = useRef<Record<string, File[]>>({});
   const topRef = useRef<HTMLDivElement>(null);
-  const { encodeFile, encodeMultiFile } = makeEncoders(filesRef);
 
   const isThreeYear = validity === "threeyear";
   const { isJoint } = ctrl;
@@ -87,7 +85,11 @@ function AccreditationInner({ onRestart }: { onRestart: () => void }) {
 
   const onFiles = (id: string, files: File[]) => {
     filesRef.current[id] = files;
-    clearError(id);
+    if (files.some((f) => f.size > MAX_FILE_BYTES)) {
+      setErrors((e) => ({ ...e, [id]: "Each file must be 5 MB or smaller." }));
+    } else {
+      clearError(id);
+    }
   };
 
   const selectEligibility = (p: Exclude<Eligibility, "">) => {
@@ -154,31 +156,29 @@ function AccreditationInner({ onRestart }: { onRestart: () => void }) {
     setSubmitting(true);
     setStatusMsg("");
     try {
+      const submissionId = newId();
+      const { uploadFile, uploadMultiFile } = makeUploaders(filesRef, `accreditation/${submissionId}`);
+
       const documents = {
-        nwCertificate: needsNwCert ? await encodeFile("acc_nw_cert") : null,
-        itr: needsItr ? await encodeFile("acc_itr") : null,
-        itrPrev: needsItr && isThreeYear ? await encodeFile("acc_itr_prev") : null,
-        panCopy: await encodeFile("acc_pan"),
-        aadhaarCopy: await encodeFile("acc_aadhaar"),
-        marriageCertificate: isJoint ? await encodeFile("acc_marriage") : null,
-        undertakings: await encodeMultiFile("acc_undertakings"),
+        nwCertificate: needsNwCert ? await uploadFile("acc_nw_cert") : null,
+        itr: needsItr ? await uploadFile("acc_itr") : null,
+        itrPrev: needsItr && isThreeYear ? await uploadFile("acc_itr_prev") : null,
+        panCopy: await uploadFile("acc_pan"),
+        aadhaarCopy: await uploadFile("acc_aadhaar"),
+        marriageCertificate: isJoint ? await uploadFile("acc_marriage") : null,
+        undertakings: await uploadMultiFile("acc_undertakings"),
       };
 
       const pathLabel =
         eligibility === "networth" ? "Net Worth" : eligibility === "hybrid" ? "Hybrid" : "Income";
 
-      const payload = {
-        formType: "Accreditation",
-        ...buildApplicantPayload(ctrl),
+      await submitAccreditation({
+        id: submissionId,
+        applicant: buildApplicantPayload(ctrl),
         eligibilityPath: pathLabel,
         certValidity: isThreeYear ? "3-Year" : "2-Year",
+        tncAccepted: tnc,
         documents,
-      };
-
-      await fetch(WEB_APP_URL, {
-        method: "POST",
-        headers: { "Content-Type": "text/plain;charset=utf-8" },
-        body: JSON.stringify(payload),
       });
       setDone(true);
     } catch (err) {
