@@ -3,8 +3,8 @@
 import { useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowLeft, ArrowRight, Loader2, Zap } from "lucide-react";
-import { WEB_APP_URL } from "@/lib/site";
 import { DOC_SECTIONS, Validity } from "./form-data";
+import { MAX_FILE_BYTES, makeUploaders, newId, submitNetWorth } from "@/lib/submissions";
 import {
   ApplicantStep,
   Button,
@@ -15,7 +15,6 @@ import {
   SuccessScreen,
   TermsBlock,
   buildApplicantPayload,
-  makeEncoders,
   scrollToFirstError,
   useApplicant,
   validateApplicant,
@@ -38,7 +37,6 @@ function NetWorthInner({ onRestart }: { onRestart: () => void }) {
 
   const filesRef = useRef<Record<string, File[]>>({});
   const topRef = useRef<HTMLDivElement>(null);
-  const { encodeFile, encodeMultiFile } = makeEncoders(filesRef);
 
   const isThreeYear = validity === "threeyear";
   const { isJoint } = ctrl;
@@ -53,7 +51,11 @@ function NetWorthInner({ onRestart }: { onRestart: () => void }) {
 
   const onFiles = (id: string, files: File[]) => {
     filesRef.current[id] = files;
-    clearError(id);
+    if (files.some((f) => f.size > MAX_FILE_BYTES)) {
+      setErrors((e) => ({ ...e, [id]: "Each file must be 5 MB or smaller." }));
+    } else {
+      clearError(id);
+    }
   };
 
   const selectValidity = (v: Exclude<Validity, "">) => {
@@ -111,32 +113,30 @@ function NetWorthInner({ onRestart }: { onRestart: () => void }) {
     setSubmitting(true);
     setStatusMsg("");
     try {
+      const submissionId = newId();
+      const { uploadFile, uploadMultiFile } = makeUploaders(filesRef, `net-worth/${submissionId}`);
+
       const documents = {
-        itr: await encodeFile("nw_itr"),
-        itrPrev: isThreeYear ? await encodeFile("nw_itr_prev") : null,
-        cas: await encodeFile("nw_cas"),
-        pms: await encodeMultiFile("nw_pms"),
-        bank: await encodeMultiFile("nw_bank"),
-        pf: await encodeMultiFile("nw_pf"),
-        intl: await encodeMultiFile("nw_intl"),
-        realEstateProof: await encodeMultiFile("nw_realestate_proof"),
-        realEstateValue: await encodeMultiFile("nw_realestate_value"),
-        gold: await encodeFile("nw_gold"),
-        jewellery: await encodeFile("nw_jewellery"),
-        loans: await encodeMultiFile("nw_loans"),
+        itr: await uploadFile("nw_itr"),
+        itrPrev: isThreeYear ? await uploadFile("nw_itr_prev") : null,
+        cas: await uploadFile("nw_cas"),
+        pms: await uploadMultiFile("nw_pms"),
+        bank: await uploadMultiFile("nw_bank"),
+        pf: await uploadMultiFile("nw_pf"),
+        intl: await uploadMultiFile("nw_intl"),
+        realEstateProof: await uploadMultiFile("nw_realestate_proof"),
+        realEstateValue: await uploadMultiFile("nw_realestate_value"),
+        gold: await uploadFile("nw_gold"),
+        jewellery: await uploadFile("nw_jewellery"),
+        loans: await uploadMultiFile("nw_loans"),
       };
 
-      const payload = {
-        formType: "Net Worth Certificate",
-        ...buildApplicantPayload(ctrl),
+      await submitNetWorth({
+        id: submissionId,
+        applicant: buildApplicantPayload(ctrl),
         certValidity: isThreeYear ? "3-Year" : "2-Year",
+        tncAccepted: tnc,
         documents,
-      };
-
-      await fetch(WEB_APP_URL, {
-        method: "POST",
-        headers: { "Content-Type": "text/plain;charset=utf-8" },
-        body: JSON.stringify(payload),
       });
       setDone(true);
     } catch (err) {
