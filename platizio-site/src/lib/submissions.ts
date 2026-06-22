@@ -133,12 +133,16 @@ function applicantColumns(a: ApplicantPayload) {
   };
 }
 
+/** Verified Razorpay payment recorded alongside a submission. */
+export type PaymentRef = { paymentId: string; orderId: string; amount: number };
+
 export async function submitNetWorth(args: {
   id: string;
   applicant: ApplicantPayload;
   certValidity: string;
   tncAccepted: boolean;
   documents: DocumentMap;
+  payment: PaymentRef;
 }): Promise<void> {
   const { error } = await getSupabase().from("net_worth_submissions").insert({
     id: args.id,
@@ -146,6 +150,7 @@ export async function submitNetWorth(args: {
     cert_validity: args.certValidity,
     tnc_accepted: args.tncAccepted,
     documents: args.documents,
+    payment: args.payment,
   });
   if (error) throw new Error(`Could not save submission: ${error.message}`);
 }
@@ -159,6 +164,7 @@ export async function submitAccreditation(args: {
   certValidity: string;
   tncAccepted: boolean;
   documents: DocumentMap;
+  payment: PaymentRef;
 }): Promise<void> {
   const { error } = await getSupabase().from("accreditation_submissions").insert({
     id: args.id,
@@ -169,6 +175,7 @@ export async function submitAccreditation(args: {
     cert_validity: args.certValidity,
     tnc_accepted: args.tncAccepted,
     documents: args.documents,
+    payment: args.payment,
   });
   if (error) throw new Error(`Could not save submission: ${error.message}`);
 }

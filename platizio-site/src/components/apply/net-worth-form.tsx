@@ -3,8 +3,9 @@
 import { useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowLeft, ArrowRight, Loader2, Zap } from "lucide-react";
-import { DOC_SECTIONS, Validity } from "./form-data";
+import { DOC_SECTIONS, PROCESSING_FEE, Validity, formatRupees, payablePaise } from "./form-data";
 import { MAX_FILE_BYTES, makeUploaders, newId, submitNetWorth } from "@/lib/submissions";
+import { payWithRazorpay } from "@/lib/razorpay-client";
 import {
   ApplicantStep,
   Button,
@@ -107,6 +108,10 @@ function NetWorthInner({ onRestart }: { onRestart: () => void }) {
     requestAnimationFrame(() => topRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }));
   };
 
+  const amountPaise = payablePaise(
+    PROCESSING_FEE.netWorth[isThreeYear ? "threeyear" : "twoyear"],
+  );
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validatePage2()) return;
@@ -114,6 +119,29 @@ function NetWorthInner({ onRestart }: { onRestart: () => void }) {
     setStatusMsg("");
     try {
       const submissionId = newId();
+
+      // 1) Collect the processing fee FIRST — nothing is saved until a
+      //    payment has been created AND its signature verified server-side.
+      const payment = await payWithRazorpay({
+        amount: amountPaise,
+        name: "Platizio",
+        description: "Net Worth Certificate — processing fee",
+        receipt: `nw_${submissionId}`,
+        prefill: {
+          name: ctrl.fields.fullName,
+          email: ctrl.fields.emailAddress,
+          contact: ctrl.fields.phoneNumber,
+        },
+        onStatus: (s) =>
+          setStatusMsg(s === "verifying" ? "Verifying payment…" : "Opening secure payment…"),
+      });
+      if (!payment) {
+        setStatusMsg("Payment cancelled — your request was not submitted.");
+        return;
+      }
+
+      // 2) Payment verified → upload documents and save the submission.
+      setStatusMsg("Payment received — saving your request…");
       const { uploadFile, uploadMultiFile } = makeUploaders(filesRef, `net-worth/${submissionId}`);
 
       const documents = {
@@ -137,11 +165,14 @@ function NetWorthInner({ onRestart }: { onRestart: () => void }) {
         certValidity: isThreeYear ? "3-Year" : "2-Year",
         tncAccepted: tnc,
         documents,
+        payment: { paymentId: payment.paymentId, orderId: payment.orderId, amount: amountPaise },
       });
       setDone(true);
     } catch (err) {
       console.error(err);
-      setStatusMsg("✗ Submission failed. Please check your connection and try again.");
+      setStatusMsg(
+        err instanceof Error ? err.message : "Payment or submission failed. Please try again.",
+      );
     } finally {
       setSubmitting(false);
     }

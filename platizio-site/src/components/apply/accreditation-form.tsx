@@ -11,9 +11,13 @@ import {
   ACC_UNDERTAKINGS_DOC,
   DocCategory,
   Eligibility,
+  PROCESSING_FEE,
   Validity,
+  formatRupees,
+  payablePaise,
 } from "./form-data";
 import { MAX_FILE_BYTES, makeUploaders, newId, submitAccreditation } from "@/lib/submissions";
+import { payWithRazorpay } from "@/lib/razorpay-client";
 import {
   ApplicantStep,
   Button,
@@ -150,6 +154,8 @@ function AccreditationInner({ onRestart }: { onRestart: () => void }) {
     requestAnimationFrame(() => topRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }));
   };
 
+  const amountPaise = payablePaise(PROCESSING_FEE.accreditation);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validatePage2()) return;
@@ -157,6 +163,29 @@ function AccreditationInner({ onRestart }: { onRestart: () => void }) {
     setStatusMsg("");
     try {
       const submissionId = newId();
+
+      // 1) Collect the processing fee FIRST — nothing is saved until a
+      //    payment has been created AND its signature verified server-side.
+      const payment = await payWithRazorpay({
+        amount: amountPaise,
+        name: "Platizio",
+        description: "Accreditation — processing fee",
+        receipt: `acc_${submissionId}`,
+        prefill: {
+          name: ctrl.fields.fullName,
+          email: ctrl.fields.emailAddress,
+          contact: ctrl.fields.phoneNumber,
+        },
+        onStatus: (s) =>
+          setStatusMsg(s === "verifying" ? "Verifying payment…" : "Opening secure payment…"),
+      });
+      if (!payment) {
+        setStatusMsg("Payment cancelled — your application was not submitted.");
+        return;
+      }
+
+      // 2) Payment verified → upload documents and save the submission.
+      setStatusMsg("Payment received — saving your application…");
       const { uploadFile, uploadMultiFile } = makeUploaders(filesRef, `accreditation/${submissionId}`);
 
       const documents = {
@@ -181,11 +210,16 @@ function AccreditationInner({ onRestart }: { onRestart: () => void }) {
         certValidity: isThreeYear ? "3-Year" : "2-Year",
         tncAccepted: tnc,
         documents,
+        payment: { paymentId: payment.paymentId, orderId: payment.orderId, amount: amountPaise },
       });
       setDone(true);
     } catch (err) {
       console.error(err);
-      setStatusMsg("✗ Submission failed. Please check your connection and try again.");
+      setStatusMsg(
+        err instanceof Error
+          ? err.message
+          : "Payment or submission failed. Please try again.",
+      );
     } finally {
       setSubmitting(false);
     }
@@ -340,14 +374,18 @@ function AccreditationInner({ onRestart }: { onRestart: () => void }) {
                   </div>
                 ))}
 
-                <Button type="submit" size="lg" disabled={submitting} className="mt-7 h-12 w-full bg-brand text-base hover:bg-brand-deep">
+                <p className="mt-7 mb-3 text-center text-xs text-muted-foreground">
+                  You&apos;ll pay the processing fee (₹2,000 + 18% GST) now via Razorpay to submit.
+                  The NDML fee is payable later at registration.
+                </p>
+                <Button type="submit" size="lg" disabled={submitting} className="h-12 w-full bg-brand text-base hover:bg-brand-deep">
                   {submitting ? (
-                    <><Loader2 className="animate-spin" data-icon="inline-start" /> Uploading &amp; Submitting…</>
+                    <><Loader2 className="animate-spin" data-icon="inline-start" /> Processing…</>
                   ) : (
-                    <>Submit Application <ArrowRight data-icon="inline-end" /></>
+                    <>Pay {formatRupees(amountPaise)} &amp; Submit <ArrowRight data-icon="inline-end" /></>
                   )}
                 </Button>
-                {statusMsg && <p className="mt-4 text-center text-sm font-semibold text-red-600">{statusMsg}</p>}
+                {statusMsg && <p className="mt-4 text-center text-sm font-medium text-muted-foreground">{statusMsg}</p>}
               </motion.div>
             )}
           </AnimatePresence>

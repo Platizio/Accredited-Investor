@@ -19,6 +19,25 @@ export const OCCUPATIONS = [
   "Agriculturist",
 ] as const;
 
+// ── Payment (Razorpay) ──
+// The "payable now" processing fee per form, in rupees. GST is added on top
+// (the fee cards quote amounts "+GST"). NDML fees stay payable later.
+export const GST_RATE = 0.18;
+export const PROCESSING_FEE = {
+  accreditation: 2000,
+  netWorth: { twoyear: 7000, threeyear: 9000 },
+} as const;
+
+/** Amount payable now = processing fee × (1 + GST), in paise (integer). */
+export function payablePaise(processingRupees: number): number {
+  return Math.round(processingRupees * (1 + GST_RATE) * 100);
+}
+
+/** Formats paise as "₹8,260" (Indian grouping) for button labels. */
+export function formatRupees(paise: number): string {
+  return "₹" + (paise / 100).toLocaleString("en-IN");
+}
+
 export type DocField = {
   id: string;
   label: string;
