@@ -232,6 +232,7 @@ export function FileField({
         onChange={(e) => onFiles(field.id, Array.from(e.target.files ?? []))}
         className="mt-2.5 block w-full text-xs text-muted-foreground file:mr-3 file:cursor-pointer file:rounded-md file:border-0 file:bg-accent file:px-3.5 file:py-2 file:text-xs file:font-semibold file:text-brand-deep hover:file:bg-brand hover:file:text-white file:transition-colors"
       />
+      {field.footnote && <p className="mt-2 text-[11px] text-muted-foreground">{field.footnote}</p>}
       <FieldError msg={error} />
     </div>
   );

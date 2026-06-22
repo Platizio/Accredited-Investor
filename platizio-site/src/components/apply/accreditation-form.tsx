@@ -132,6 +132,7 @@ function AccreditationInner({ onRestart }: { onRestart: () => void }) {
     if (needsItr && !filesRef.current.acc_itr?.[0]) errs.acc_itr = "Latest year ITR is required.";
     if (needsItr && isThreeYear && !filesRef.current.acc_itr_prev?.[0]) errs.acc_itr_prev = "Previous year ITR is required for a 3-year certificate.";
     if (!filesRef.current.acc_pan?.[0]) errs.acc_pan = "Copy of PAN is required.";
+    if (!filesRef.current.acc_aadhaar?.[0]) errs.acc_aadhaar = "A valid ID proof is required.";
     if (isJoint && !filesRef.current.acc_marriage?.[0]) errs.acc_marriage = "Marriage Certificate is required for joint applications.";
     if (!filesRef.current.acc_undertakings?.length) errs.acc_undertakings = "Signed undertakings are required.";
     setErrors(errs);

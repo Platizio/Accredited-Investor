@@ -44,6 +44,8 @@ export type DocField = {
   /** Muted inline note rendered after the label, e.g. "(recommended)" */
   note?: string;
   hint?: string;
+  /** Muted note rendered below the upload button, e.g. accepted document types */
+  footnote?: string;
   required?: boolean;
   multiple?: boolean;
   accept?: string;
@@ -249,10 +251,16 @@ export const ACC_ITR_DOC: DocCategory = {
 export const ACC_IDENTITY_DOC: DocCategory = {
   title: "Identity Proof",
   required: true,
-  desc: "Copy of PAN is mandatory; Aadhaar is optional.",
+  desc: "Copy of PAN and a valid ID proof are both mandatory.",
   fields: [
     { id: "acc_pan", label: "Copy of PAN", required: true, accept: ".pdf,image/jpeg,image/png" },
-    { id: "acc_aadhaar", label: "Copy of Aadhaar", note: "(if provided)", accept: ".pdf,image/jpeg,image/png" },
+    {
+      id: "acc_aadhaar",
+      label: "Valid ID Proof",
+      required: true,
+      footnote: "Accepted IDs: Aadhaar Card, Driver's License, Passport, Voter's ID Card.",
+      accept: ".pdf,image/jpeg,image/png",
+    },
   ],
 };
 
