@@ -298,14 +298,18 @@ function NetWorthInner({ onRestart }: { onRestart: () => void }) {
                   </div>
                 ))}
 
-                <Button type="submit" size="lg" disabled={submitting} className="mt-7 h-12 w-full bg-brand text-base hover:bg-brand-deep">
+                <p className="mt-7 mb-3 text-center text-xs text-muted-foreground">
+                  You&apos;ll pay the processing fee ({isThreeYear ? "₹9,000" : "₹7,000"} + 18% GST) now via Razorpay to submit.
+                  The NDML fee is payable later at registration.
+                </p>
+                <Button type="submit" size="lg" disabled={submitting} className="h-12 w-full bg-brand text-base hover:bg-brand-deep">
                   {submitting ? (
-                    <><Loader2 className="animate-spin" data-icon="inline-start" /> Uploading &amp; Submitting…</>
+                    <><Loader2 className="animate-spin" data-icon="inline-start" /> Processing…</>
                   ) : (
-                    <>Submit Net Worth Request <ArrowRight data-icon="inline-end" /></>
+                    <>Pay {formatRupees(amountPaise)} &amp; Submit <ArrowRight data-icon="inline-end" /></>
                   )}
                 </Button>
-                {statusMsg && <p className="mt-4 text-center text-sm font-semibold text-red-600">{statusMsg}</p>}
+                {statusMsg && <p className="mt-4 text-center text-sm font-medium text-muted-foreground">{statusMsg}</p>}
               </motion.div>
             )}
           </AnimatePresence>

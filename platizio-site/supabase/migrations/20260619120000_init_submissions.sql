@@ -34,7 +34,8 @@ create table if not exists public.net_worth_submissions (
   -- form-specific
   cert_validity      text,         -- '2-Year' | '3-Year'
   tnc_accepted       boolean,
-  documents          jsonb         -- { slot: FileMeta | FileMeta[] | null }
+  documents          jsonb,        -- { slot: FileMeta | FileMeta[] | null }
+  payment            jsonb         -- Razorpay { paymentId, orderId, amount }
 );
 
 create table if not exists public.accreditation_submissions (
@@ -57,7 +58,8 @@ create table if not exists public.accreditation_submissions (
   eligibility_path   text,         -- 'Net Worth' | 'Hybrid' | 'Income'
   cert_validity      text,
   tnc_accepted       boolean,
-  documents          jsonb
+  documents          jsonb,
+  payment            jsonb         -- Razorpay { paymentId, orderId, amount }
 );
 
 -- ── Row-level security: anon may INSERT only ─────────────────────────────
