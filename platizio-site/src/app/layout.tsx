@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Cormorant } from "next/font/google";
 import "./globals.css";
 import { SITE } from "@/lib/site";
@@ -38,6 +38,14 @@ export const metadata: Metadata = {
     description: SITE.description,
   },
   robots: { index: true, follow: true },
+  verification: {
+    google: "r38lcOLoUKZkYJ_4evGjeN09WQ7do5duawJtv01dPVk",
+  },
+};
+
+// themeColor must live in the viewport export (deprecated in `metadata` since Next 14).
+export const viewport: Viewport = {
+  themeColor: "#7A2000",
 };
 
 // Site-wide structured data. Two graphs: the Organization and the WebSite.
@@ -45,11 +53,17 @@ const siteJsonLd: Record<string, unknown>[] = [
   {
     "@context": "https://schema.org",
     "@type": "Organization",
+    "@id": SITE.url + "#organization",
     name: SITE.name,
     url: SITE.url,
-    logo: SITE.url + "/platizio-logo.png",
+    logo: {
+      "@type": "ImageObject",
+      url: SITE.url + "/platizio-logo.png",
+      width: 500,
+      height: 150,
+    },
     description: SITE.description,
-    areaServed: "IN",
+    areaServed: { "@type": "Country", name: "India" },
     slogan: "Become a SEBI Accredited Investor.",
     contactPoint: {
       "@type": "ContactPoint",
@@ -62,8 +76,11 @@ const siteJsonLd: Record<string, unknown>[] = [
   {
     "@context": "https://schema.org",
     "@type": "WebSite",
+    "@id": SITE.url + "#website",
     name: SITE.name,
     url: SITE.url,
+    inLanguage: "en-IN",
+    publisher: { "@id": SITE.url + "#organization" },
   },
 ];
 

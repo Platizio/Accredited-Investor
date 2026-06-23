@@ -46,9 +46,9 @@ export function Hero() {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="mt-6 text-4xl font-display font-bold tracking-tight text-foreground sm:text-6xl"
           >
-            Your gateway to India&apos;s{" "}
-            <span className="font-display italic text-brand">exclusive</span>{" "}
-            investment universe
+            Become a{" "}
+            <span className="font-display italic text-brand">SEBI Accredited</span>{" "}
+            Investor in India
           </motion.h1>
 
           <motion.p
@@ -84,7 +84,7 @@ export function Hero() {
               size="lg"
               className="h-12 px-7 text-base"
             >
-              <Link href="/#why">Learn more</Link>
+              <Link href="/#why">Why get accredited</Link>
             </Button>
           </motion.div>
         </div>

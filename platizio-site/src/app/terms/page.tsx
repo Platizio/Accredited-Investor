@@ -1,16 +1,25 @@
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
-import { buildMetadata } from "@/lib/seo";
+import { buildMetadata, breadcrumbJsonLd } from "@/lib/seo";
+import { JsonLd } from "@/components/json-ld";
 
 export const metadata = buildMetadata({
   title: "Terms of Service",
+  description:
+    "The terms governing use of Platizio's facilitation services for obtaining a Net Worth Certificate and submitting a SEBI Accredited Investor application to NDML.",
   path: "/terms",
 });
+
+const breadcrumb = breadcrumbJsonLd([
+  { name: "Home", path: "/" },
+  { name: "Terms of Service", path: "/terms" },
+]);
 
 export default function TermsPage() {
   return (
     <>
       <Navbar />
+      <JsonLd data={breadcrumb} />
       <main className="flex-1 bg-cream">
         <section className="mx-auto max-w-3xl px-4 pt-28 pb-20 sm:px-6">
           <article className="space-y-8">

@@ -62,7 +62,7 @@ export function Navbar() {
         <Link href="/" className="flex items-center gap-2" onClick={() => setOpen(false)}>
           <Image
             src="/platizio-logo.png"
-            alt="Platizio"
+            alt="Platizio — SEBI Accredited Investor facilitation in India"
             width={220}
             height={80}
             priority

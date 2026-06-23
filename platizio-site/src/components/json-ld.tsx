@@ -6,7 +6,9 @@ export function JsonLd({
   return (
     <script
       type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
+      // Scrub "<" to its unicode escape to prevent XSS via any future
+      // dynamic JSON-LD field (per Next.js docs). Harmless for static data.
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(data).replace(/</g, "\\u003c") }}
     />
   );
 }

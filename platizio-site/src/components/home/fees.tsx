@@ -103,7 +103,7 @@ export function Fees() {
         <Reveal delay={0.15} className="mt-10 text-center">
           <Button asChild size="lg" className="bg-brand hover:bg-brand-deep">
             <Link href="/apply">
-              Apply now <ArrowRight data-icon="inline-end" />
+              Apply for accreditation <ArrowRight data-icon="inline-end" />
             </Link>
           </Button>
         </Reveal>

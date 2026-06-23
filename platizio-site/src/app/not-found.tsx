@@ -1,5 +1,16 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+
+export const metadata: Metadata = {
+  title: "Page not found",
+  // Override the root layout's `index: true` so the 404 isn't indexable
+  // (consistent with Next's auto-injected noindex); keep follow so the
+  // page's links to / and /apply still pass.
+  robots: { index: false, follow: true },
+  // Don't inherit the root layout's canonical: "/" on a 404.
+  alternates: { canonical: null },
+};
 
 export default function NotFound() {
   return (

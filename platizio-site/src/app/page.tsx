@@ -13,20 +13,20 @@ import { SITE } from "@/lib/site";
 import { JsonLd } from "@/components/json-ld";
 import { FAQS } from "@/components/home/faq-data";
 
-export const metadata = buildMetadata({ path: "/" });
+export const metadata = buildMetadata({
+  path: "/",
+  titleAbsolute: "SEBI Accredited Investor in India | Net Worth Certificate",
+});
 
 const homeJsonLd: Record<string, unknown>[] = [
   {
     "@context": "https://schema.org",
     "@type": "Service",
+    "@id": SITE.url + "#accreditation-service",
     name: "SEBI Accredited Investor Accreditation",
     serviceType: "Investor accreditation facilitation",
-    provider: {
-      "@type": "Organization",
-      name: SITE.name,
-      url: SITE.url,
-    },
-    areaServed: "IN",
+    provider: { "@id": SITE.url + "#organization" },
+    areaServed: { "@type": "Country", name: "India" },
     description: SITE.description,
     audience: {
       "@type": "Audience",
@@ -41,7 +41,7 @@ const homeJsonLd: Record<string, unknown>[] = [
       name: f.q,
       acceptedAnswer: {
         "@type": "Answer",
-        text: f.a + (f.bullets ? " " + f.bullets.join(" ") : ""),
+        text: f.a + (f.bullets ? " " + f.bullets.join("; ") : ""),
       },
     })),
   },

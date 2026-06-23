@@ -2,35 +2,20 @@ import Link from "next/link";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { ArrowRight, FileCheck2, FileSignature } from "lucide-react";
-import { buildMetadata } from "@/lib/seo";
-import { SITE } from "@/lib/site";
+import { buildMetadata, breadcrumbJsonLd } from "@/lib/seo";
 import { JsonLd } from "@/components/json-ld";
 
 export const metadata = buildMetadata({
-  title: "Apply",
+  title: "Apply for SEBI Accredited Investor Status",
   description:
     "Choose your application: get a Net Worth Certificate issued by our affiliated CA, or apply directly for SEBI Accreditation if you already hold one.",
   path: "/apply",
 });
 
-const breadcrumbJsonLd: Record<string, unknown> = {
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  itemListElement: [
-    {
-      "@type": "ListItem",
-      position: 1,
-      name: "Home",
-      item: SITE.url + "/",
-    },
-    {
-      "@type": "ListItem",
-      position: 2,
-      name: "Apply",
-      item: SITE.url + "/apply",
-    },
-  ],
-};
+const breadcrumb = breadcrumbJsonLd([
+  { name: "Home", path: "/" },
+  { name: "Apply", path: "/apply" },
+]);
 
 const CHOICES = [
   {
@@ -57,13 +42,13 @@ export default function ApplyChooser() {
   return (
     <>
       <Navbar />
-      <JsonLd data={breadcrumbJsonLd} />
+      <JsonLd data={breadcrumb} />
       <main className="flex-1 bg-cream">
         <section className="mx-auto max-w-5xl px-4 pt-28 pb-20 sm:px-6">
           <div className="mb-12 text-center">
             <h1 className="text-3xl font-display font-bold tracking-tight sm:text-4xl">
-              How would you like to{" "}
-              <span className="font-display italic text-brand">begin</span>?
+              Start your SEBI{" "}
+              <span className="font-display italic text-brand">Accreditation</span>
             </h1>
             <p className="mx-auto mt-3 max-w-2xl text-sm text-muted-foreground">
               Two paths, one destination. Get your Net Worth Certificate issued first, or jump

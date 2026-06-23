@@ -4,7 +4,7 @@ export const SITE = {
   name: "Platizio",
   title: "Platizio — Become a SEBI Accredited Investor",
   description:
-    "Platizio helps Indian investors obtain SEBI Accredited Investor status — Net Worth Certificate via affiliated CAs and accreditation submitted to NDML, end to end.",
+    "Become a SEBI Accredited Investor in India — Platizio arranges your Net Worth Certificate via affiliated CAs and submits your accreditation to NDML.",
   locale: "en_IN",
   twitter: "@platizio", // TODO(launch): set/remove if no handle
 } as const;

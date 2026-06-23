@@ -1,16 +1,25 @@
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
-import { buildMetadata } from "@/lib/seo";
+import { buildMetadata, breadcrumbJsonLd } from "@/lib/seo";
+import { JsonLd } from "@/components/json-ld";
 
 export const metadata = buildMetadata({
   title: "Privacy Policy",
+  description:
+    "How Platizio collects, uses, and protects your personal data under India's DPDP Act, 2023 when you apply for a Net Worth Certificate and SEBI accreditation.",
   path: "/privacy",
 });
+
+const breadcrumb = breadcrumbJsonLd([
+  { name: "Home", path: "/" },
+  { name: "Privacy Policy", path: "/privacy" },
+]);
 
 export default function PrivacyPage() {
   return (
     <>
       <Navbar />
+      <JsonLd data={breadcrumb} />
       <main className="flex-1 bg-cream">
         <section className="mx-auto max-w-3xl px-4 pt-28 pb-20 sm:px-6">
           <article className="space-y-8">
