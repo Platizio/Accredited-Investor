@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowLeft, ArrowRight, Loader2 } from "lucide-react";
+import { ArrowLeft, ArrowRight, Download, FileDown, Loader2 } from "lucide-react";
 import {
   ACC_IDENTITY_DOC,
   ACC_ITR_DOC,
@@ -33,6 +33,65 @@ import {
   useApplicant,
   validateApplicant,
 } from "./form-core";
+
+// Downloadable undertaking templates, keyed to the applicant's residency.
+const UNDERTAKING_TEMPLATES = [
+  {
+    residency: "resident",
+    label: "Indian Resident",
+    title: "Format of Undertaking",
+    href: "/undertakings/undertaking-resident.pdf",
+    download: "Accreditation-Undertaking-Indian-Resident.pdf",
+  },
+  {
+    residency: "nri",
+    label: "NRI / Foreign National",
+    title: "Self-Declaration of Annual Income",
+    href: "/undertakings/self-declaration-nri.pdf",
+    download: "Self-Declaration-Annual-Income-NRI.pdf",
+  },
+] as const;
+
+/** Download links for the signed-undertaking templates; highlights the one matching residency. */
+function UndertakingTemplates({ residency }: { residency: string }) {
+  return (
+    <div className="mb-3 rounded-lg border border-brand/30 bg-accent/40 p-3.5">
+      <p className="flex items-center gap-1.5 text-xs font-semibold text-brand-deep">
+        <FileDown className="size-3.5" /> Download the template, sign it, then upload it below
+      </p>
+      <div className="mt-2.5 grid gap-2 sm:grid-cols-2">
+        {UNDERTAKING_TEMPLATES.map((t) => {
+          const yours = residency === t.residency;
+          return (
+            <a
+              key={t.residency}
+              href={t.href}
+              download={t.download}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`group flex items-center gap-2.5 rounded-lg border bg-card px-3 py-2.5 transition-colors hover:border-brand/50 hover:bg-accent ${
+                yours ? "border-brand/50 ring-1 ring-brand/20" : "border-border"
+              }`}
+            >
+              <Download className="size-4 shrink-0 text-brand" />
+              <span className="min-w-0">
+                <span className="block text-xs font-semibold">
+                  {t.label}
+                  {yours && (
+                    <span className="ml-1.5 text-[10px] font-bold uppercase tracking-wide text-brand">
+                      · yours
+                    </span>
+                  )}
+                </span>
+                <span className="block truncate text-[11px] text-muted-foreground">{t.title}</span>
+              </span>
+            </a>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
 
 export function AccreditationForm() {
   const [resetKey, setResetKey] = useState(0);
@@ -348,6 +407,9 @@ function AccreditationInner({ onRestart }: { onRestart: () => void }) {
                     <p className="mt-0.5 mb-3 text-xs text-muted-foreground">
                       {cat.isItr ? itrDesc : cat.desc}
                     </p>
+                    {cat === ACC_UNDERTAKINGS_DOC && (
+                      <UndertakingTemplates residency={ctrl.residency} />
+                    )}
                     <div className="grid gap-3 sm:grid-cols-2">
                       {cat.fields
                         .filter((f) => !f.prevYear || isThreeYear)
