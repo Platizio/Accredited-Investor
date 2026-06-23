@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowLeft, ArrowRight, Loader2, Zap } from "lucide-react";
+import { ArrowLeft, ArrowRight, Loader2 } from "lucide-react";
 import { DOC_SECTIONS, PROCESSING_FEE, Validity, formatRupees, payablePaise } from "./form-data";
 import { MAX_FILE_BYTES, makeUploaders, newId, submitNetWorth } from "@/lib/submissions";
 import { payWithRazorpay } from "@/lib/razorpay-client";
@@ -62,12 +62,6 @@ function NetWorthInner({ onRestart }: { onRestart: () => void }) {
   const selectValidity = (v: Exclude<Validity, "">) => {
     setValidity(v);
     clearError("validity");
-  };
-
-  const fillSample = () => {
-    ctrl.fillApplicantSample();
-    setValidity("twoyear");
-    setErrors({});
   };
 
   // ── Validation ──
@@ -199,16 +193,6 @@ function NetWorthInner({ onRestart }: { onRestart: () => void }) {
       <div className="overflow-hidden rounded-2xl border border-border bg-card shadow-xl shadow-brand-deep/5">
         <div className="h-1.5 bg-gradient-to-r from-brand-deep via-brand to-brand-light" />
         <form onSubmit={handleSubmit} noValidate className="p-6 sm:p-10">
-          <div className="mb-4 text-right">
-            <button
-              type="button"
-              onClick={fillSample}
-              className="inline-flex items-center gap-1.5 rounded-lg border border-dashed border-brand px-3.5 py-2 text-xs font-semibold text-brand transition-colors hover:bg-accent"
-            >
-              <Zap className="size-3.5" /> Fill Sample Data
-            </button>
-          </div>
-
           <AnimatePresence mode="wait">
             {page === 1 ? (
               <motion.div key="p1" initial={{ opacity: 0, x: -24 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -24 }} transition={{ duration: 0.3 }}>

@@ -13,7 +13,6 @@ import {
   GENDERS,
   OCCUPATIONS,
   Residency,
-  SAMPLE_FIELDS,
   TNC_JURISDICTION,
   TNC_POINTS,
 } from "./form-data";
@@ -278,25 +277,10 @@ export function useApplicant() {
       sp_permCountry: f.sp_currCountry, sp_permPincode: f.sp_currPincode,
     }));
 
-  /** Fills the applicant (page 1) portion with sample data. */
-  const fillApplicantSample = () => {
-    setResidency("resident");
-    setAccountType("individual");
-    setFields((f) => ({
-      ...f,
-      ...SAMPLE_FIELDS,
-      permAddr1: SAMPLE_FIELDS.currAddr1,
-      permAddr2: SAMPLE_FIELDS.currAddr2,
-      permCity: SAMPLE_FIELDS.currCity,
-      permCountry: "India",
-      permPincode: SAMPLE_FIELDS.currPincode,
-    }));
-  };
-
   return {
     residency, accountType, fields, isJoint, countryOptions, phonePlaceholder,
     setField, bind, selectResidency, selectAccountType,
-    copyCurrentAddress, copySpouseAddress, fillApplicantSample,
+    copyCurrentAddress, copySpouseAddress,
   };
 }
 
@@ -378,7 +362,7 @@ export function validateApplicant(
 
 /** Builds the shared applicant portion of the submit payload. */
 export function buildApplicantPayload(ctrl: ApplicantController) {
-  const { fields, residency, accountType, isJoint } = ctrl;
+  const { fields, residency, isJoint } = ctrl;
   return {
     accountType: isJoint ? "Joint – Spouse" : "Individual",
     applicationType: residency === "nri" ? "NRI" : "Indian Resident",

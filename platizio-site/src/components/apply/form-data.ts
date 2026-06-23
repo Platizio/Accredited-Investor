@@ -299,18 +299,3 @@ export const TNC_POINTS = [
 
 export const TNC_JURISDICTION =
   "Any disputes, claims, grievances, or matters arising out of or relating to the use of the platform or accreditation application process shall be subject to the exclusive jurisdiction of the courts located in Delhi, India under the governing law of India.";
-
-export const SAMPLE_FIELDS: Record<string, string> = {
-  fullName: "Arjun Mehta",
-  organization: "Mehta Capital Advisors LLP",
-  emailAddress: "arjun.mehta@mehtacapital.in",
-  phoneNumber: "+91 98765 43210",
-  panCard: "ABCPM1234A",
-  gender: "Male",
-  occupation: "Professional",
-  currAddr1: "14B, Palm Grove Residency",
-  currAddr2: "Sector 62, NOIDA",
-  currCity: "Noida",
-  currCountry: "India",
-  currPincode: "201309",
-};
