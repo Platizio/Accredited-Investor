@@ -24,7 +24,7 @@ const CHOICES = [
     eyebrow: "Step 1 · If you don't have a certificate",
     title: "Apply for Net-Worth Certificate",
     desc: "Our affiliated Chartered Accountants prepare and issue your Net Worth Certificate. Upload your financial documents and we handle the certification.",
-    points: ["Issued by our affiliated CA", "2-year or 3-year validity", "All-inclusive ₹17,000–₹23,500+GST"],
+    points: ["Issued by our affiliated CA", "2-year or 3-year validity", "Flat fee — ₹5,000 (2-yr) / ₹7,000 (3-yr), no GST"],
     cta: "Start Net-Worth application",
   },
   {
@@ -33,7 +33,7 @@ const CHOICES = [
     eyebrow: "Step 2 · If you already hold a certificate",
     title: "Apply for Accreditation",
     desc: "Already have a Net Worth Certificate? Apply directly for SEBI Accredited Investor status. We verify and submit your application to NDML.",
-    points: ["Upload your Net Worth Certificate", "Submitted to NDML", "From ₹12,000+GST all-inclusive"],
+    points: ["Upload your Net Worth Certificate", "Submitted to NDML", "₹2,000 + GST — NDML fee payable separately"],
     cta: "Start Accreditation application",
   },
 ];

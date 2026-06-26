@@ -3,7 +3,7 @@
 import { useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowLeft, ArrowRight, Loader2 } from "lucide-react";
-import { DOC_SECTIONS, PROCESSING_FEE, Validity, formatRupees, payablePaise } from "./form-data";
+import { DOC_SECTIONS, PROCESSING_FEE, Validity, flatPaise, formatRupees } from "./form-data";
 import { MAX_FILE_BYTES, makeUploaders, newId, submitNetWorth } from "@/lib/submissions";
 import { payWithRazorpay } from "@/lib/razorpay-client";
 import {
@@ -102,7 +102,7 @@ function NetWorthInner({ onRestart }: { onRestart: () => void }) {
     requestAnimationFrame(() => topRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }));
   };
 
-  const amountPaise = payablePaise(
+  const amountPaise = flatPaise(
     PROCESSING_FEE.netWorth[isThreeYear ? "threeyear" : "twoyear"],
   );
 
@@ -222,8 +222,8 @@ function NetWorthInner({ onRestart }: { onRestart: () => void }) {
                 <div className="grid gap-3 sm:grid-cols-2" role="radiogroup">
                   {(
                     [
-                      { v: "twoyear", name: "2-Year Certificate", processing: "₹7,000+GST", ndml: "₹10,000+GST", total: "₹17,000+GST", itr: "Latest year ITR required" },
-                      { v: "threeyear", name: "3-Year Certificate", processing: "₹9,000+GST", ndml: "₹14,500+GST", total: "₹23,500+GST", itr: "Latest + previous year ITR required" },
+                      { v: "twoyear", name: "2-Year Certificate", fee: "₹5,000", ndml: "₹10,000+GST", itr: "Latest year ITR required" },
+                      { v: "threeyear", name: "3-Year Certificate", fee: "₹7,000", ndml: "₹14,500+GST", itr: "Latest + previous year ITR required" },
                     ] as const
                   ).map((plan) => (
                     <button
@@ -238,9 +238,15 @@ function NetWorthInner({ onRestart }: { onRestart: () => void }) {
                     >
                       <div className="text-[15px] font-bold">{plan.name}</div>
                       <div className="mt-2 space-y-1 text-xs text-muted-foreground">
-                        <div className="flex justify-between"><span className="font-semibold text-foreground/70">Processing Fees</span><span>{plan.processing}</span></div>
-                        <div className="flex justify-between"><span className="font-semibold text-foreground/70">NDML Fees</span><span>{plan.ndml}</span></div>
-                        <div className="mt-1 flex justify-between border-t border-dashed border-border pt-1"><span className="font-semibold text-foreground/70">Total</span><span className="font-bold text-brand-deep">{plan.total}</span></div>
+                        <div className="flex items-baseline justify-between">
+                          <span className="font-semibold text-foreground/70">Certificate Fee</span>
+                          <span className="text-base font-bold text-brand-deep">{plan.fee}</span>
+                        </div>
+                        <div className="text-[11px]">Flat fee · no GST</div>
+                        <div className="flex justify-between border-t border-dashed border-border pt-1">
+                          <span className="font-semibold text-foreground/70">NDML (payable later)</span>
+                          <span>{plan.ndml}</span>
+                        </div>
                         <div className="pt-1 italic">{plan.itr}</div>
                       </div>
                     </button>
@@ -248,7 +254,8 @@ function NetWorthInner({ onRestart }: { onRestart: () => void }) {
                 </div>
                 <CardError show={!!errors.validity}>{errors.validity}</CardError>
                 <p className="mt-2 text-[11px] text-muted-foreground">
-                  All-inclusive — Platizio arranges your Net Worth Certificate through our affiliated CA and handles your NDML accreditation. GST applies to all fees.
+                  The Net Worth Certificate fee is a flat amount with no GST — Platizio arranges your certificate
+                  through our affiliated CA. The NDML registration fee is paid separately, later, at registration.
                 </p>
 
                 {/* 4 · Documents Upload */}
@@ -283,8 +290,8 @@ function NetWorthInner({ onRestart }: { onRestart: () => void }) {
                 ))}
 
                 <p className="mt-7 mb-3 text-center text-xs text-muted-foreground">
-                  You&apos;ll pay the processing fee ({isThreeYear ? "₹9,000" : "₹7,000"} + 18% GST) now via Razorpay to submit.
-                  The NDML fee is payable later at registration.
+                  You&apos;ll pay the flat Net Worth Certificate fee of {formatRupees(amountPaise)} (no GST) now via Razorpay to submit.
+                  The NDML registration fee is payable separately, later. SEBI accreditation (₹2,000 + GST) is a separate step.
                 </p>
                 <Button type="submit" size="lg" disabled={submitting} className="h-12 w-full bg-brand text-base hover:bg-brand-deep">
                   {submitting ? (

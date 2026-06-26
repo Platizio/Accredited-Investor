@@ -8,21 +8,15 @@ const PLANS = [
   {
     name: "2-Year Certificate",
     tagline: "Standard validity",
+    certFee: "₹5,000",
     ndml: "₹10,000+GST",
-    options: [
-      { label: "Net Worth Certificate Arranged by Platizio", processing: "₹7,000+GST", total: "₹17,000+GST" },
-      { label: "Net Worth Certificate arranged by self", processing: "₹2,000+GST", total: "₹12,000+GST" },
-    ],
     itrNote: "Latest year ITR required",
   },
   {
     name: "3-Year Certificate",
     tagline: "Extended validity",
+    certFee: "₹7,000",
     ndml: "₹14,500+GST",
-    options: [
-      { label: "Net Worth Certificate Arranged by Platizio", processing: "₹9,000+GST", total: "₹23,500+GST" },
-      { label: "Net Worth Certificate arranged by self", processing: "₹2,000+GST", total: "₹16,500+GST" },
-    ],
     itrNote: "Latest + previous year ITR required",
     featured: true,
   },
@@ -41,10 +35,10 @@ export function Fees() {
             <span className="font-display italic text-brand">surprises</span>
           </h2>
           <p className="mt-4 text-muted-foreground">
-            Two parts: a Processing fee and the NDML certificate fee. The Processing
-            fee depends on whether Platizio arranges your Net Worth Certificate —
-            ₹3,000 if you already hold one, ₹8,000 if we issue it through our
-            affiliated CA.
+            A flat Net Worth Certificate fee (no GST) when Platizio arranges it through
+            our affiliated CA, plus the SEBI accreditation fee of ₹2,000 + GST. The NDML
+            registration fee is paid separately, later, at registration. Already hold a
+            Net Worth Certificate? You skip the certificate fee.
           </p>
         </Reveal>
 
@@ -64,37 +58,35 @@ export function Fees() {
                   {p.tagline}
                 </div>
                 <h3 className="mt-1 text-2xl font-bold">{p.name}</h3>
-                <div className="mt-1 text-xs text-muted-foreground">
-                  NDML Fees{" "}
-                  <span className="font-semibold text-foreground/70">{p.ndml}</span>
-                </div>
-
-                <div className="mt-6 space-y-3">
-                  {p.options.map((o) => (
-                    <div
-                      key={o.label}
-                      className="rounded-xl border border-border bg-cream/40 p-4"
-                    >
-                      <div className="text-xs font-semibold text-brand-deep">{o.label}</div>
-                      <div className="mt-3 space-y-1.5 text-sm">
-                        <div className="flex items-baseline justify-between text-muted-foreground">
-                          <span>Processing Fees</span>
-                          <span className="font-medium text-foreground/80">{o.processing}</span>
-                        </div>
-                        <div className="flex items-baseline justify-between text-muted-foreground">
-                          <span>NDML Fees</span>
-                          <span className="font-medium text-foreground/80">{p.ndml}</span>
-                        </div>
-                        <div className="flex items-baseline justify-between border-t border-dashed border-border pt-2">
-                          <span className="text-sm font-semibold">Total</span>
-                          <span className="text-xl font-bold text-brand-deep">{o.total}</span>
-                        </div>
-                      </div>
+                <div className="mt-6 space-y-3 text-sm">
+                  <div className="rounded-xl border border-border bg-cream/40 p-4">
+                    <div className="flex items-baseline justify-between">
+                      <span className="text-xs font-semibold text-brand-deep">Net Worth Certificate</span>
+                      <span className="text-xl font-bold text-brand-deep">{p.certFee}</span>
                     </div>
-                  ))}
+                    <div className="mt-0.5 text-[11px] text-muted-foreground">
+                      Arranged by our affiliated CA · flat fee, no GST
+                    </div>
+                  </div>
+
+                  <div className="space-y-1.5 px-1 text-muted-foreground">
+                    <div className="flex items-baseline justify-between">
+                      <span>SEBI Accreditation</span>
+                      <span className="font-medium text-foreground/80">₹2,000+GST</span>
+                    </div>
+                    <div className="flex items-baseline justify-between">
+                      <span>
+                        NDML registration <span className="text-[11px]">(payable later)</span>
+                      </span>
+                      <span className="font-medium text-foreground/80">{p.ndml}</span>
+                    </div>
+                  </div>
                 </div>
 
-                <p className="mt-6 text-xs text-muted-foreground">{p.itrNote}</p>
+                <p className="mt-5 text-xs text-muted-foreground">
+                  Already hold a Net Worth Certificate? You pay only the accreditation fee.
+                </p>
+                <p className="mt-2 text-xs text-muted-foreground">{p.itrNote}</p>
               </div>
             </StaggerItem>
           ))}

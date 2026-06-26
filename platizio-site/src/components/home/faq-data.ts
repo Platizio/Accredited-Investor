@@ -28,7 +28,7 @@ export const FAQS: Faq[] = [
   },
   {
     q: "What is the difference between the 2-year and 3-year certificates?",
-    a: "The validity period and the documentation. A 2-year certificate needs your latest year's ITR, while a 3-year certificate needs ITRs for the latest two years. Fees also differ: a 2-year certificate totals ₹12,000–₹17,000+GST and a 3-year certificate totals ₹16,500–₹23,500+GST, depending on whether Platizio arranges your Net Worth Certificate (Processing ₹2,000+GST if you arrange it yourself, or ₹7,000+GST for 2-year / ₹9,000+GST for 3-year if Platizio arranges it, plus the NDML fee of ₹10,000+GST for 2-year or ₹14,500+GST for 3-year).",
+    a: "The validity period and the documentation. A 2-year certificate needs your latest year's ITR, while a 3-year certificate needs ITRs for the latest two years. Fees also differ: if Platizio arranges your Net Worth Certificate, the flat certificate fee is ₹5,000 for a 2-year or ₹7,000 for a 3-year certificate, with no GST. The SEBI accreditation fee is ₹2,000 + GST, and the NDML registration fee (₹10,000+GST for a 2-year or ₹14,500+GST for a 3-year certificate) is payable separately, later, at registration. If you already hold a Net Worth Certificate, you skip the certificate fee.",
   },
   {
     q: "Who issues the final certificate?",

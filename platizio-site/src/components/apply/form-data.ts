@@ -20,17 +20,23 @@ export const OCCUPATIONS = [
 ] as const;
 
 // ── Payment (Razorpay) ──
-// The "payable now" processing fee per form, in rupees. GST is added on top
-// (the fee cards quote amounts "+GST"). NDML fees stay payable later.
+// The "payable now" fee per form, in rupees. The accreditation fee is quoted
+// "+GST" (GST added on top). The Net Worth Certificate fee is a FLAT amount
+// with NO GST. NDML registration fees stay payable separately, later.
 export const GST_RATE = 0.18;
 export const PROCESSING_FEE = {
-  accreditation: 2000,
-  netWorth: { twoyear: 7000, threeyear: 9000 },
+  accreditation: 2000, // + 18% GST
+  netWorth: { twoyear: 5000, threeyear: 7000 }, // flat, no GST
 } as const;
 
-/** Amount payable now = processing fee × (1 + GST), in paise (integer). */
+/** GST-inclusive amount payable now = fee × (1 + GST), in paise (integer). */
 export function payablePaise(processingRupees: number): number {
   return Math.round(processingRupees * (1 + GST_RATE) * 100);
+}
+
+/** Flat (GST-free) amount payable now, in paise (integer) — e.g. the NW Certificate fee. */
+export function flatPaise(rupees: number): number {
+  return Math.round(rupees * 100);
 }
 
 /** Formats paise as "₹8,260" (Indian grouping) for button labels. */
